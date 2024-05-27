@@ -10,13 +10,12 @@ const PORT = process.env.PORT || 5000;
 // Body-parser 설정
 app.use(express.json({ extended: false }));
 // 라우트 설정
-app.use("/api/register", require("./routes/api/register"));
+app.use("/api/register", require("./service/register"));
 
 // 루트 라우트 설정
 app.get("/", (req, res) => {
     res.send("API RUNNING...");
 });
-
 
 connectDB();
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
