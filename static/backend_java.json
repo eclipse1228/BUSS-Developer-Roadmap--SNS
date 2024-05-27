@@ -1,0 +1,231 @@
+{
+    "backend": {
+      "title": "Java Backend Developer Roadmap",
+      "description": "A roadmap for becoming a proficient Java backend developer.",
+      "stages": [
+        {
+          "title": "Java Language",
+          "order": 1,
+          "topics": [
+            {
+              "name": "Core Java",
+              "description": "Learn the fundamentals of Java programming language.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Java Programming Masterclass",
+                  "url": "https://www.udemy.com/course/java-the-complete-java-developer-course/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Java Documentation",
+                  "url": "https://docs.oracle.com/en/java/"
+                }
+              ]
+            },
+            {
+              "name": "Advanced Java",
+              "description": "Deep dive into advanced Java concepts.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Advanced Java Programming",
+                  "url": "https://www.coursera.org/learn/advanced-java-programming"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Effective Java by Joshua Bloch",
+                  "url": "https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Databases",
+          "order": 2,
+          "topics": [
+            {
+              "name": "SQL",
+              "description": "Learn the basics of SQL and relational databases.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "SQL for Data Science",
+                  "url": "https://www.coursera.org/learn/sql-for-data-science"
+                },
+                {
+                  "type": "documentation",
+                  "title": "W3Schools SQL Tutorial",
+                  "url": "https://www.w3schools.com/sql/"
+                }
+              ]
+            },
+            {
+              "name": "MySQL",
+              "description": "Learn how to use MySQL database.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "The Ultimate MySQL Bootcamp",
+                  "url": "https://www.udemy.com/course/the-ultimate-mysql-bootcamp-go-from-sql-beginner-to-expert/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official MySQL Documentation",
+                  "url": "https://dev.mysql.com/doc/"
+                }
+              ]
+            },
+            {
+              "name": "PostgreSQL",
+              "description": "Learn how to use PostgreSQL database.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Mastering PostgreSQL",
+                  "url": "https://www.udemy.com/course/mastering-postgresql/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official PostgreSQL Documentation",
+                  "url": "https://www.postgresql.org/docs/"
+                }
+              ]
+            },
+            {
+              "name": "NoSQL",
+              "description": "Understand the basics of NoSQL databases.",
+              "resources": [
+                {
+                  "type": "article",
+                  "title": "Introduction to NoSQL",
+                  "url": "https://www.mongodb.com/nosql-explained"
+                },
+                {
+                  "type": "course",
+                  "title": "NoSQL Databases",
+                  "url": "https://www.edx.org/course/nosql-databases"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Caching",
+          "order": 3,
+          "topics": [
+            {
+              "name": "Redis",
+              "description": "Learn how to use Redis for caching.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Redis Crash Course",
+                  "url": "https://www.udemy.com/course/learn-redis/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Redis Documentation",
+                  "url": "https://redis.io/documentation"
+                }
+              ]
+            },
+            {
+              "name": "Memcached",
+              "description": "Learn how to use Memcached for caching.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Memcached Fundamentals",
+                  "url": "https://www.pluralsight.com/courses/memcached-fundamentals"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Memcached Documentation",
+                  "url": "https://memcached.org/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Testing",
+          "order": 4,
+          "topics": [
+            {
+              "name": "JUnit",
+              "description": "Learn how to write unit tests in Java using JUnit.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "JUnit 5 in 20 Steps",
+                  "url": "https://www.udemy.com/course/junit-tutorial-for-beginners/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official JUnit Documentation",
+                  "url": "https://junit.org/junit5/docs/current/user-guide/"
+                }
+              ]
+            },
+            {
+              "name": "Mockito",
+              "description": "Learn how to use Mockito for mocking in tests.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Mockito for Java Developers",
+                  "url": "https://www.udemy.com/course/mockito-tutorial-with-junit-examples/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Mockito Documentation",
+                  "url": "https://site.mockito.org/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Frameworks",
+          "order": 5,
+          "topics": [
+            {
+              "name": "Spring",
+              "description": "Learn the basics of the Spring framework.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Spring Framework Masterclass",
+                  "url": "https://www.udemy.com/course/spring-framework-master-class/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Spring Documentation",
+                  "url": "https://spring.io/projects/spring-framework"
+                }
+              ]
+            },
+            {
+              "name": "Hibernate",
+              "description": "Learn how to use Hibernate for ORM in Java.",
+              "resources": [
+                {
+                  "type": "course",
+                  "title": "Hibernate Fundamentals",
+                  "url": "https://www.udemy.com/course/hibernate-core/"
+                },
+                {
+                  "type": "documentation",
+                  "title": "Official Hibernate Documentation",
+                  "url": "https://hibernate.org/orm/documentation/"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+  
