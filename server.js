@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json({ extended: false }));
 // 라우트 설정
 app.use("/register", require("./services/register"));
+app.use("/login", require("./services/login"))
 
 // 루트 라우트 설정
 app.get("/", (req, res) => {
