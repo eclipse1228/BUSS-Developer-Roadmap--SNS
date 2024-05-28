@@ -20,7 +20,7 @@ app.set("views", path.join(__dirname, "templates"));
 // 라우트 설정
 app.use("/register", require("./services/register"));
 app.use("/login", require("./services/login"));
-
+app.use('/upload', require('./services/upload'));
 // 루트 라우트 설정
 app.get("/", (req, res) => {
     res.render("index");
@@ -32,6 +32,9 @@ app.get("/login", (req, res) => {
 
 app.get("/register", (req, res) => {
     res.render("register");
+});
+app.get('/upload', (req, res) => {
+    res.render('upload');
 });
 
 connectDB();
