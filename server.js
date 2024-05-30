@@ -7,6 +7,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+// 모듈 가져오기
 const connectDB = require("./config/db");
 
 dotenv.config(); // .env 설정
@@ -26,7 +27,6 @@ const client = new OpenAI({
 });
 
 let assistant;
-
 // Create Assistant once 
 (async () => {
   try {
@@ -127,5 +127,33 @@ app.post("/chat", async (req, res) => {
 
 // Connect to Database
 // connectDB();
+
+// Body-parser 설정
+app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: false })); // 폼 데이터 파싱
+
+// EJS를 뷰 엔진으로 등록
+app.engine('ejs', require('ejs').__express);
+
+// 뷰 엔진 설정
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "templates"));
+
+// 라우트 설정
+app.use("/register", require("./services/register"));
+app.use("/login", require("./services/login"));
+
+// 루트 라우트 설정
+app.get("/", (req, res) => {
+    res.render("index");
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
