@@ -1,4 +1,5 @@
 // nodemon으로 서버 실행 : npm run server 
+
 // 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
@@ -8,6 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session'); // 세션 모듈 추가
+
 const connectDB = require("./config/db");
 
 dotenv.config(); // .env 설정
