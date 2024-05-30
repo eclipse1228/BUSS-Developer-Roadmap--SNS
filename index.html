@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>트리 다이어그램</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- D3.js 라이브러리 -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+  <!-- 트리 다이어그램을 위한 SVG 컨테이너 -->
+  <svg id="tree-container" width="1200" height="900"></svg>
+
+  <!-- JavaScript 코드 -->
+  <script>
+    // roadmap.json 파일에서 데이터를 불러옴
+    d3.json("roadmap.json").then(function(data) {
+      // 트리 다이어그램의 여백 설정
+      var margin = {top: 20, right: 120, bottom: 20, left: 120},
+          width = 1200 - margin.right - margin.left, // 전체 너비에서 여백을 뺀 너비
+          height = 900 - margin.top - margin.bottom; // 전체 높이에서 여백을 뺀 높이
+
+      // 데이터를 계층 구조로 변환
+      var root = d3.hierarchy(data);
+      // 트리 레이아웃을 설정하고 크기를 지정
+      var treeLayout = d3.tree().size([width, height]);
+
+      // 트리 구조를 만듦
+      treeLayout(root);
+
+      // SVG 그룹 요소를 생성하고 여백을 기준으로 변환
+      var svg = d3.select("#tree-container")
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // 노드 간의 링크(선)를 추가
+      var link = svg.selectAll(".link")
+                    .data(root.links())
+                    .enter()
+                    .append("path")
+                    .attr("class", "link")
+                    .attr("d", d3.linkVertical()
+                                 .x(d => d.x)
+                                 .y(d => d.y));
+
+      // 노드를 추가
+      var node = svg.selectAll(".node")
+                    .data(root.descendants())
+                    .enter()
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+
+      // 노드를 사각형으로 추가
+      node.append("rect")
+          .attr("width", 80) // 사각형의 너비
+          .attr("height", 40) // 사각형의 높이
+          .attr("x", -40) // 사각형을 중앙으로 이동
+          .attr("y", -20) // 사각형을 중앙으로 이동
+          .attr("rx", 10) // 둥근 모서리 반지름
+          .attr("ry", 10) // 둥근 모서리 반지름
+          .style("fill", "#fff") // 사각형의 채우기 색상
+          .style("stroke", "steelblue") // 사각형의 외곽선 색상
+          .style("stroke-width", "2px"); // 사각형의 외곽선 두께
+
+      // 사각형 안에 텍스트를 추가
+      node.append("text")
+          .attr("text-anchor", "middle") // 텍스트를 중앙 정렬
+          .attr("dominant-baseline", "middle") // 텍스트를 수직 방향으로 중앙 정렬
+          .text(d => d.data.name); // 각 노드의 이름을 텍스트로 표시
+    }).catch(function(error) {
+      console.error("roadmap.json 파일을 불러오거나 파싱하는 중 오류가 발생했습니다:", error);
+    });
+  </script>
+</body>
+</html>
