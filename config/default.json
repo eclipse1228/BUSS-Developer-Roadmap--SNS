@@ -1,3 +1,4 @@
 
 {
-    "mongoURI":"mongodb+srv://SW_Admin:hT22CxBv8LO3mNsy@cluster0.xmfl6rf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"}
+    "mongoURI":"mongodb://localhost:27017"
+}
