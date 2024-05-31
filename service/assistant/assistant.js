@@ -27,13 +27,13 @@ async function main() {
   console.log(myAssistant);
 
 
-  // file 준비 (static 폴더에 있는 파일 경로 지정)
-  const filePath = path.join(__dirname, '..', '..', 'static', 'backend_java.json');
-
   // 파일 경로 확인
   console.log("File paths:", filePath);
 
   try {
+      // file 준비 (static 폴더에 있는 파일 경로 지정)
+    const filePath = path.join(__dirname, '..', '..', 'static', 'backend_java.json');
+
     // 파일 업로드
     const file = [filePath].map((filePath) => fs.createReadStream(filePath));
 
@@ -62,54 +62,52 @@ async function main() {
   }
 
 
-  // // polling 하면서 백엔드에서 처리 완료되었는지 계속 확인한다. (polling 오류)
-  // try {
-  //   await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, fileStreams);
-  // } catch (error) {
-  //   console.error("Error during uploadAndPoll:", error);
-  // }
+  // polling 하면서 백엔드에서 처리 완료되었는지 계속 확인한다. 
+  try {
+    await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, fileStreams);
+  } catch (error) {
+    console.error("Error during uploadAndPoll:", error);
+  }
 
-
-  // // 쓰레드에 직접 문서를 넣기 (파일은 해당 쓰레드에서만 사용되는 벡터스토리지에 저장됨) (일회성,단건 파일 업로드용임 우리는 아직 사용 X )
-  // const thread = await client.beta.threads.create({
-  //   messages: [
-  //     {
-  //       role: "user",
-  //       content: "i want to see java Backend RoadMap",
-  //     },
-  //   ],
-  // });
+  // 쓰레드 == 메세지 큐
+  const thread = await client.beta.threads.create({
+    messages: [
+      {
+        role: "user",
+        content: "i want to see java Backend RoadMap",
+      },
+    ],
+  });
 
   // The thread now has a vector store in its tool resources.
-  // console.log(thread.tool_resources?.file_search);
+  console.log(thread.tool_resources?.file_search);
 
-//   const stream = client.beta.threads.runs
-//     .stream(thread.id, {
-//       assistant_id: myAssistant.id,
-//     })
-//     .on("textCreated", () => console.log("assistant >"))
-//     .on("toolCallCreated", (event) => console.log("assistant " + event.type))
-//     .on("messageDone", async (event) => {
-//       if (event.content[0].type === "text") {
-//         const { text } = event.content[0];
-//         const { annotations } = text;
-//         const citations = [];
+  const stream = client.beta.threads.runs
+    .stream(thread.id, {
+      assistant_id: myAssistant.id,
+    })
+    .on("textCreated", () => console.log("assistant >"))
+    .on("toolCallCreated", (event) => console.log("assistant " + event.type))
+    .on("messageDone", async (event) => {
+      if (event.content[0].type === "text") {
+        const { text } = event.content[0];
+        const { annotations } = text;
+        const citations = [];
 
-//         let index = 0;
-//         for (let annotation of annotations) {
-//           text.value = text.value.replace(annotation.text, "[" + index + "]");
-//           const { file_citation } = annotation;
-//           if (file_citation) {
-//             const citedFile = await client.files.retrieve(file_citation.file_id);
-//             citations.push("[" + index + "]" + citedFile.filename);
-//           }
-//           index++;
-//         }
+        let index = 0;
+        for (let annotation of annotations) {
+          text.value = text.value.replace(annotation.text, "[" + index + "]");
+          const { file_citation } = annotation;
+          if (file_citation) {
+            const citedFile = await client.files.retrieve(file_citation.file_id);
+            citations.push("[" + index + "]" + citedFile.filename);
+          }
+          index++;
+        }
 
-//         console.log(text.value);
-//         console.log(citations.join("\n"));
-//       }
-//     });
-// }
+        console.log(text.value);
+        console.log(citations.join("\n"));
+      }
+    });
 }
 main().catch(err => console.error(err));

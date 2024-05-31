@@ -12,11 +12,13 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.3.11",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "mongodb": "^6.6.2",
     "mongoose": "^8.4.0",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "openai": "^4.47.2"
   }
 }
