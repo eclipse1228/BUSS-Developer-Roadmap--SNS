@@ -1,4 +1,5 @@
 // nodemon으로 서버 실행 : npm run server 
+
 // 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
@@ -7,7 +8,8 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// 모듈 가져오기
+const session = require('express-session'); // 세션 모듈 추가
+
 const connectDB = require("./config/db");
 
 dotenv.config(); // .env 설정
@@ -18,9 +20,16 @@ const PORT = process.env.PORT || 5000;
 // Middleware 설정
 app.use(cors());
 app.use(express.json());
-app.use("/api/register", require("./service/register")); // 라우트 설정
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false })); // 폼 데이터 파싱
 app.use(express.static(path.join(__dirname, 'templates')));
+
+// 세션 설정
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'defaultSecret', // 환경 변수에서 비밀 키 가져오기, 기본값 설정
+  resave: false,
+  saveUninitialized: true
+}));
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -126,11 +135,7 @@ app.post("/chat", async (req, res) => {
 });
 
 // Connect to Database
-// connectDB();
-
-// Body-parser 설정
-app.use(express.json({ extended: false }));
-app.use(express.urlencoded({ extended: false })); // 폼 데이터 파싱
+connectDB();
 
 // EJS를 뷰 엔진으로 등록
 app.engine('ejs', require('ejs').__express);
@@ -140,8 +145,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
 
 // 라우트 설정
-app.use("/register", require("./services/register"));
-app.use("/login", require("./services/login"));
+app.use("/register", require("./service/register"));
+app.use("/login", require("./service/login"));
+app.use("/main", require("./service/main")); // 메인 페이지 라우트 추가
+app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 
 // 루트 라우트 설정
 app.get("/", (req, res) => {

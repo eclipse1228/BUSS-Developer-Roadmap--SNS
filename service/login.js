@@ -1,10 +1,17 @@
-// 모듈 가져오기
 const express = require("express");
 const User = require("../db/User"); // User model 불러오기
 const bcrypt = require("bcryptjs"); // 암호화 모듈
+const session = require("express-session"); // 세션 관리 모듈
 
 // 라우터 생성
 const router = express.Router();
+
+// 세션 설정
+router.use(session({
+  secret: 'yourSecretKey',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // POST 요청 처리
 router.post("/", async (req, res) => {
@@ -28,7 +35,11 @@ router.post("/", async (req, res) => {
         .json({ errors: [{ msg: "Invalid ID or Password" }] });
     }
 
-    res.send("Login Successful");
+    // 세션에 사용자 정보 저장
+    req.session.user = user;
+
+    // 팝업으로 사용자 이름 출력 후 메인 페이지로 리디렉션
+    res.send(`<script>alert("${user.id}님 반갑습니다"); window.location.href = '/main';</script>`);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
