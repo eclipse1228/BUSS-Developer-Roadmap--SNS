@@ -8,9 +8,16 @@
 </head>
 <body>
   <div class="container">
-    <h2 class="mt-5">Welcome to the Main Page</h2>
-    <p>Hello, <%= user.id %>! You are logged in.</p>
-    <a href="/logout" class="btn btn-primary">Logout</a>
+    <h2 class="mt-5">메인 페이지(main)</h2>
+    <% if (user === "guest") { %>
+      <p>Hello, guest! You are not logged in.</p>
+      <a href="/login" class="btn btn-primary">Login</a>
+      <a href="/register" class="btn btn-secondary">Register</a>
+    <% } else { %>
+      <p>Hello, <%= user.id %>! You are logged in.</p>
+      <a href="/editProfile" class="btn btn-secondary">Edit Profile</a>
+      <a href="/logout" class="btn btn-primary">Logout</a>
+    <% } %>
   </div>
 </body>
 </html>
