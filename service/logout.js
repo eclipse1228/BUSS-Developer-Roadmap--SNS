@@ -6,7 +6,7 @@ router.get("/", (req, res) => {
     if (err) {
       return res.status(500).send("Server Error");
     }
-    res.redirect("/login");
+    res.redirect("/");
   });
 });
 

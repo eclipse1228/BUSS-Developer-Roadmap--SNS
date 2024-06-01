@@ -1,25 +1,18 @@
-const express = require("express"); 
-const User = require("../db/User"); // User model 불러오기
-const bcrypt = require("bcryptjs");        // 암호화 모듈
+const express = require("express");
+const User = require("../db/User");
+const bcrypt = require("bcryptjs");
 
+const router = express.Router();
 
-// 라우터 생성
-const router = express.Router(); 
-
-// POST 요청 처리
-router.post("/",  async (req, res) => {
-
-  // 요청 본문에서 데이터 추출
-  const { id, pw, name, age, email, job } = req.body; 
+router.post("/", async (req, res) => {
+  const { id, pw, name, age, email, job } = req.body;
 
   try {
-    // id 중복 검사
     let user = await User.findOne({ id });
     if (user) {
       return res.status(400).json({ errors: [{ msg: "ID already exists" }] });
     }
 
-    // User 객체 생성
     user = new User({
       id,
       pw,
@@ -29,12 +22,10 @@ router.post("/",  async (req, res) => {
       job
     });
 
-    // 비밀번호 암호화
     const salt = await bcrypt.genSalt(10);
     user.pw = await bcrypt.hash(pw, salt);
 
-    // 생성한 User 객체를 DB에 저장  
-    await user.save(); 
+    await user.save();
 
     res.send("Success");
   } catch (error) {
@@ -43,4 +34,4 @@ router.post("/",  async (req, res) => {
   }
 });
 
-module.exports = router; // export
+module.exports = router;
