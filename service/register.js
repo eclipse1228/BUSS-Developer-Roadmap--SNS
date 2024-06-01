@@ -1,6 +1,6 @@
 // 모듈 가져오기
 const express = require("express"); 
-const User = require("../models/User"); // User model 불러오기
+const User = require("../db/User"); // User model 불러오기
 const bcrypt = require("bcryptjs");        // 암호화 모듈
 
 // 라우터 생성
