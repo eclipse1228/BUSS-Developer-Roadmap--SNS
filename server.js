@@ -1,3 +1,4 @@
+// server.js
 // nodemon으로 서버 실행 : npm run server 
 
 // 모듈 가져오기
@@ -149,6 +150,7 @@ app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
 app.use("/main", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
+app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
 
 // 루트 라우트 설정
 app.get("/", (req, res) => {
@@ -156,11 +158,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("login");
+  res.render("login");
 });
 
 app.get("/register", (req, res) => {
-    res.render("register");
+  res.render("register");
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
