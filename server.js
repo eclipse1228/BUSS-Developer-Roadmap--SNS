@@ -136,8 +136,9 @@ app.post("/chat", async (req, res) => {
 });
 
 // Connect to Database
+console.log("try connect")
 connectDB();
-
+console.log("try .. ")
 // EJS를 뷰 엔진으로 등록
 app.engine('ejs', require('ejs').__express);
 
