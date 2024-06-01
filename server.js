@@ -148,13 +148,14 @@ app.set("views", path.join(__dirname, "templates"));
 // 라우트 설정
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
-app.use("/main", require("./service/main")); // 메인 페이지 라우트 추가
+app.use("/", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
 
 // 루트 라우트 설정
 app.get("/", (req, res) => {
-    res.render("index");
+  const user = req.session.user || "guest";
+  res.render("main", { user });
 });
 
 app.get("/login", (req, res) => {
