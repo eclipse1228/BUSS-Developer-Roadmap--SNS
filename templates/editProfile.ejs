@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mt-5">Edit Profile</h2>
+    <form id="editProfileForm">
+      <div class="form-group">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" id="id" name="id" value="<%= user.id %>" readonly>
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>">
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" name="age" value="<%= user.age %>">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>">
+      </div>
+      <div class="form-group">
+        <label for="job">Job</label>
+        <input type="text" class="form-control" id="job" name="job" value="<%= user.job %>">
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="/" class="btn btn-secondary">Main Page</a>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $("#editProfileForm").on("submit", function(event) {
+        event.preventDefault();
+        const formData = $(this).serialize();
+        
+        $.post("/editProfile", formData, function(data) {
+          if (data.success) {
+            alert("Profile updated successfully");
+            window.location.href = '/editProfile';
+          } else {
+            alert("No changes to update");
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

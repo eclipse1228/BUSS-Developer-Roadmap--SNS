@@ -17,8 +17,16 @@ const UserSchema = new mongoose.Schema({
     age: { 
         type: Number, 
         required: true 
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    job: {
+        type: String,
+        required: false
     }
 });
 
-// model을 export
-module.exports = User = mongoose.model("user", UserSchema);
+// 모델을 export
+module.exports = mongoose.model("User", UserSchema);
