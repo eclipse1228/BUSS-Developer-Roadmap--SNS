@@ -145,20 +145,6 @@ const dbName = process.env.DB_NAME;
 
 let bucket;
 
-const connectToMongoDB = async () => {
-  try {
-    const client = await MongoClient.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-    const db = client.db(dbName);
-    console.log(`Connected to database: ${db.databaseName}`);
-    bucket = new GridFSBucket(db, { bucketName: 'pdfs' });
-    console.log('GridFSBucket 초기화 성공');
-  } catch (err) {
-    console.error('MongoDB 연결 실패:', err);
-    process.exit(1);
-  }
-};
-
-connectToMongoDB();
 
 app.post('/upload', upload.single('pdf'), (req, res) => {
   const file = req.file;
