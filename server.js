@@ -1,3 +1,7 @@
+// server.js
+// nodemon으로 서버 실행 : npm run server 
+
+// 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
 const fs = require('fs');
@@ -16,12 +20,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware 설정
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
 
+// 세션 설정
 app.use(session({
   secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
@@ -122,7 +128,7 @@ app.set("views", path.join(__dirname, "templates"));
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 파일 크기 제한 (예: 10MB)
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedMimeTypes = ['application/pdf'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
@@ -187,9 +193,9 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
 
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
+app.use("/", require("./service/main"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
-app.use("/", require("./service/main"));
 
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
