@@ -6,17 +6,17 @@
 
 // 모듈 가져오기
 const mongoose = require("mongoose");
-const config = require("config");
+// const config = require("config");
 
 // default.json 파일에서 mongoURI 값을 읽어옴
-const uri = config.get("mongoURI");
+// const uri = config.get("mongoURI");
 
 // MongoDB에 연결
 const connectDB = async () => {
   try {
-    await mongoose.connect(uri, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
+    await mongoose.connect("mongodb://127.0.0.1:27017", {
+      // useUnifiedTopology: true,
+      // useNewUrlParser: true,
     });
 
     console.log("MongoDB Connected...");
@@ -25,5 +25,4 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
 module.exports = connectDB;
