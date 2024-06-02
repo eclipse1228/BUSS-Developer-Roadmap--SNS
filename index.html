@@ -70,6 +70,15 @@
         .enter().append("line")
         .attr("class", "link");
 
+      // 노드를 클릭
+      function nodeClicked(event, d) {
+        // url 확인
+        if (d.data.url) {
+          // url 오픈
+          window.open(d.data.url);
+        }
+      }
+
       var node = g.selectAll(".node")
         .data(nodes)
         .enter().append("g")
@@ -77,7 +86,8 @@
         .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
-          .on("end", dragended));
+          .on("end", dragended))
+        .on("click", nodeClicked);
 
       node.append("rect")
         .attr("width", function(d) { return d.data.name.length * 8 + 20; })
