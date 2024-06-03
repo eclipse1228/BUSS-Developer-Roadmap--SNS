@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments for Post</title>
+</head>
+<body>
+    <h1>Comments for Post</h1>
+    <% if (comments.length > 0) { %>
+        <ul>
+            <% comments.forEach(comment => { %>
+                <li>
+                    <p><strong>Author:</strong> <%= comment.author.name %></p>
+                    <p><strong>Content:</strong> <%= comment.content %></p>
+                    <p><strong>Created At:</strong> <%= new Date(comment.createdAt).toLocaleString() %></p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No comments found for this post.</p>
+    <% } %>
+</body>
+</html>
