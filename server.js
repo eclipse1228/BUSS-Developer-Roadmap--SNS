@@ -17,6 +17,8 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
+// const router = express.Router();
+
 const PORT = process.env.PORT || 5000;
 
 // Middleware 설정
@@ -25,6 +27,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // 세션 설정
 app.use(session({
@@ -184,7 +187,8 @@ app.use("/login", require("./service/login"));
 app.use("/", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
-app.use("/post", require("./service/posting"));
+app.use("/roadmap", require("./service/roadmap"));  // 로드맵 페이지 라우트 추가.
+
 
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
@@ -205,6 +209,14 @@ app.get("/post", (req,res)=> {
 
 app.get('/upload', (req, res) => {
   res.render('upload');
+});
+
+app.get('/roadmap', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates/roadmap.html'));
+});
+
+app.get('/roadmap2',(req,res)=> {
+  res.sendFile(path.join(__dirname, 'templates/roadmap2.html'));
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
