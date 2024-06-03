@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Test</title>
+</head>
+<body>
+    <h1>Comment Test Page</h1>
+    <form id="commentForm">
+        <label for="content">Content:</label>
+        <input type="text" id="content" name="content" required><br><br>
+        
+        <input type="hidden" id="authorId" name="authorId"><br><br>
+        
+        <label for="postId">Post ID:</label>
+        <input type="text" id="postId" name="postId" required><br><br>
+        
+        <button type="submit">Submit Comment</button>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        async function getUser() {
+            try {
+                const response = await fetch('/api/auth/user');
+                if (response.ok) {
+                    const user = await response.json();
+                    console.log('User data:', user);  // 디버깅을 위한 콘솔 로그
+                    document.getElementById('authorId').value = user._id;
+                } else {
+                    console.error('Failed to get user:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const content = document.getElementById('content').value;
+            const authorId = document.getElementById('authorId').value;
+            const postId = document.getElementById('postId').value;
+
+            console.log('Submitting comment:', { content, authorId, postId });  // 디버깅을 위한 콘솔 로그
+
+            if (!content || !authorId || !postId) {
+                document.getElementById('responseMessage').innerText = '모든 필드를 입력해주세요.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/comments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content, authorId, postId })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message);
+                }
+
+                const data = await response.json();
+                console.log('Comment submitted successfully:', data);  // 디버깅을 위한 콘솔 로그
+                document.getElementById('responseMessage').innerText = 'Comment submitted successfully!';
+            } catch (error) {
+                console.error('Error submitting comment:', error);
+                document.getElementById('responseMessage').innerText = `Error: ${error.message}`;
+            }
+        });
+
+        window.onload = getUser;
+    </script>
+</body>
+</html>
