@@ -182,7 +182,8 @@ app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
 app.use("/createPost", require("./service/createPost")); 
 app.use('/board', require('./service/board'));
-app.use('/showPost', require('./service/showPost')); 
+app.use('/showPost', require('./service/showPost'));
+app.use('/addComment', require('./service/addComment'));
 
 
 app.get("/", (req, res) => {

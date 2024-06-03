@@ -17,12 +17,17 @@
       <p><%= post.content %></p>
     </article>
     <section>
-      <!-- <h2>댓글</h2>
-      <ul>
-        <% post.comments.forEach(comment => { %>
-          <li><%= comment.content %> - <%= comment.author %></li>
-        <% }) %>
-      </ul> -->
+        <h2>댓글</h2>
+        <form action="/addComment" method="POST">
+            <input type="hidden" name="post" value="<%= post._id %>">
+            <textarea name="content" rows="4" cols="50" placeholder="댓글을 입력하세요"></textarea>
+            <button type="submit">댓글 달기</button>
+        </form>
+        <ul>
+            <% post.comments.forEach(comment => { %>
+            <li><%= comment.content %> - <%= comment.author %></li>
+            <% }) %>
+        </ul>
     </section>
   </main>
   <footer>
