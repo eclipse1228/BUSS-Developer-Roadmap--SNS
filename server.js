@@ -70,11 +70,9 @@ let assistant;
   }
 })();
 
-// MongoDB 연결 설정
-const mongoURI = process.env.MONGO_URI;
-const dbName = process.env.DB_NAME;
 
-let bucket;
+
+
 
 // connectDB 함수 호출
 connectDB();
@@ -84,53 +82,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
 
 // Multer 설정 (파일 업로드)
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedMimeTypes = ['application/pdf'];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
-      cb(new Error('Invalid file type'));
-    } else {
-      cb(null, true);
-    }
-  }
-});
 
-// 파일 업로드 엔드포인트
-app.post('/upload', upload.single('pdf'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).json({ message: '파일을 업로드 해주세요.', success: false });
-  }
-
-  if (!bucket) {
-    console.error('GridFSBucket 객체가 초기화되지 않았습니다. bucket:', bucket);
-    return res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
-  }
-
-  try {
-    console.log('업로드 스트림 시작');
-    const uploadStream = bucket.openUploadStream(file.originalname);
-    uploadStream.end(file.buffer);
-
-    uploadStream.on('finish', () => {
-      console.log('파일 업로드 완료');
-      res.status(200).json({ message: `파일 업로드 완료: ${file.originalname}`, success: true });
-    });
-
-    uploadStream.on('error', (err) => {
-      console.error('업로드 스트림 오류:', err);
-      res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
-    });
-  } catch (error) {
-    console.error('파일 업로드 처리 중 오류 발생:', error);
-    res.status(500).json({ message: '파일 업로드 처리 중 오류가 발생했습니다.' });
-  }
-});
-
-// OpenAI Chat 엔드포인트
 app.get("/chat", (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
 });
@@ -221,6 +173,8 @@ app.get('/api/auth/user', (req, res) => {
   }
   res.status(200).json(req.session.user);
 });
-
+const uploadRoutes = require('./service/upload');
+app.use('/upload', uploadRoutes);
+// OpenAI Chat 엔드포인트
 // 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

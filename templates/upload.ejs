@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload PDF</title>
+    <title>File Upload</title>
 </head>
 <body>
-    <h1>Upload PDF File</h1>
-    <% if (typeof message !== 'undefined') { %>
-        <p style="color: <% if (success) { %>green<% } else { %>red<% } %>;">
-            <%= message %>
-        </p>
-    <% } %>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="pdf" accept="application/pdf" required>
+    <h1>File Upload</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf" accept="application/pdf">
         <button type="submit">Upload</button>
     </form>
 </body>
