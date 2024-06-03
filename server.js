@@ -183,6 +183,7 @@ app.use("/editProfile", require("./service/editProfile"));
 app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
 app.use('/board', require('./service/board'));
 
+
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
   res.render("main", { user });
