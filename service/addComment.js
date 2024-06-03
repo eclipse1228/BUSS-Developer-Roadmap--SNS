@@ -22,10 +22,12 @@ router.post('/', async (req, res) => {
     // 댓글 저장
     await newComment.save();
 
-    res.status(200).json({ message: '댓글이 성공적으로 추가되었습니다.' });
+    // 댓글 추가 성공 시 클라이언트에 응답
+    res.status(200).json({ success: true, message: '댓글이 성공적으로 추가되었습니다.' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    // 서버 오류 발생 시 클라이언트에 응답
+    res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
 
