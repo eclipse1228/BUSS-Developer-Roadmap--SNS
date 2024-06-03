@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= category %> 게시물 목록</title>
+  <link rel="stylesheet" href="/path/to/your/styles.css">
+  <style>
+    .post {
+      background-color: white;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .post h3 {
+      margin: 0;
+    }
+    .post p {
+      margin: 5px 0;
+    }
+    .post .info {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><%= category %> 게시물 목록</h1>
+    <div class="posts">
+      <% if (posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+          <div class="post">
+            <div class="info">
+              <h3><%= post.author.username %></h3>
+              <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+            </div>
+            <!-- 클릭시 해당 게시물의 상세 내용을 보여줄 링크 -->
+            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+            <p><%= post.content %></p>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>해당 카테고리에 게시물이 없습니다.</p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

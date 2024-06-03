@@ -93,6 +93,9 @@
             padding: 10px;
             margin: 0 0 10px 0;
         }
+        .content h2 span {
+            cursor: pointer;
+        }
         .post {
             background-color: white;
             margin: 10px 0;
@@ -111,12 +114,14 @@
             justify-content: space-between;
         }
     </style>
-    <script>
+    <script>       
         function goToChat() {
             window.location.href = '/chat';
         }
         function createPost() {
             window.location.href = '/post';
+        function goToBoard(category) {
+            window.location.href = `/board/${category}`;
         }
     </script>
 </head>
@@ -138,8 +143,9 @@
     </div>
     <div class="navbar">
         <a href="#">MAIN</a>
-        <a href="#">MYPAGE</a>
         <a href="#">ANALYSIS</a>
+        <a href="/editProfile">정보수정</a>
+        <a href="/createPost">글쓰기</a>
     </div>
     <div class="container">
         <div class="sidebar">
@@ -192,7 +198,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>COMMUNITY</h2>
+                <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>Rnfxlqrhddbwk1</h3>
@@ -230,7 +236,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>FRONTEND</h2>
+                <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>account1</h3>
@@ -268,7 +274,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>BACKEND</h2>
+                <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>epdlxjqpdltm</h3>

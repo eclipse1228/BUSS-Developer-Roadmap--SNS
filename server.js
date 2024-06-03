@@ -11,7 +11,6 @@ const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
-
 const connectDB = require("./config/db");
 
 dotenv.config();
@@ -150,7 +149,6 @@ const dbName = process.env.DB_NAME;
 
 let bucket;
 
-
 app.post('/upload', upload.single('pdf'), (req, res) => {
   const file = req.file;
   if (!file) {
@@ -184,10 +182,19 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
 
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
+<<<<<<< HEAD
 app.use("/", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
 app.use("/roadmap", require("./service/roadmap"));  // 로드맵 페이지 라우트 추가.
+=======
+app.use("/", require("./service/main"));
+app.use("/logout", require("./service/logout"));
+app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); 
+app.use('/board', require('./service/board'));
+app.use('/showPost', require('./service/showPost')); 
+>>>>>>> origin
 
 
 app.get("/", (req, res) => {
