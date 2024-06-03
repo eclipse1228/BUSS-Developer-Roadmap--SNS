@@ -138,6 +138,9 @@ app.use("/createPost", require("./service/createPost")); // 게시물 작성 API
 app.use("/comments", require("./service/comment"));  // 댓글 라우트 추가
 app.use('/board', require('./service/board'));
 
+app.use('/showPost', require('./service/showPost'));
+app.use('/addComment', require('./service/addComment'));
+
 // 템플릿 라우트 설정
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";

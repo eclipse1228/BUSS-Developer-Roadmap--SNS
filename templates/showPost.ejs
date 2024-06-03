@@ -1,3 +1,5 @@
+<!-- showPost.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= post.title %> - 게시물</title>
   <link rel="stylesheet" href="/styles.css">
+  <script>
+    function addComment() {
+      const content = document.getElementById('commentContent').value;
+      const post = '<%= post._id %>'; // 게시물의 ID
+      fetch('/addComment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ content, post })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message); // 성공 메시지 표시
+          location.reload(); // 페이지 새로고침
+        } else {
+          alert(data.message); // 실패 메시지 표시
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('서버 오류가 발생했습니다.');
+      });
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -17,12 +45,16 @@
       <p><%= post.content %></p>
     </article>
     <section>
-      <!-- <h2>댓글</h2>
+      <h2>댓글</h2>
+      <form>
+        <textarea id="commentContent" rows="4" cols="50" placeholder="댓글을 입력하세요"></textarea>
+        <button type="button" onclick="addComment()">댓글 달기</button>
+      </form>
       <ul>
         <% post.comments.forEach(comment => { %>
           <li><%= comment.content %> - <%= comment.author %></li>
         <% }) %>
-      </ul> -->
+      </ul>
     </section>
   </main>
   <footer>
