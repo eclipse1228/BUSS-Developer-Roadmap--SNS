@@ -25,7 +25,11 @@ const UserSchema = new mongoose.Schema({
     job: {
         type: String,
         required: false
-    }
+    },
+    roadmaps: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Roadmap'
+    }]
 });
 
 // 모델을 export

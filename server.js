@@ -1,6 +1,5 @@
 // server.js
 // nodemon으로 서버 실행 : npm run server 
-
 // 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
@@ -17,6 +16,8 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
+// const router = express.Router();
+
 const PORT = process.env.PORT || 5000;
 
 // Middleware 설정
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // 세션 설정
 app.use(session({
@@ -118,6 +120,9 @@ app.post("/chat", async (req, res) => {
 });
 
 connectDB();
+console.log("try .. ")
+
+// EJS를 뷰 엔진으로 등록
 
 app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
@@ -177,6 +182,7 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
 
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
+app.use("/roadmap", require("./service/roadmap"));  // 로드맵 페이지 라우트 추가.
 app.use("/", require("./service/main"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
@@ -184,6 +190,7 @@ app.use("/createPost", require("./service/createPost"));
 app.use('/board', require('./service/board'));
 app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
+
 
 
 app.get("/", (req, res) => {
@@ -199,8 +206,20 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
+app.get("/post", (req,res)=> {
+  res.render("post");
+})
+
 app.get('/upload', (req, res) => {
   res.render('upload');
+});
+
+app.get('/roadmap', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates/roadmap.html'));
+});
+
+app.get('/roadmap2',(req,res)=> {
+  res.sendFile(path.join(__dirname, 'templates/roadmap2.html'));
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
