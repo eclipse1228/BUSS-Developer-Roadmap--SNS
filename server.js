@@ -1,6 +1,3 @@
-// server.js
-// nodemon으로 서버 실행 : npm run server 
-
 // 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
@@ -12,7 +9,6 @@ const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
-
 const connectDB = require("./config/db");
 
 dotenv.config();
@@ -34,6 +30,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// OpenAI 클라이언트 설정
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -73,6 +70,67 @@ let assistant;
   }
 })();
 
+// MongoDB 연결 설정
+const mongoURI = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME;
+
+let bucket;
+
+// connectDB 함수 호출
+connectDB();
+
+app.engine('ejs', require('ejs').__express);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "templates"));
+
+// Multer 설정 (파일 업로드)
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = ['application/pdf'];
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      cb(new Error('Invalid file type'));
+    } else {
+      cb(null, true);
+    }
+  }
+});
+
+// 파일 업로드 엔드포인트
+app.post('/upload', upload.single('pdf'), (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ message: '파일을 업로드 해주세요.', success: false });
+  }
+
+  if (!bucket) {
+    console.error('GridFSBucket 객체가 초기화되지 않았습니다. bucket:', bucket);
+    return res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
+  }
+
+  try {
+    console.log('업로드 스트림 시작');
+    const uploadStream = bucket.openUploadStream(file.originalname);
+    uploadStream.end(file.buffer);
+
+    uploadStream.on('finish', () => {
+      console.log('파일 업로드 완료');
+      res.status(200).json({ message: `파일 업로드 완료: ${file.originalname}`, success: true });
+    });
+
+    uploadStream.on('error', (err) => {
+      console.error('업로드 스트림 오류:', err);
+      res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
+    });
+  } catch (error) {
+    console.error('파일 업로드 처리 중 오류 발생:', error);
+    res.status(500).json({ message: '파일 업로드 처리 중 오류가 발생했습니다.' });
+  }
+});
+
+// OpenAI Chat 엔드포인트
 app.get("/chat", (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
 });
@@ -118,71 +176,17 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-connectDB();
-
-app.engine('ejs', require('ejs').__express);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "templates"));
-
-// Multer 설정 (파일 업로드)
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedMimeTypes = ['application/pdf'];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
-      cb(new Error('Invalid file type'));
-    } else {
-      cb(null, true);
-    }
-  }
-});
-
-// MongoDB 연결 설정
-const mongoURI = process.env.MONGO_URI;
-const dbName = process.env.DB_NAME;
-
-let bucket;
-
-
-app.post('/upload', upload.single('pdf'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).json({ message: '파일을 업로드 해주세요.', success: false });
-  }
-
-  if (!bucket) {
-    console.error('GridFSBucket 객체가 초기화되지 않았습니다. bucket:', bucket);
-    return res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
-  }
-
-  try {
-    console.log('업로드 스트림 시작');
-    const uploadStream = bucket.openUploadStream(file.originalname);
-    uploadStream.end(file.buffer);
-
-    uploadStream.on('finish', () => {
-      console.log('파일 업로드 완료');
-      res.status(200).json({ message: `파일 업로드 완료: ${file.originalname}`, success: true });
-    });
-
-    uploadStream.on('error', (err) => {
-      console.error('업로드 스트림 오류:', err);
-      res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
-    });
-  } catch (error) {
-    console.error('파일 업로드 처리 중 오류 발생:', error);
-    res.status(500).json({ message: '파일 업로드 처리 중 오류가 발생했습니다.' });
-  }
-});
-
+// 서비스 라우트 설정
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
 app.use("/", require("./service/main"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
+app.use("/comments", require("./service/comment"));  // 댓글 라우트 추가
+app.use('/board', require('./service/board'));
 
+// 템플릿 라우트 설정
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
   res.render("main", { user });
@@ -200,4 +204,23 @@ app.get('/upload', (req, res) => {
   res.render('upload');
 });
 
+// 댓글 테스트 페이지 라우팅
+app.get("/commentTest", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentTest.html'));
+});
+
+// 댓글 목록 페이지 라우팅
+app.get("/commentList", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentList.html'));
+});
+
+// 로그인된 사용자 정보 반환
+app.get('/api/auth/user', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  res.status(200).json(req.session.user);
+});
+
+// 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
