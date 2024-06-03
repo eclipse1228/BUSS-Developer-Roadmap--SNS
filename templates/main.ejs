@@ -115,6 +115,9 @@
         function goToChat() {
             window.location.href = '/chat';
         }
+        function createPost() {
+            window.location.href = '/post';
+        }
     </script>
 </head>
 <body>
@@ -130,6 +133,7 @@
                 <a href="/logout" class="btn btn-primary">Logout</a>
             <% } %>
             <button onclick="goToChat()">Assistant</button>
+            <button onclick="createPost()"">게시글 쓰기</button>
         </div>
     </div>
     <div class="navbar">

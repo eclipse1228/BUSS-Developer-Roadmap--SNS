@@ -152,7 +152,7 @@ app.use("/login", require("./service/login"));
 app.use("/", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
-
+app.use("/post", require("./service/posting"));
 // 루트 라우트 설정
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
@@ -166,5 +166,9 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   res.render("register");
 });
+
+app.get("/post", (req,res)=> {
+  res.render("post");
+})
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
