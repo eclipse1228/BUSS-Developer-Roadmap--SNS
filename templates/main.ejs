@@ -93,6 +93,9 @@
             padding: 10px;
             margin: 0 0 10px 0;
         }
+        .content h2 span {
+            cursor: pointer;
+        }
         .post {
             background-color: white;
             margin: 10px 0;
@@ -111,10 +114,7 @@
             justify-content: space-between;
         }
     </style>
-    <script>
-        function goToChat() {
-            window.location.href = '/chat';
-        }
+    <script>       
         function goToChat() {
             window.location.href = '/chat';
         }
@@ -195,7 +195,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>COMMUNITY<button onclick="goToBoard('community')">더보기</h2>
+                <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>Rnfxlqrhddbwk1</h3>
@@ -233,7 +233,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>FRONTEND <button onclick="goToBoard('frontend')">더보기</button></h2>
+                <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>account1</h3>
@@ -271,7 +271,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>BACKEND<button onclick="goToBoard('backend')">더보기</button></h2>
+                <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
                 <div class="post">
                     <div class="info">
                         <h3>epdlxjqpdltm</h3>
