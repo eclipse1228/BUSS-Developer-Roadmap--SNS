@@ -115,6 +115,12 @@
         function goToChat() {
             window.location.href = '/chat';
         }
+        function goToChat() {
+            window.location.href = '/chat';
+        }
+        function goToBoard(category) {
+            window.location.href = `/board/${category}`;
+        }
     </script>
 </head>
 <body>
@@ -189,7 +195,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>COMMUNITY</h2>
+                <h2>COMMUNITY<button onclick="goToBoard('community')">더보기</h2>
                 <div class="post">
                     <div class="info">
                         <h3>Rnfxlqrhddbwk1</h3>
@@ -227,7 +233,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>FRONTEND</h2>
+                <h2>FRONTEND <button onclick="goToBoard('frontend')">더보기</button></h2>
                 <div class="post">
                     <div class="info">
                         <h3>account1</h3>
@@ -265,7 +271,7 @@
                 </div>
             </div>
             <div class="content">
-                <h2>BACKEND</h2>
+                <h2>BACKEND<button onclick="goToBoard('backend')">더보기</button></h2>
                 <div class="post">
                     <div class="info">
                         <h3>epdlxjqpdltm</h3>
