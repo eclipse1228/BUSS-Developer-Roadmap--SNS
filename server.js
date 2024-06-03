@@ -1,6 +1,5 @@
 // server.js
 // nodemon으로 서버 실행 : npm run server 
-
 // 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
@@ -139,6 +138,7 @@ app.post("/chat", async (req, res) => {
 console.log("try connect")
 connectDB();
 console.log("try .. ")
+
 // EJS를 뷰 엔진으로 등록
 app.engine('ejs', require('ejs').__express);
 
@@ -153,6 +153,7 @@ app.use("/", require("./service/main")); // 메인 페이지 라우트 추가
 app.use("/logout", require("./service/logout")); // 로그아웃 라우트 추가
 app.use("/editProfile", require("./service/editProfile")); // 프로필 수정 라우트 추가
 app.use("/post", require("./service/posting"));
+
 // 루트 라우트 설정
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
@@ -170,5 +171,6 @@ app.get("/register", (req, res) => {
 app.get("/post", (req,res)=> {
   res.render("post");
 })
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
