@@ -14,18 +14,20 @@
       <input type="text" id="title" name="title" required>
     </div>
     <div>
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="community">COMMUNITY</option>
+          <option value="backend">BACKEND</option>
+          <option value="frontend">FRONTEND</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+    <div>
       <label for="content">Content:</label>
       <textarea id="content" name="content" required></textarea>
     </div>
-    <div>
-      <label for="category">Category:</label>
-      <select id="category" name="category" required>
-        <option value="">Select a category</option>
-        <option value="General">General</option>
-        <option value="Question">Question</option>
-        <!-- Add more options as needed -->
-      </select>
-    </div>
+
     <button type="submit">Create Post</button>
   </form>
 
