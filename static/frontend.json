@@ -1,0 +1,143 @@
+{
+  "frontEnd": {
+    "internet": {
+      "howDoesInternetWork": {
+        "recommendation": "personal",
+        "description": "How does the internet work?",
+        "course": "www.coursera.org/learn/internet-history"
+      },
+      "http": {
+        "recommendation": "personal",
+        "description": "What is HTTP?",
+        "course": "www.udacity.com/course/intro-to-http--ud675"
+      },
+      "domainName": {
+        "recommendation": "personal",
+        "description": "What is Domain Name?",
+        "course": "www.edx.org/course/web-domain-names"
+      },
+      "hosting": {
+        "recommendation": "personal",
+        "description": "What is hosting?",
+        "course": "www.pluralsight.com/courses/web-hosting-fundamentals"
+      },
+      "dns": {
+        "recommendation": "personal",
+        "description": "DNS and how it works?",
+        "course": "www.udemy.com/course/dns-fundamentals"
+      },
+      "browsers": {
+        "recommendation": "personal",
+        "description": "Browsers and how they work?",
+        "course": "www.coursera.org/learn/browser-rendering"
+      }
+    },
+    "html": {
+      "learnBasics": {
+        "recommendation": "personal",
+        "description": "Learn the basics",
+        "course": "www.codecademy.com/learn/learn-html"
+      },
+      "writingSemanticHTML": {
+        "recommendation": "personal",
+        "description": "Writing Semantic HTML",
+        "course": "www.freecodecamp.org/learn/responsive-web-design/basic-html-and-html5"
+      },
+      "formsValidations": {
+        "recommendation": "personal",
+        "description": "Forms and Validations",
+        "course": "www.udacity.com/course/html5-forms--ud853"
+      },
+      "accessibility": {
+        "recommendation": "personal",
+        "description": "Accessibility",
+        "course": "www.edx.org/course/web-accessibility"
+      },
+      "seoBasics": {
+        "recommendation": "notRecommended",
+        "description": "SEO Basics",
+        "course": "www.coursera.org/learn/seo-fundamentals"
+      }
+    },
+    "css": {
+      "learnBasics": {
+        "recommendation": "personal",
+        "description": "Learn the basics",
+        "course": "www.codecademy.com/learn/learn-css"
+      },
+      "makingLayouts": {
+        "recommendation": "personal",
+        "description": "Making Layouts",
+        "course": "www.udacity.com/course/css-layout-fundamentals--ud882"
+      },
+      "responsiveDesign": {
+        "recommendation": "personal",
+        "description": "Responsive Design",
+        "course": "www.freecodecamp.org/learn/responsive-web-design"
+      }
+    },
+    "javascript": {
+      "learnBasics": {
+        "recommendation": "personal",
+        "description": "Learn the Basics",
+        "course": "www.codecademy.com/learn/introduction-to-javascript"
+      },
+      "domManipulation": {
+        "recommendation": "personal",
+        "description": "Learn DOM Manipulation",
+        "course": "www.udacity.com/course/javascript-and-the-dom--ud117"
+      },
+      "fetchApiAjax": {
+        "recommendation": "personal",
+        "description": "Fetch API / Ajax (XHR)",
+        "course": "www.pluralsight.com/courses/using-fetch"
+      }
+    },
+    "frameworks": {
+      "react": {
+        "recommendation": "personal",
+        "description": "React",
+        "course": "www.codecademy.com/learn/react-101"
+      },
+      "vue": {
+        "recommendation": "alternative",
+        "description": "Vue.js",
+        "course": "www.vueschool.io/courses/introduction-to-vue-3"
+      },
+      "angular": {
+        "recommendation": "alternative",
+        "description": "Angular",
+        "course": "www.pluralsight.com/courses/angular-getting-started-update"
+      }
+    },
+    "versionControlSystems": {
+      "git": {
+        "recommendation": "personal",
+        "description": "Git",
+        "course": "www.udacity.com/course/version-control-with-git--ud123"
+      },
+      "vcsHosting": {
+        "description": "VCS Hosting",
+        "options": {
+          "gitHub": "GitHub",
+          "gitLab": "GitLab",
+          "bitbucket": "Bitbucket"
+        }
+      }
+    },
+    "packageManagers": {
+      "npm": {
+        "description": "npm",
+        "course": "www.codecademy.com/learn/introduction-to-npm"
+      },
+      "pnpm": {
+        "description": "pnpm",
+        "course": "www.pnpm.io/tutorials"
+      },
+      "yarn": {
+        "description": "yarn",
+        "course": "www.udemy.com/course/yarn-package-manager"
+      }
+    }
+  }
+}

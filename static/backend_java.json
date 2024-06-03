@@ -1,231 +1,272 @@
 {
-    "backend": {
-      "title": "Java Backend Developer Roadmap",
-      "description": "A roadmap for becoming a proficient Java backend developer.",
-      "stages": [
-        {
-          "title": "Java Language",
-          "order": 1,
-          "topics": [
-            {
-              "name": "Core Java",
-              "description": "Learn the fundamentals of Java programming language.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Java Programming Masterclass",
-                  "url": "https://www.udemy.com/course/java-the-complete-java-developer-course/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Java Documentation",
-                  "url": "https://docs.oracle.com/en/java/"
-                }
-              ]
-            },
-            {
-              "name": "Advanced Java",
-              "description": "Deep dive into advanced Java concepts.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Advanced Java Programming",
-                  "url": "https://www.coursera.org/learn/advanced-java-programming"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Effective Java by Joshua Bloch",
-                  "url": "https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Databases",
-          "order": 2,
-          "topics": [
-            {
-              "name": "SQL",
-              "description": "Learn the basics of SQL and relational databases.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "SQL for Data Science",
-                  "url": "https://www.coursera.org/learn/sql-for-data-science"
-                },
-                {
-                  "type": "documentation",
-                  "title": "W3Schools SQL Tutorial",
-                  "url": "https://www.w3schools.com/sql/"
-                }
-              ]
-            },
-            {
-              "name": "MySQL",
-              "description": "Learn how to use MySQL database.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "The Ultimate MySQL Bootcamp",
-                  "url": "https://www.udemy.com/course/the-ultimate-mysql-bootcamp-go-from-sql-beginner-to-expert/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official MySQL Documentation",
-                  "url": "https://dev.mysql.com/doc/"
-                }
-              ]
-            },
-            {
-              "name": "PostgreSQL",
-              "description": "Learn how to use PostgreSQL database.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Mastering PostgreSQL",
-                  "url": "https://www.udemy.com/course/mastering-postgresql/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official PostgreSQL Documentation",
-                  "url": "https://www.postgresql.org/docs/"
-                }
-              ]
-            },
-            {
-              "name": "NoSQL",
-              "description": "Understand the basics of NoSQL databases.",
-              "resources": [
-                {
-                  "type": "article",
-                  "title": "Introduction to NoSQL",
-                  "url": "https://www.mongodb.com/nosql-explained"
-                },
-                {
-                  "type": "course",
-                  "title": "NoSQL Databases",
-                  "url": "https://www.edx.org/course/nosql-databases"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Caching",
-          "order": 3,
-          "topics": [
-            {
-              "name": "Redis",
-              "description": "Learn how to use Redis for caching.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Redis Crash Course",
-                  "url": "https://www.udemy.com/course/learn-redis/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Redis Documentation",
-                  "url": "https://redis.io/documentation"
-                }
-              ]
-            },
-            {
-              "name": "Memcached",
-              "description": "Learn how to use Memcached for caching.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Memcached Fundamentals",
-                  "url": "https://www.pluralsight.com/courses/memcached-fundamentals"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Memcached Documentation",
-                  "url": "https://memcached.org/"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Testing",
-          "order": 4,
-          "topics": [
-            {
-              "name": "JUnit",
-              "description": "Learn how to write unit tests in Java using JUnit.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "JUnit 5 in 20 Steps",
-                  "url": "https://www.udemy.com/course/junit-tutorial-for-beginners/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official JUnit Documentation",
-                  "url": "https://junit.org/junit5/docs/current/user-guide/"
-                }
-              ]
-            },
-            {
-              "name": "Mockito",
-              "description": "Learn how to use Mockito for mocking in tests.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Mockito for Java Developers",
-                  "url": "https://www.udemy.com/course/mockito-tutorial-with-junit-examples/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Mockito Documentation",
-                  "url": "https://site.mockito.org/"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Frameworks",
-          "order": 5,
-          "topics": [
-            {
-              "name": "Spring",
-              "description": "Learn the basics of the Spring framework.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Spring Framework Masterclass",
-                  "url": "https://www.udemy.com/course/spring-framework-master-class/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Spring Documentation",
-                  "url": "https://spring.io/projects/spring-framework"
-                }
-              ]
-            },
-            {
-              "name": "Hibernate",
-              "description": "Learn how to use Hibernate for ORM in Java.",
-              "resources": [
-                {
-                  "type": "course",
-                  "title": "Hibernate Fundamentals",
-                  "url": "https://www.udemy.com/course/hibernate-core/"
-                },
-                {
-                  "type": "documentation",
-                  "title": "Official Hibernate Documentation",
-                  "url": "https://hibernate.org/orm/documentation/"
-                }
-              ]
-            }
-          ]
-        }
-      ]
+  "javaBackendDeveloper": {
+    "basicJava": {
+      "javaSyntax": {
+        "description": "Java syntax",
+        "course": "https://www.udemy.com/course/java-tutorial/"
+      },
+      "variableTypes": {
+        "description": "Variable types",
+        "course": "https://www.codecademy.com/learn/learn-java/modules/learn-java-variables"
+      },
+      "strings": {
+        "description": "Strings",
+        "course": "https://www.coursera.org/lecture/java-programming/1-introduction-to-strings-64AmJ"
+      },
+      "arrays": {
+        "description": "Arrays",
+        "course": "https://www.pluralsight.com/guides/working-with-arrays-in-java"
+      },
+      "controlStatements": {
+        "description": "Control statements",
+        "course": "https://www.edx.org/course/introduction-to-java-programming-part-1-3"
+      },
+      "functions": {
+        "description": "Functions",
+        "course": "https://www.freecodecamp.org/news/java-methods-definitive-guide/"
+      },
+      "classesAndObjects": {
+        "description": "Classes and objects",
+        "course": "https://www.codecademy.com/learn/learn-java/modules/learn-java-classes"
+      }
+    },
+    "objectOrientedProgramming": {
+      "inheritance": {
+        "description": "Inheritance",
+        "course": "https://www.coursera.org/lecture/object-oriented-java/inheritance-lXwyu"
+      },
+      "encapsulation": {
+        "description": "Encapsulation",
+        "course": "https://www.pluralsight.com/guides/encapsulation-in-java"
+      },
+      "polymorphism": {
+        "description": "Polymorphism",
+        "course": "https://www.edx.org/course/object-oriented-programming-in-java"
+      },
+      "abstractClassAndInterface": {
+        "description": "Abstract class and interface",
+        "course": "https://www.udemy.com/course/java-tutorial/#abstract-classes-and-interfaces"
+      }
+    },
+    "collectionsAndGenerics": {
+      "lists": {
+        "description": "Lists",
+        "course": "https://www.codecademy.com/learn/java-collections/modules/learn-java-collections/cheatsheet"
+      },
+      "maps": {
+        "description": "Maps",
+        "course": "https://www.coursera.org/lecture/java-collections/maps-EaZ3m"
+      },
+      "sets": {
+        "description": "Sets",
+        "course": "https://www.pluralsight.com/guides/java-collections-framework-sets"
+      },
+      "queuesAndStacks": {
+        "description": "Queues and Stacks",
+        "course": "https://www.edx.org/course/data-structures-java-stack-and-queue"
+      },
+      "comparisonAndSorting": {
+        "description": "Comparison and sorting",
+        "course": "https://www.udemy.com/course/java-tutorial/#sorting-arrays-and-lists"
+      },
+      "generics": {
+        "description": "Generics in Java",
+        "course": "https://www.freecodecamp.org/news/java-generics/"
+      }
+    },
+    "multithreadingAndConcurrency": {
+      "threadCreationAndManagement": {
+        "description": "Thread creation and management",
+        "course": "https://www.coursera.org/lecture/parallel-java/1-introduction-to-threads-and-concurrency-YIGy0"
+      },
+      "synchronization": {
+        "description": "Synchronization",
+        "course": "https://www.pluralsight.com/guides/thread-synchronization-in-java"
+      },
+      "threadCommunication": {
+        "description": "Thread communication",
+        "course": "https://www.edx.org/course/multithreaded-programming-in-java"
+      },
+      "threadPools": {
+        "description": "Thread pools",
+        "course": "https://www.udemy.com/course/java-multithreading-course/"
+      }
+    },
+    "exceptionHandling": {
+      "exceptionTypes": {
+        "description": "Understanding exception types",
+        "course": "https://www.codecademy.com/learn/java/modules/java-exceptions/cheatsheet"
+      },
+      "tryCatchBlocks": {
+        "description": "try-catch blocks",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/try-catch-blocks-handling-exceptions-C5yvw"
+      },
+      "dealingWithMultipleExceptions": {
+        "description": "Dealing with multiple exceptions",
+        "course": "https://www.pluralsight.com/guides/handling-multiple-exceptions-in-java"
+      },
+      "customExceptions": {
+        "description": "Custom exceptions",
+        "course": "https://www.edx.org/course/java-exceptions-and-custom-exceptions"
+      }
+    },
+    "fileIOAndSerialization": {
+      "byteStreamsAndCharacterStreams": {
+        "description": "Byte streams and character streams",
+        "course": "https://www.udemy.com/course/java-file-handling/"
+      },
+      "fileHandling": {
+        "description": "File handling",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/file-handling-YqJry"
+      },
+      "serialization": {
+        "description": "Serialization",
+        "course": "https://www.pluralsight.com/guides/serialization-in-java"
+      }
+    },
+    "javaMemoryManagement": {
+      "javaMemoryModel": {
+        "description": "Java memory model",
+        "course": "https://www.edx.org/course/java-memory-management"
+      },
+      "garbageCollection": {
+        "description": "Garbage collection",
+        "course": "https://www.codecademy.com/learn/java-intermediate/modules/learn-java-intermediate-garbage-collection"
+      },
+      "jvmTuning": {
+        "description": "JVM tuning",
+        "course": "https://www.pluralsight.com/guides/jvm-tuning-in-java"
+      }
+    },
+    "jvmAndJit": {
+      "jvmArchitecture": {
+        "description": "Understanding JVM architecture",
+        "course": "https://www.coursera.org/lecture/java-performance-tuning/understanding-the-jvm-architecture-QEU58"
+      },
+      "justInTimeCompiler": {
+        "description": "Just-In-Time Compiler",
+        "course": "https://www.udemy.com/course/java-jvm-performance-troubleshooting-memory-hotspot-jit/"
+      }
+    },
+    "java8Features": {
+      "lambdaFunctions": {
+        "description": "Lambda Functions",
+        "course": "https://www.codecademy.com/learn/java/modules/java-lambda-expressions/cheatsheet"
+      },
+      "streamAPI": {
+        "description": "Stream API",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/streams-in-java-8-U6Q4K"
+      },
+      "optionalClass": {
+        "description": "Optional class",
+        "course": "https://www.pluralsight.com/guides/java-8-optional-class"
+      },
+      "newDateAndTimeAPI": {
+        "description": "New Date and Time API",
+        "course": "https://www.edx.org/course/java-8-date-and-time-apis"
+      }
+    },
+    "databasesAndSQL": {
+      "sqlBasics": {
+        "description": "SQL basics",
+        "course": "https://www.codecademy.com/learn/learn-sql"
+      },
+      "jdbcSetupAndConfiguration": {
+        "description": "JDBC setup and configuration",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/jdbc-programming-4TBHR"
+      },
+      "usingSqlWithJava": {
+        "description": "Using SQL with Java",
+        "course": "https://www.pluralsight.com/guides/java-sql-using-jdbc"
+      }
+    },
+    "springAndHibernate": {
+      "springFramework": {
+        "description": "Understanding the Spring Framework",
+        "course": "https://www.edx.org/course/introduction-to-spring-framework-5"
+      },
+      "springBootAndMvc": {
+        "description": "Spring Boot and MVC",
+        "course": "https://www.udemy.com/course/spring-boot-introduction/"
+      },
+      "hibernateFramework": {
+        "description": "Understanding the Hibernate Framework",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/introduction-to-hibernate-Yp0Ux"
+      },
+      "jpa": {
+        "description": "JPA",
+        "course": "https://www.pluralsight.com/guides/jpa-java-persistence-api"
+      }
+    },
+    "restfulWebServices": {
+      "buildingRestfulApis": {
+        "description": "Building RESTful API's in Java",
+        "course": "https://www.udemy.com/course/restful-web-service-with-spring-boot-creating-webservices/"
+      },
+      "consumingRestfulApis": {
+        "description": "Consuming RESTful API's in Java",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/consuming-web-services-in-java-MQdlp"
+      },
+      "httpAndStatusCodes": {
+        "description": "Understanding HTTP and status codes",
+        "course": "https://www.pluralsight.com/guides/http-status-codes-in-java"
+      }
+    },
+    "unitTesting": {
+      "understandingUnitTesting": {
+        "description": "Understanding Unit Testing",
+        "course": "https://www.edx.org/course/unit-testing-in-java"
+      },
+      "junit": {
+        "description": "JUnit",
+        "course": "https://www.codecademy.com/learn/java-unit-testing-with-junit"
+      },
+      "mockingFrameworks": {
+        "description": "Mocking frameworks like Mockito",
+        "course": "https://www.pluralsight.com/guides/java-unit-testing-with-mockito"
+      }
+    },
+    "applicationDeploymentAndDistribution": {
+      "executableJars": {
+        "description": "Creating executable Jars",
+        "course": "https://www.coursera.org/lecture/java-programming-arrays-lists-data/creating-executable-jars-y4I7e"
+      },
+      "deployingOnWebServers": {
+        "description": "Deploying Java application on Web Servers",
+        "course": "https://www.pluralsight.com/guides/deploying-java-applications-on-web-servers"
+      },
+      "dockerAndContainerization": {
+        "description": "Docker and containerization",
+        "course": "https://www.edx.org/course/containerizing-java-applications-using-docker"
+      }
+    },
+    "microservicesArchitecture": {
+      "introToMicroservices": {
+        "description": "Intro to microservices architecture",
+        "course": "https://www.udemy.com/course/microservices-architecture-for-java-developers/"
+      },
+      "springBootMicroservices": {
+        "description": "Spring Boot with microservices",
+        "course": "https://www.coursera.org/lecture/spring-boot-microservices-java-spring-cloud/introduction-to-microservices-with-spring-boot-and-spring-cloud-qqPQS"
+      },
+      "microservicesDeployment": {
+        "description": "Microservices deployment",
+        "course": "https://www.pluralsight.com/guides/deployment-strategies-for-microservices"
+      }
+    },
+    "messageBrokers": {
+      "jms": {
+        "description": "JMS",
+        "course": "https://www.codecademy.com/learn/java-messaging-services"
+      },
+      "rabbitmq": {
+        "description": "RabbitMQ",
+        "course": "https://www.coursera.org/lecture/java-microservices-rabbitmq/rabbitmq-messaging-with-java-spring-boot-application-WI2Ig"
+      },
+      "kafka": {
+        "description": "Kafka",
+        "course": "https://www.udemy.com/course/apache-kafka/"
+      }
     }
   }
-  
+}
