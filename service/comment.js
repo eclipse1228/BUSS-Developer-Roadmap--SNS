@@ -52,4 +52,19 @@ router.get('/', async (req, res) => {
   }
 });
 
+// 게시물별 댓글 조회 API 엔드포인트
+router.get('/post/:postId', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const comments = await Comment.find({ post: postId }).populate('author').populate('post');
+    if (!comments.length) {
+      return res.status(404).json({ message: '해당 게시물에 대한 댓글이 없습니다.' });
+    }
+    res.render('commentsByPost', { comments });
+  } catch (err) {
+    console.error('Error fetching comments for post:', err);
+    res.status(500).json({ message: '서버 오류' });
+  }
+});
+
 module.exports = router;
