@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Post</title>
+  <link rel="stylesheet" href="/path/to/your/styles.css">
+</head>
+<body>
+  <h1>Create a New Post</h1>
+  <form id="createPostForm" method="POST" action="/createPost">
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+      <label for="content">Content:</label>
+      <textarea id="content" name="content" required></textarea>
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <select id="category" name="category" required>
+        <option value="">Select a category</option>
+        <option value="General">General</option>
+        <option value="Question">Question</option>
+        <!-- Add more options as needed -->
+      </select>
+    </div>
+    <button type="submit">Create Post</button>
+  </form>
+
+  <script>
+    document.getElementById('createPostForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch('/createPost', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(result.message);
+          event.target.reset();
+          window.location.href = result.redirectTo; // 메인 페이지로 이동
+        } else {
+          alert(result.message || '게시물 작성 중 오류가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error('게시물 작성 중 오류 발생:', error);
+        alert('게시물 작성 중 오류가 발생했습니다.');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -12,7 +12,6 @@ const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
-
 const connectDB = require("./config/db");
 
 dotenv.config();
@@ -145,7 +144,6 @@ const dbName = process.env.DB_NAME;
 
 let bucket;
 
-
 app.post('/upload', upload.single('pdf'), (req, res) => {
   const file = req.file;
   if (!file) {
@@ -182,6 +180,7 @@ app.use("/login", require("./service/login"));
 app.use("/", require("./service/main"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
 
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
