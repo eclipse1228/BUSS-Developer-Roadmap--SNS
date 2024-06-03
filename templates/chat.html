@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat with Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+    .header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 16px;
+      box-sizing: border-box;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .navbar {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #444;
+      width: 100%;
+      padding-left: 6px;
+      box-sizing: border-box;
+    }
+    .navbar a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .navbar a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    #chat {
+      width: 65%;
+      max-width: 800px;
+      height: 73%;
+      border: 1px solid #ccc;
+      padding: 20px;
+      overflow-y: scroll;
+      background-color: white;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .message-container {
+      display: flex;
+      margin-bottom: 15px;
+    }
+    .message-container.bot {
+      justify-content: flex-start;
+    }
+    .message-container.user {
+      justify-content: flex-end;
+    }
+    .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      position: relative;
+    }
+    .message.bot {
+      background-color: #e9e9eb;
+    }
+    .message.user {
+      background-color: #007bff;
+      color: white;
+    }
+    .message-input-container {
+      width: 60%;
+      max-width: 846px;
+      display: flex;
+      margin-top: 20px;
+    }
+    #message {
+      width: 100%;
+      padding: 23px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      margin-right: 10px;
+      font-size: 22px;
+    }
+    #send {
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    #send:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>BUSS</h1>
+  </div>
+  <div class="navbar">
+    <a href="/">MAIN</a>
+    <a href="#">MYPAGE</a>
+  </div>
+  <div id="chat"></div>
+  <div class="message-input-container">
+    <input type="text" id="message" placeholder="Type your message...">
+    <button id="send">Send</button>
+  </div>
+
+  <script>
+    document.getElementById('send').addEventListener('click', async () => {
+      const message = document.getElementById('message').value;
+      if (!message) return;
+
+      // Display user message
+      const chat = document.getElementById('chat');
+      const userMessageContainer = document.createElement('div');
+      userMessageContainer.classList.add('message-container', 'user');
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user');
+      userMessage.textContent = message;
+      userMessageContainer.appendChild(userMessage);
+      chat.appendChild(userMessageContainer);
+
+      // Send message to server
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: message })
+      });
+
+      const data = await response.json();
+
+      // Display bot message
+      const botMessageContainer = document.createElement('div');
+      botMessageContainer.classList.add('message-container', 'bot');
+      const botMessage = document.createElement('div');
+      botMessage.classList.add('message', 'bot');
+      botMessage.textContent = data.bot;
+      botMessageContainer.appendChild(botMessage);
+      chat.appendChild(botMessageContainer);
+
+      // Clear input
+      document.getElementById('message').value = '';
+      chat.scrollTop = chat.scrollHeight;
+    });
+  </script>
+</body>
+</html>

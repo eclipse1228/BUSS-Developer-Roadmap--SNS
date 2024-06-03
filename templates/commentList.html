@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment List</title>
+</head>
+<body>
+    <h1>Comment List</h1>
+    <ul id="commentList"></ul>
+
+    <script>
+        async function loadComments() {
+            try {
+                const response = await fetch('/comments');
+                const comments = await response.json();
+
+                const commentList = document.getElementById('commentList');
+                commentList.innerHTML = '';
+
+                comments.forEach(comment => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Content: ${comment.content}, Author: ${comment.author.name}, Post: ${comment.post.title}`;
+                    commentList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading comments:', error);
+            }
+        }
+
+        window.onload = loadComments;
+    </script>
+</body>
+</html>
