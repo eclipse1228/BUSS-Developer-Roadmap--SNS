@@ -10,7 +10,7 @@ const session = require('express-session');
 const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
 const DB= require("./config/db");
-const morgan = require('morgar');
+const morgan = require('morgan');
 const winston = require('./config/winston');
 
 dotenv.config();
