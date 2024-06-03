@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13a64775-4b7e-473d-9c6f-254a67da1043" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/winston.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/winston.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +124,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1717456150484</updated>
-      <workItem from="1717456151571" duration="2664000" />
+      <workItem from="1717456151571" duration="2805000" />
     </task>
     <servers />
   </component>
