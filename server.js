@@ -9,7 +9,7 @@ const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
-const DB= require("./config/db");
+const connectDB = require("./config/db");
 const morgan = require('morgan');
 const winston = require('./config/winston');
 
@@ -77,7 +77,7 @@ let assistant;
 
 
 // connectDB 함수 호출
-DB.connectDB();
+connectDB();
 
 app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
