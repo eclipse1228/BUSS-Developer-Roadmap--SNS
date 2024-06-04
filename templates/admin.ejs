@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 정보</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>사용자 정보</h1>
+    <form action="/" method="GET">
+        <label for="job">직업 필터:</label>
+        <select name="job" id="job" onchange="this.form.submit()">
+            <option value="">모두 보기</option>
+            <% jobs.forEach(job => { %>
+                <option value="<%= job %>" <%= job === selectedJob ? 'selected' : '' %>><%= job %></option>
+            <% }) %>
+        </select>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>나이</th>
+                <th>이메일</th>
+                <th>직업</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.id %></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.age %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.job %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>
