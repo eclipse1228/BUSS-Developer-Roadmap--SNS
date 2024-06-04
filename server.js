@@ -12,7 +12,7 @@ const { MongoClient, GridFSBucket } = require('mongodb');
 const connectDB = require("./config/db");
 const morgan = require('morgan');
 const winston = require('./config/winston');
-
+const addLikeRouter = require('./service/addlike');
 dotenv.config();
 
 const app = express();
@@ -142,7 +142,7 @@ app.use('/board', require('./service/board'));
 app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
 app.use('/getComments', require('./service/getComments')); 
-
+app.use('/addLike', addLikeRouter);
 // 템플릿 라우트 설정
 app.get("/", (req, res) => {
   const user = req.session.user || "guest";
