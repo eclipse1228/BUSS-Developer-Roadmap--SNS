@@ -124,14 +124,13 @@
         function goToBoard(category) {
             window.location.href = `/board/${category}`;
         }
-    
     </script>
 </head>
 <body>
     <div class="header">
         <div class="logo">BUSS</div>
         <div class="user-info">
-            <% if (user === "guest") { %>
+            <% if (user.id === "guest") { %>
                 <span>비회원</span>
                 <a href="/login" class="btn btn-primary">Login</a>
                 <a href="/register" class="btn btn-secondary">Register</a>
@@ -140,14 +139,13 @@
                 <a href="/logout" class="btn btn-primary">Logout</a>
             <% } %>
             <button onclick="goToChat()">Assistant</button>
-            <button onclick="createPost()"">게시글 쓰기</button>
+            <button onclick="createPost()">게시글 쓰기</button>
         </div>
     </div>
     <div class="navbar">
         <a href="#">MAIN</a>
         <a href="#">ANALYSIS</a>
         <a href="/editProfile">정보수정</a>
-        <a href="/createPost">글쓰기</a>
     </div>
     <div class="container">
         <div class="sidebar">
@@ -163,155 +161,55 @@
         <div class="content-grid">
             <div class="content">
                 <h2>WEEKLY BEST</h2>
+                <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>dltkdwjr</h3>
-                        <span>130 ♡ 33</span>
+                        <h3><%= post.author.id %></h3>
+                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
                     </div>
-                    <p>이상적인 루트의 로드맵 공유합니다.</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <p><%= post.content %></p>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>Rnfxlqrhddbwk1</h3>
-                        <span>99 ♡ 23</span>
-                    </div>
-                    <p>AI에게 로드맵 자세하게 알아오는 방법.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>guswlrtkdnjs</h3>
-                        <span>80 ♡ 9</span>
-                    </div>
-                    <p>현재 사원의 FRONTEND 로드맵 입니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>clswjfgksaos</h3>
-                        <span>50 ♡ 8</span>
-                    </div>
-                    <p>BACKEND 로드맵.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>account1</h3>
-                        <span>10 ♡ 3</span>
-                    </div>
-                    <p>서버 오픈 방법</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
+                <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>Rnfxlqrhddbwk1</h3>
-                        <span>99 ♡ 23</span>
+                        <h3><%= post.author.id %></h3>
+                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
                     </div>
-                    <p>AI에게 로드맵 자세하게 알아오는 방법.</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <p><%= post.content %></p>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>dkanakf</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>이거 로드맵 괜찮나요?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>dltkdwjr</h3>
-                        <span>130 ♡ 33</span>
-                    </div>
-                    <p>이상적인 루트의 로드맵 공유합니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>sksmshaffkdy</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>이거 뭐 어떻게 하나요 ?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>aoaoq123</h3>
-                        <span>1 ♡ 3</span>
-                    </div>
-                    <p>로드맵 괜찮을까요 ?</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
+                <% frontendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>account1</h3>
-                        <span>0 ♡ 0</span>
+                        <h3><%= post.author.id %></h3>
+                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
                     </div>
-                    <p>HTML 이거 맞나요 ?</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <p><%= post.content %></p>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>wkfkdwlf1</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>제 FRONTEND 로드맵좀 봐주세요.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>rhtndlqlsek</h3>
-                        <span>0 ♡ 3</span>
-                    </div>
-                    <p>CSS 오류 수정 방법.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>guswlrtkdnjs</h3>
-                        <span>80 ♡ 9</span>
-                    </div>
-                    <p>현재 사원의 FRONTEND 로드맵 입니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>testdnjs</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>제 FRONTEND 로드맵좀 봐주세요.</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
+                <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>epdlxjqpdltm</h3>
-                        <span>0 ♡ 2</span>
+                        <h3><%= post.author.id %></h3>
+                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
                     </div>
-                    <p>데이터 베이스 연동 어떻게 하나요 ?</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <p><%= post.content %></p>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>clswjfgksaos</h3>
-                        <span>50 ♡ 8</span>
-                    </div>
-                    <p>BACKEND 로드맵.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>zhemafhfkdy</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>C++ 이거 어떻게해 하나요?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>carkhgowntpdy</h3>
-                        <span>10 ♡ 3</span>
-                    </div>
-                    <p>서버 오픈 방법</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>xptmdls</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>로드맵 괜찮을까요 ?</p>
-                </div>
+                <% }) %>
             </div>
         </div>
     </div>
