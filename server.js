@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
-const { MongoClient, GridFSBucket } = require('mongodb');
 const connectDB = require("./config/db");
 const addLikeRouter = require('./service/addlike');
 const { getTopWriters } = require('./service/topwriter');
@@ -208,6 +207,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
       tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
     });
 
+    console.log('File successfully uploaded to vector store');
     res.status(200).json({ message: 'File uploaded and processed successfully' });
   } catch (error) {
     console.error("Error during file upload and processing:", error);
