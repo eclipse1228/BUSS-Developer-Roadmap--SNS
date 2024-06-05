@@ -96,6 +96,10 @@
         .content h2 span {
             cursor: pointer;
         }
+        .content h2 span:hover {
+            color: #007bff; /* 마우스를 올렸을 때 색상 변경 */
+            cursor: pointer; /* 커서 모양 변경 */
+        }
         .post {
             background-color: white;
             margin: 10px 0;
@@ -108,6 +112,14 @@
         }
         .post p {
             margin: 5px 0;
+        }
+       .post a {
+            font-size: 25px; /* 글씨체 크기 조절 */
+            color: black; /* 글씨 색상 조절 */
+            text-decoration: none; /* 밑줄 없애기 */
+        }
+        .post a:hover {
+            color: #007bff; /* 링크에 마우스를 올렸을 때 색상 변경 */
         }
         .post .info {
             display: flex;
@@ -143,7 +155,7 @@
         </div>
     </div>
     <div class="navbar">
-        <a href="#">MAIN</a>
+        <a href="/">MAIN</a>
         <a href="#">ANALYSIS</a>
         <a href="/editProfile">정보수정</a>
     </div>
@@ -166,11 +178,10 @@
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.id %></h3>
-                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    <p><%= post.content %></p>
                 </div>
                 <% }) %>
             </div>
@@ -179,11 +190,10 @@
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.id %></h3>
-                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    <p><%= post.content %></p>
                 </div>
                 <% }) %>
             </div>
@@ -192,11 +202,10 @@
                 <% frontendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.id %></h3>
-                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    <p><%= post.content %></p>
                 </div>
                 <% }) %>
             </div>
@@ -205,11 +214,10 @@
                 <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.id %></h3>
-                        <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    <p><%= post.content %></p>
                 </div>
                 <% }) %>
             </div>
