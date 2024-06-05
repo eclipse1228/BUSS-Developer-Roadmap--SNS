@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
-const { MongoClient, GridFSBucket } = require('mongodb');
+const multer = require('multer');
 const connectDB = require("./config/db");
 const addLikeRouter = require('./service/addlike');
 const { getTopWriters } = require('./service/topwriter');
@@ -78,8 +78,63 @@ app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
 
-// Multer 설정 (파일 업로드)
+// Multer 설정 (파일 업로드를 위한 미들웨어)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // 파일 업로드 경로
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // 원본 파일 이름 사용
+  }
+});
+const upload = multer({ storage: storage });
 
+// 서비스 라우트 설정
+app.use("/register", require("./service/register"));
+app.use("/login", require("./service/login"));
+app.use("/", require("./service/gettopwriter"));
+app.use("/logout", require("./service/logout"));
+app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
+app.use("/comments", require("./service/comment"));  // 댓글 라우트 추가
+app.use('/board', require('./service/board'));
+app.use('/showPost', require('./service/showPost'));
+app.use('/addComment', require('./service/addComment'));
+app.use('/getComments', require('./service/getComments')); 
+app.use('/addLike', addLikeRouter);
+app.use("/", require("./service/gettopwriter")); 
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.get('/upload', (req, res) => {
+  res.render('upload');
+});
+
+// 댓글 테스트 페이지 라우팅
+app.get("/commentTest", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentTest.html'));
+});
+
+// 댓글 목록 페이지 라우팅
+app.get("/commentList", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentList.html'));
+});
+
+// 로그인된 사용자 정보 반환
+app.get('/api/auth/user', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  res.status(200).json(req.session.user);
+});
+
+// /chat 라우트 추가
 app.get("/chat", (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
 });
@@ -140,39 +195,41 @@ app.use('/getComments', require('./service/getComments'));
 app.use('/addLike', addLikeRouter);
 app.use("/", require("./service/gettopwriter")); 
 
+// 파일 업로드 라우트 추가
+app.post('/upload', upload.single('pdf'), async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'uploads', req.file.originalname);
 
-app.get("/login", (req, res) => {
-  res.render("login");
-});
 
-app.get("/register", (req, res) => {
-  res.render("register");
-});
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`);
+    }
 
-app.get('/upload', (req, res) => {
-  res.render('upload');
-});
+    const file = fs.createReadStream(filePath);
 
-// 댓글 테스트 페이지 라우팅
-app.get("/commentTest", (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'commentTest.html'));
-});
+    let vectorStore = await client.beta.vectorStores.create({
+      name: "RoadMap",
+      expires_after: {
+        "anchor": "last_active_at",
+        "days": 1
+      }
+    });
 
-// 댓글 목록 페이지 라우팅
-app.get("/commentList", (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'commentList.html'));
-});
+    await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
+      files: [file],
+    });
 
-// 로그인된 사용자 정보 반환
-app.get('/api/auth/user', (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ message: 'Not authenticated' });
+    await client.beta.assistants.update(assistant.id, {
+      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
+    });
+
+    console.log('File successfully uploaded to vector store');
+    res.status(200).json({ message: 'File uploaded and processed successfully' });
+  } catch (error) {
+    console.error("Error during file upload and processing:", error);
+    res.status(500).json({ message: 'Error during file upload and processing' });
   }
-  res.status(200).json(req.session.user);
 });
-
-const uploadRoutes = require('./service/upload');
-app.use('/upload', uploadRoutes);
 
 // 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
