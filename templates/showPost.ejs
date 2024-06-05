@@ -59,6 +59,24 @@
       });
     }
 
+    function addLike() {
+      const postId = '<%= post._id %>';
+      fetch(`/addLike/${postId}`, {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('likeCount').textContent = data.likes;
+        } else {
+          alert('좋아요를 추가하는 중 오류가 발생했습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('서버 오류가 발생했습니다.');
+      });
+    }
   </script>
 </head>
 <body>
@@ -82,6 +100,10 @@
           <li><%= comment.content %> - <%= comment.author.name %></li>
         <% }) %>
       </ul>
+    </section>
+    <section>
+      <button type="button" onclick="addLike()">좋아요</button>
+      <span id="likeCount"><%= post.likes %></span> Likes
     </section>
   </main>
   <footer>
