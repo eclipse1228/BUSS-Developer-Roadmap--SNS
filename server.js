@@ -9,6 +9,8 @@ const session = require('express-session');
 const { MongoClient, GridFSBucket } = require('mongodb');
 const connectDB = require("./config/db");
 const addLikeRouter = require('./service/addlike');
+const { getTopWriters } = require('./service/topwriter');
+const Post = require('./db/Post');
 
 dotenv.config();
 
@@ -76,10 +78,57 @@ app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
 
+// Multer 설정 (파일 업로드)
+
+app.get("/chat", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+});
+
+app.post("/chat", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    const thread = await client.beta.threads.create({
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const stream = client.beta.threads.runs
+      .stream(thread.id, { assistant_id: assistant.id })
+      .on("textCreated", () => console.log("assistant >"))
+      .on("toolCallCreated", (event) => console.log("assistant " + event.type))
+      .on("messageDone", async (event) => {
+        if (event.content[0].type === "text") {
+          const { text } = event.content[0];
+          const { annotations } = text;
+          const citations = [];
+
+          let index = 0;
+          for (let annotation of annotations) {
+            text.value = text.value.replace(annotation.text, "[" + index + "]");
+            const { file_citation } = annotation;
+            if (file_citation) {
+              const citedFile = await client.files.retrieve(file_citation.file_id);
+              citations.push("[" + index + "]" + citedFile.filename);
+            }
+            index++;
+          }
+
+          console.log(text.value);
+          console.log(citations.join("\n"));
+
+          res.status(200).send({ bot: text.value });
+        }
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
-app.use("/", require("./service/gettopwriter"));  // 여기서 main.js를 불러옴
+app.use("/", require("./service/gettopwriter"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
 app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
@@ -89,7 +138,41 @@ app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
 app.use('/getComments', require('./service/getComments')); 
 app.use('/addLike', addLikeRouter);
-app.use("/", require("./service/main"));
+app.use("/", require("./service/gettopwriter")); 
+
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.get('/upload', (req, res) => {
+  res.render('upload');
+});
+
+// 댓글 테스트 페이지 라우팅
+app.get("/commentTest", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentTest.html'));
+});
+
+// 댓글 목록 페이지 라우팅
+app.get("/commentList", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentList.html'));
+});
+
+// 로그인된 사용자 정보 반환
+app.get('/api/auth/user', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  res.status(200).json(req.session.user);
+});
+
+const uploadRoutes = require('./service/upload');
+app.use('/upload', uploadRoutes);
 
 // 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
