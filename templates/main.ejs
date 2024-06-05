@@ -151,11 +151,13 @@
         <div class="sidebar">
             <h3>Top Writers</h3>
             <ul>
-                <li>account1 <span>점수 156</span></li>
-                <li>account1 <span>점수 120</span></li>
-                <li>account1 <span>점수 80</span></li>
-                <li>account1 <span>점수 50</span></li>
-                <li>account1 <span>점수 20</span></li>
+                <% if (typeof topwriters !== 'undefined') { %>
+                    <% topwriters.forEach(writer => { %>
+                        <li><%= writer.username %> <span>점수 <%= writer.postCount %></span></li>
+                    <% }) %>
+                <% } else { %>
+                    <li>No top writers available.</li>
+                <% } %>
             </ul>
         </div>
         <div class="content-grid">
