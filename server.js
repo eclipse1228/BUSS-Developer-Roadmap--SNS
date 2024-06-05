@@ -180,10 +180,26 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// 서비스 라우트 설정
+app.use("/register", require("./service/register"));
+app.use("/login", require("./service/login"));
+app.use("/", require("./service/gettopwriter"));
+app.use("/logout", require("./service/logout"));
+app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); 
+app.use("/comments", require("./service/comment"));  
+app.use('/board', require('./service/board'));
+app.use('/showPost', require('./service/showPost'));
+app.use('/addComment', require('./service/addComment'));
+app.use('/getComments', require('./service/getComments')); 
+app.use('/addLike', addLikeRouter);
+app.use("/", require("./service/gettopwriter")); 
+
 // 파일 업로드 라우트 추가
 app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'uploads', req.file.originalname);
+
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${filePath}`);
