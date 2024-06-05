@@ -3,41 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= category %> 게시물 목록</title>
+  <title><%= category.toUpperCase() %> 게시물 목록</title>
   <link rel="stylesheet" href="/path/to/your/styles.css">
   <style>
+    /* Header 및 Navbar 스타일 */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+    .header .logo {
+        font-size: 24px;
+    }
+    .header .user-info {
+        display: flex;
+        align-items: center;
+    }
+    .header .user-info button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .header .user-info button:hover {
+        background-color: #0056b3;
+    }
+    .navbar {
+        display: flex;
+        justify-content: flex-start;
+        background-color: #444;
+    }
+    .navbar a {
+        color: white;
+        padding: 14px 20px;
+        text-decoration: none;
+        text-align: center;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    /* Container, Sidebar 및 Content 스타일 */
+    .container {
+        display: grid;
+        grid-template-columns: 1fr; /* 컨테이너 너비를 조정하여 페이지 중앙에 위치 */
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .posts {
+      display: grid;
+      gap: 20px;
+    }
+
     .post {
-      background-color: white;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .post h3 {
-      margin: 0;
+
+    .post h4 {
+      margin-top: 0; /* 기본 마진 제거 */
+      margin-bottom: 10px; /* 기본 마진 제거 */
+      font-size: 25px; /* 게시물 제목 글씨 크기 */
+      color: black; /* 게시물 제목 글씨 색상 */
     }
+
+    .post h4 a {
+      color: black; /* 링크 색상 조정 */
+      text-decoration: none; /* 밑줄 제거 */
+    }
+
+    .post h4 a:hover {
+      color: #007bff;
+    }
+
     .post p {
-      margin: 5px 0;
+      margin: 0 0; /* 단락 간격 조정 */
     }
-    .post .info {
+
+    .info {
       display: flex;
       justify-content: space-between;
+      align-items: flex-end; /* 우측 아래 정렬 */
+    }
+
+    .info span {
+      font-size: 20px; /* 좋아요와 댓글 수 글씨 크기 */
+      color: #888; /* 좋아요와 댓글 수 색상 */
+    }
+
+    /* 추가적인 스타일링 */
+    h1 {
+      text-align: center; /* 중앙 정렬 */
+      margin-top: 20px; /* 상단 마진 추가 */
+    }
+
+    /* 폼 스타일 */
+    form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
     }
   </style>
+  <script>       
+      function goToChat() {
+          window.location.href = '/chat';
+      }
+  </script>
 </head>
 <body>
+  <div class="header">
+    <div class="logo">
+      BUSS
+    </div>
+    <div class="user-info">
+        <button onclick="goToChat()">Assistant</button>
+    </div>
+  </div>
+  <div class="navbar">
+      <a href="/">MAIN</a>
+  </div>
+
   <div class="container">
-    <h1><%= category %> 게시물 목록</h1>
+    <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
     <div class="posts">
       <% if (posts.length > 0) { %>
         <% posts.forEach(post => { %>
           <div class="post">
             <div class="info">
-              <h3><%= post.author.username %></h3>
-              <span><%= post.likes %> ♡ <%= post.comments.length %></span>
+              <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 맨 위에 위치 -->
+              <div>
+                <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
+                <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+              </div>
             </div>
-            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-            <p><%= post.content %></p>
+            <p><%= post.content.substring(0, 50) + (post.content.length > 50 ? '...' : '') %></p> <!-- 본문내용은 50자까지 표현 -->
           </div>
         <% }); %>
       <% } else { %>
