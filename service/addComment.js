@@ -1,5 +1,3 @@
-// service/addComment.js
-
 const express = require('express');
 const router = express.Router();
 const Comment = require('../db/Comment');
@@ -22,12 +20,14 @@ router.post('/', async (req, res) => {
     // 댓글 저장
     await newComment.save();
 
-    res.status(200).json({ success: true, message: '댓글이 성공적으로 추가되었습니다.' });
+    // 댓글이 추가되면 해당 게시물의 comments 배열에 댓글을 추가
+    const updatedPost = await Post.findByIdAndUpdate(post, { $push: { comments: newComment._id } }, { new: true });
+
+    res.status(200).json({ success: true, message: '댓글이 성공적으로 추가되었습니다.', updatedPost });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
   }
 });
-
 
 module.exports = router;
