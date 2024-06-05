@@ -7,7 +7,7 @@ const Post = require('../db/Post'); // Post 스키마 가져오기
 router.get('/:category', async (req, res) => {
   const { category } = req.params;
   try {
-    const posts = await Post.find({ category }).populate('author', 'username').sort({ createdAt: -1 }).limit(5);
+    const posts = await Post.find({ category }).populate('author', 'username').sort({ createdAt: -1 });
     res.render('board', { category, posts });
   } catch (error) {
     console.error('게시물 조회 중 오류 발생:', error);

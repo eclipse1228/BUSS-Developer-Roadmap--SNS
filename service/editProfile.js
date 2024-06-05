@@ -1,3 +1,5 @@
+// 정보 수정
+
 const express = require("express");
 const User = require("../db/User");
 const router = express.Router();
@@ -28,12 +30,15 @@ router.post("/", async (req, res) => {
     if (age && age !== user.age) { user.age = age; isUpdated = true; }
     if (email && email !== user.email) { user.email = email; isUpdated = true; }
     if (job && job !== user.job) { user.job = job; isUpdated = true; }
-
+    
     if (isUpdated) {
       await user.save();
-      return res.json({ success: true, message: "Profile updated successfully" });
-    } else {
-      return res.json({ success: false, message: "No changes to update" });
+      // 세션 데이터 업데이트
+      req.session.user = user;
+      return res.json({ success: true, message: "변경사항이 저장되었습니다." });
+    } 
+    else if(!isUpdated) {
+      return res.json({ success: false, message: "변경사항이 없습니다." });
     }
   } catch (error) {
     console.error(error.message);
