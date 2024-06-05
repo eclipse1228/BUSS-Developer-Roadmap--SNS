@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat with Assistant</title>
   <style>
+    /* 기존 스타일 유지 */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -96,16 +97,20 @@
       margin-right: 10px;
       font-size: 22px;
     }
-    #send {
+    #send, #upload-pdf {
       padding: 10px 20px;
       background-color: #007bff;
       border: none;
       color: white;
       border-radius: 20px;
       cursor: pointer;
+      margin-right: 10px;
     }
-    #send:hover {
+    #send:hover, #upload-pdf:hover {
       background-color: #0056b3;
+    }
+    #pdf-file {
+      display: none;
     }
   </style>
 </head>
@@ -121,6 +126,8 @@
   <div class="message-input-container">
     <input type="text" id="message" placeholder="Type your message...">
     <button id="send">Send</button>
+    <input type="file" id="pdf-file" accept="application/pdf">
+    <button id="upload-pdf">Upload PDF</button>
   </div>
 
   <script>
@@ -160,6 +167,46 @@
 
       // Clear input
       document.getElementById('message').value = '';
+      chat.scrollTop = chat.scrollHeight;
+    });
+
+    document.getElementById('upload-pdf').addEventListener('click', () => {
+      document.getElementById('pdf-file').click();
+    });
+
+    document.getElementById('pdf-file').addEventListener('change', async () => {
+      const file = document.getElementById('pdf-file').files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('pdf', file);
+
+      // Display user message about the file upload
+      const chat = document.getElementById('chat');
+      const userMessageContainer = document.createElement('div');
+      userMessageContainer.classList.add('message-container', 'user');
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user');
+      userMessage.textContent = `파일 업로드: ${file.name}`;
+      userMessageContainer.appendChild(userMessage);
+      chat.appendChild(userMessageContainer);
+
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      // Display bot message about upload status
+      const botMessageContainer = document.createElement('div');
+      botMessageContainer.classList.add('message-container', 'bot');
+      const botMessage = document.createElement('div');
+      botMessage.classList.add('message', 'bot');
+      botMessage.textContent = data.message;
+      botMessageContainer.appendChild(botMessage);
+      chat.appendChild(botMessageContainer);
+
       chat.scrollTop = chat.scrollHeight;
     });
   </script>
