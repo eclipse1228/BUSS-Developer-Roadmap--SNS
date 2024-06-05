@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>트리 다이어그램</title>
+  <style>
+    /* 트리 다이어그램을 위한 CSS 스타일 */
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 2px;
+    }
+
+    .node {
+      cursor: pointer;
+    }
+
+    .node rect {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 2px;
+    }
+
+    .node text {
+      font: 12px sans-serif;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  </style>
+  <!-- D3.js 라이브러리 -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+  <!-- 트리 다이어그램을 위한 SVG 컨테이너 -->
+  <svg id="tree-container" width="1200" height="900"></svg>
+
+  <!-- JavaScript 코드 -->
+  <script>
+    d3.json("roadmap.json").then(function(data) {
+      var width = 1200;
+      var height = 900;
+
+      var root = d3.hierarchy(data);
+      var links = root.links();
+      var nodes = root.descendants();
+
+      var simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(150))
+        .force("charge", d3.forceManyBody().strength(-400))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("y", d3.forceY().y(function(d) { return d.depth * 250; }))
+        .force("collision", d3.forceCollide().radius(function(d) { return d.data.name.length * 2 + 15; }));
+
+      
+      var svg = d3.select("#tree-container")
+        .attr("width", width)
+        .attr("height", height);
+
+      var zoom = d3.zoom()
+        .scaleExtent([0.1, 4])
+        .on("zoom", zoomed);
+
+      svg.call(zoom);
+
+      var g = svg.append("g");
+
+      var link = g.selectAll(".link")
+        .data(links)
+        .enter().append("line")
+        .attr("class", "link");
+
+      // 노드를 클릭
+      function nodeClicked(event, d) {
+        // url 확인
+        if (d.data.url) {
+          // url 오픈
+          window.open(d.data.url);
+        }
+      }
+
+      var node = g.selectAll(".node")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended))
+        .on("click", nodeClicked);
+
+      node.append("rect")
+        .attr("width", function(d) { return d.data.name.length * 8 + 20; })
+        .attr("height", 30)
+        .attr("rx", 10)
+        .attr("ry", 10);
+
+      node.append("text")
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+        .attr("x", function(d) { return (d.data.name.length * 8 + 20) / 2; })
+        .attr("y", 15)
+        .text(d => d.data.name);
+
+      simulation.on("tick", () => {
+        link.attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        node.attr("transform", d => "translate(" + (d.x - (d.data.name.length * 8 + 20) / 2) + "," + (d.y - 15) + ")");
+      });
+
+      function zoomed(event) {
+        g.attr("transform", event.transform);
+      }
+
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+    }).catch(function(error) {
+      console.error("roadmap.json 파일을 불러오거나 파싱하는 중 오류가 발생했습니다:", error);
+    });
+  </script>
+</body>
+</html>

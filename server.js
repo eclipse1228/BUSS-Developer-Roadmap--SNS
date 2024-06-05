@@ -1,4 +1,3 @@
-// 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
 const fs = require('fs');
@@ -7,11 +6,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
-const multer = require('multer');
 const { MongoClient, GridFSBucket } = require('mongodb');
 const connectDB = require("./config/db");
-const morgan = require('morgan');
-const winston = require('./config/winston');
+const addLikeRouter = require('./service/addlike');
+const { getTopWriters } = require('./service/topwriter');
+const Post = require('./db/Post');
 
 dotenv.config();
 
@@ -72,10 +71,6 @@ let assistant;
   }
 })();
 
-
-
-
-
 // connectDB 함수 호출
 connectDB();
 
@@ -133,7 +128,7 @@ app.post("/chat", async (req, res) => {
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
-app.use("/", require("./service/main"));
+app.use("/", require("./service/gettopwriter"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
 app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
@@ -142,12 +137,9 @@ app.use('/board', require('./service/board'));
 app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
 app.use('/getComments', require('./service/getComments')); 
+app.use('/addLike', addLikeRouter);
+app.use("/", require("./service/gettopwriter")); 
 
-// 템플릿 라우트 설정
-app.get("/", (req, res) => {
-  const user = req.session.user || "guest";
-  res.render("main", { user });
-});
 
 app.get("/login", (req, res) => {
   res.render("login");
@@ -178,8 +170,9 @@ app.get('/api/auth/user', (req, res) => {
   }
   res.status(200).json(req.session.user);
 });
+
 const uploadRoutes = require('./service/upload');
 app.use('/upload', uploadRoutes);
-// OpenAI Chat 엔드포인트
+
 // 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
