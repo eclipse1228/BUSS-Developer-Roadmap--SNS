@@ -308,7 +308,8 @@
       </section>
       <header>
         <p style="margin-bottom: -10px">카테고리: <%= post.category %></p>
-        <p>작성자: <%= post.author.name %></p>
+        <p style="margin-bottom: -10px">작성자: <%= post.author.name %></p>
+        <p>작성일: <%= new Date(post.createdAt).toLocaleString() %></p>
         <h1 style="margin-bottom: -10px;"><%= post.title %></h1>
       </header>
       <main>
