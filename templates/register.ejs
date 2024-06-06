@@ -109,7 +109,7 @@
         <label for="job">직업</label>
         <input type="text" class="form-control" id="job" name="job">
       </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
   </div>
 
@@ -129,7 +129,7 @@
         });
 
         if (response.ok) {
-          alert("Welcome! Registration successful.");
+          alert("회원가입에 성공했습니다.");
           window.location.href = "/login";
         } else {
           const result = await response.json();

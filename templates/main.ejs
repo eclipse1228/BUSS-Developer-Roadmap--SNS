@@ -108,6 +108,11 @@
         }
         .post h3 {
             margin: 0;
+            margin-left: 5px;
+            font-weight:100;
+        }
+        .post h4 {
+            margin: 5px;
         }
         .post p {
             margin: 5px 0;
@@ -190,10 +195,10 @@
     <div class="container">
         <div class="sidebar">
             <h3>Top Writers</h3>
-            <ol>
+            <ol style="margin: -15px -20px">
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
-                        <li><%= writer.username %> <span> [<%= writer.postCount %>점]</span></li>
+                        <li><strong><%= writer.username %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
                     <% }) %>
                 <% } else { %>
                     <li>No top writers available.</li>

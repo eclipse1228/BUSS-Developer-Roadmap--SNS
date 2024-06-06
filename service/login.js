@@ -13,6 +13,11 @@ router.use(session({
   saveUninitialized: true
 }));
 
+// 로그인 페이지 렌더링
+router.get("/", (req, res) => {
+  res.render("login", { id: req.query.id || "" });
+});
+
 // 로그인 요청 처리
 router.post("/", async (req, res) => {
   const { id, pw } = req.body;
@@ -21,13 +26,13 @@ router.post("/", async (req, res) => {
     // 사용자 확인
     let user = await User.findOne({ id });
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: "Invalid ID or Password" }] });
+      return res.send(`<script>alert("아이디 또는 비밀번호를 확인해주세요."); window.location.href = '/login?id=${id}';</script>`);
     }
 
     // 비밀번호 확인
     const isMatch = await bcrypt.compare(pw, user.pw);
     if (!isMatch) {
-      return res.status(400).json({ errors: [{ msg: "Invalid ID or Password" }] });
+      return res.send(`<script>alert("아이디 또는 비밀번호를 확인해주세요."); window.location.href = '/login?id=${id}';</script>`);
     }
 
     // 세션에 사용자 정보 저장
