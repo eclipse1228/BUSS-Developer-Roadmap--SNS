@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Post</title>
-  <link rel="stylesheet" href="/path/to/your/styles.css">
   <style>
     /* Header 및 Navbar 스타일 */
     body {
@@ -111,6 +110,12 @@
       box-sizing: border-box;
     }
 
+    textarea {
+      height: 300px; /* 원하는 높이 설정 */
+      resize: none;  /* 크기 조절 비활성화 */
+    }
+
+
     button[type="submit"] {
       padding: 10px 20px;
       background-color: #007bff;
@@ -154,11 +159,11 @@
         <h1>게시물 작성</h1>
         <form id="createPostForm" method="POST" action="/createPost">
           <div>
-            <label for="title">Title:</label>
+            <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>
           </div>
           <div>
-              <label for="category">Category:</label>
+              <label for="category">카테고리:</label>
               <select id="category" name="category" required>
                 <option value="">Select a category</option>
                 <option value="community">COMMUNITY</option>
@@ -168,11 +173,11 @@
               </select>
             </div>
           <div>
-            <label for="content">Content:</label>
+            <label for="content">내용:</label>
             <textarea id="content" name="content" required></textarea>
           </div>
 
-          <button type="submit">Create Post</button>
+          <button type="submit">게시물 작성</button>
         </form>
       </div>
     </div>
