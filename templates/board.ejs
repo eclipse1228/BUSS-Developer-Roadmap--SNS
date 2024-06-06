@@ -64,9 +64,14 @@
     /* Container, Sidebar 및 Content 스타일 */
     .container {
         display: grid;
-        grid-template-columns: 1fr; /* 컨테이너 너비를 조정하여 페이지 중앙에 위치 */
+        grid-template-columns: 15% 75%; /* 사이드바를 15%로 설정, 나머지 콘텐츠를 75%로 설정 */
         gap: 20px;
         padding: 20px;
+    }
+
+    .sidebar {
+      background-color: #f1f1f1;
+      padding: 10px;
     }
 
     .posts {
@@ -82,9 +87,9 @@
     }
 
     .post h4 {
-      margin-top: 0; /* 기본 마진 제거 */
-      margin-bottom: 10px; /* 기본 마진 제거 */
-      font-size: 25px; /* 게시물 제목 글씨 크기 */
+      margin: 10px 0 10px 0; /* 기본 마진 제거 및 하단 마진 추가 */
+      font-size: 1.3em; /* 게시물 제목 글씨 크기 */
+      font-weight: bold; /* 게시물 제목 Bold체 */
       color: black; /* 게시물 제목 글씨 색상 */
     }
 
@@ -98,7 +103,8 @@
     }
 
     .post p {
-      margin: 0 0; /* 단락 간격 조정 */
+      margin: 0; /* 단락 간격 조정 */
+      color: #888;
     }
 
     .info {
@@ -171,36 +177,34 @@
       <a href="/">MAIN</a>
   </div>
   <div class="container">
-    <div class="sidebar">
-      <!-- <h3>Top Writers</h3>
-      <ul>
-          <% if (typeof topwriters !== 'undefined') { %>
-              <% topwriters.forEach(writer => { %>
-                  <li><%= writer.username %> <span>점수 <%= writer.postCount %></span></li>
-              <% }) %>
-          <% } else { %>
-              <li>No top writers available.</li>
-          <% } %>
-      </ul> -->
-    </div>
-    <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
-    <div class="posts">
-      <% if (posts.length > 0) { %>
-        <% posts.forEach(post => { %>
-          <div class="post">
-            <div class="info">
-              <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 맨 위에 위치 -->
-              <div>
-                <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
-                <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+    <div class="sidebar"></div>
+    <div class="content">
+      <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
+      <div class="posts">
+        <% if (posts.length > 0) { %>
+          <% posts.forEach(post => { %>
+            <div class="post">
+              <div class="info">
+                <span>작성자: <%= post.author.name %></span> <!-- 사용자 이름을 첫 줄에 표시 -->
+              </div>
+              <div class="info">
+                <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 두 번째 줄에 Bold체와 글자 크기 증가 -->
+              </div>
+              <div class="info">
+                <p><%= post.content.substring(0, 130) + (post.content.length > 130 ? '...' : '') %></p> <!-- 게시물 내용은 50자까지 표시 -->
+              </div>
+              <div class="info">
+                <div>
+                  <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
+                  <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+                </div>
               </div>
             </div>
-            <p><%= post.content.substring(0, 50) + (post.content.length > 50 ? '...' : '') %></p> <!-- 본문내용은 50자까지 표현 -->
-          </div>
-        <% }); %>
-      <% } else { %>
-        <p>해당 카테고리에 게시물이 없습니다.</p>
-      <% } %>
+          <% }); %>
+        <% } else { %>
+          <p>해당 카테고리에 게시물이 없습니다.</p>
+        <% } %>
+      </div>
     </div>
   </div>
 </body>
