@@ -1,6 +1,3 @@
-// server.js
-// nodemon으로 서버 실행 : npm run server 
-// 모듈 가져오기
 const dotenv = require("dotenv");
 const OpenAI = require('openai');
 const fs = require('fs');
@@ -10,14 +7,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const multer = require('multer');
-const { MongoClient, GridFSBucket } = require('mongodb');
 const connectDB = require("./config/db");
+const addLikeRouter = require('./service/addlike');
+const { getTopWriters } = require('./service/topwriter');
+const Post = require('./db/Post');
 
 dotenv.config();
 
 const app = express();
-// const router = express.Router();
-
 const PORT = process.env.PORT || 5000;
 
 // Middleware 설정
@@ -26,7 +23,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
-app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // 세션 설정
 app.use(session({
@@ -34,7 +30,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+<<<<<<< HEAD
 // open AI Key 
+=======
+
+// OpenAI 클라이언트 설정
+>>>>>>> origin
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -74,6 +75,70 @@ let assistant;
   }
 })();
 
+// connectDB 함수 호출
+connectDB();
+
+app.engine('ejs', require('ejs').__express);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "templates"));
+
+// Multer 설정 (파일 업로드를 위한 미들웨어)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // 파일 업로드 경로
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // 원본 파일 이름 사용
+  }
+});
+const upload = multer({ storage: storage });
+
+// 서비스 라우트 설정
+app.use("/register", require("./service/register"));
+app.use("/login", require("./service/login"));
+app.use("/", require("./service/main"));
+app.use("/logout", require("./service/logout"));
+app.use("/editProfile", require("./service/editProfile"));
+app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
+app.use("/comments", require("./service/comment"));  // 댓글 라우트 추가
+app.use('/board', require('./service/board'));
+app.use('/showPost', require('./service/showPost'));
+app.use('/addComment', require('./service/addComment'));
+app.use('/getComments', require('./service/getComments')); 
+app.use('/addLike', addLikeRouter);
+app.use("/gettopwriter", require("./service/gettopwriter")); 
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.get('/upload', (req, res) => {
+  res.render('upload');
+});
+
+// 댓글 테스트 페이지 라우팅
+app.get("/commentTest", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentTest.html'));
+});
+
+// 댓글 목록 페이지 라우팅
+app.get("/commentList", (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'commentList.html'));
+});
+
+// 로그인된 사용자 정보 반환
+app.get('/api/auth/user', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  res.status(200).json(req.session.user);
+});
+
+// /chat 라우트 추가
 app.get("/chat", (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
 });
@@ -119,106 +184,41 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-connectDB();
-console.log("try .. ")
-
-// EJS를 뷰 엔진으로 등록
-
-app.engine('ejs', require('ejs').__express);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "templates"));
-
-// Multer 설정 (파일 업로드)
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedMimeTypes = ['application/pdf'];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
-      cb(new Error('Invalid file type'));
-    } else {
-      cb(null, true);
-    }
-  }
-});
-
-// MongoDB 연결 설정
-const mongoURI = process.env.MONGO_URI;
-const dbName = process.env.DB_NAME;
-
-let bucket;
-
-app.post('/upload', upload.single('pdf'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).json({ message: '파일을 업로드 해주세요.', success: false });
-  }
-
-  if (!bucket) {
-    console.error('GridFSBucket 객체가 초기화되지 않았습니다. bucket:', bucket);
-    return res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
-  }
-
+// 파일 업로드 라우트 추가
+app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
-    console.log('업로드 스트림 시작');
-    const uploadStream = bucket.openUploadStream(file.originalname);
-    uploadStream.end(file.buffer);
+    const filePath = path.join(__dirname, 'uploads', req.file.originalname);
 
-    uploadStream.on('finish', () => {
-      console.log('파일 업로드 완료');
-      res.status(200).json({ message: `파일 업로드 완료: ${file.originalname}`, success: true });
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`);
+    }
+
+    const file = fs.createReadStream(filePath);
+
+    let vectorStore = await client.beta.vectorStores.create({
+      name: "RoadMap",
+      expires_after: {
+        "anchor": "last_active_at",
+        "days": 1
+      }
     });
 
-    uploadStream.on('error', (err) => {
-      console.error('업로드 스트림 오류:', err);
-      res.status(500).json({ message: '파일 업로드 중 오류가 발생했습니다.' });
+    await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
+      files: [file],
     });
+
+    await client.beta.assistants.update(assistant.id, {
+      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
+    });
+
+    console.log('File successfully uploaded to vector store');
+    res.status(200).json({ message: 'File uploaded and processed successfully' });
   } catch (error) {
-    console.error('파일 업로드 처리 중 오류 발생:', error);
-    res.status(500).json({ message: '파일 업로드 처리 중 오류가 발생했습니다.' });
+    console.error("Error during file upload and processing:", error);
+    res.status(500).json({ message: 'Error during file upload and processing' });
   }
 });
 
-app.use("/register", require("./service/register"));
-app.use("/login", require("./service/login"));
-app.use("/roadmap", require("./service/roadmap"));  // 로드맵 페이지 라우트 추가.
-app.use("/", require("./service/main"));
-app.use("/logout", require("./service/logout"));
-app.use("/editProfile", require("./service/editProfile"));
-app.use("/createPost", require("./service/createPost")); 
-app.use('/board', require('./service/board'));
-app.use('/showPost', require('./service/showPost')); 
-
-
-
-app.get("/", (req, res) => {
-  const user = req.session.user || "guest";
-  res.render("main", { user });
-});
-
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-app.get("/register", (req, res) => {
-  res.render("register");
-});
-
-app.get("/post", (req,res)=> {
-  res.render("post");
-})
-
-app.get('/upload', (req, res) => {
-  res.render('upload');
-});
-
-app.get('/roadmap', (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates/roadmap.html'));
-});
-
-app.get('/roadmap2',(req,res)=> {
-  res.sendFile(path.join(__dirname, 'templates/roadmap2.html'));
-});
-
+// 서버 시작
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

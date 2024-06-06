@@ -17,6 +17,9 @@ router.post('/', async (req, res) => {
   const { title, content, category } = req.body;
   const author = req.session.user._id;
 
+  const user = req.session.user || { id: 'guest' };
+  res.render('createPost', { user });
+
   if (!title || !content || !category) {
     return res.status(400).json({ message: '모든 필드를 입력해주세요.' });
   }
@@ -39,4 +42,6 @@ router.post('/', async (req, res) => {
   }
 });
 
+
 module.exports = router;
+

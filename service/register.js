@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
   try {
     let user = await User.findOne({ id });
     if (user) {
-      return res.status(400).json({ errors: [{ msg: "ID already exists" }] });
+      return res.status(400).json({ errors: [{ msg: "이미 존재하는 ID 입니다." }] });
     }
 
     user = new User({

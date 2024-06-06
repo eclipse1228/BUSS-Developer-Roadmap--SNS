@@ -10,6 +10,7 @@
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            padding-bottom: 50px;
         }
         .header {
             background-color: #333;
@@ -28,8 +29,8 @@
         .header .user-info {
             display: flex;
             align-items: center;
+            position: relative;
         }
-        .header .user-info span,
         .header .user-info a,
         .header .user-info button {
             margin-left: 10px;
@@ -45,8 +46,6 @@
             color: white;
             border: none;
             border-radius: 5px;
-            margin-left: 10px;
-            margin-right: 10px;
         }
         .header .user-info button:hover {
             background-color: #0056b3;
@@ -68,7 +67,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: 15% 75%; /* 사이드바를 25%로 설정, 나머지 콘텐츠를 75%로 설정 */
+            grid-template-columns: 15% 75%;
             gap: 20px;
             padding: 20px;
         }
@@ -96,6 +95,10 @@
         .content h2 span {
             cursor: pointer;
         }
+        .content h2 span:hover {
+            color: #007bff;
+            cursor: pointer;
+        }
         .post {
             background-color: white;
             margin: 10px 0;
@@ -105,212 +108,151 @@
         }
         .post h3 {
             margin: 0;
+            margin-left: 5px;
+            font-weight:100;
+        }
+        .post h4 {
+            margin: 5px;
         }
         .post p {
             margin: 5px 0;
+        }
+        .post a {
+            font-size: 25px;
+            color: black;
+            text-decoration: none;
+        }
+        .post a:hover {
+            color: #007bff;
         }
         .post .info {
             display: flex;
             justify-content: space-between;
         }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 150px;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: gray;
+        }
     </style>
-    <script>       
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
         function goToChat() {
             window.location.href = '/chat';
         }
+
         function createPost() {
-            window.location.href = '/post';
+            window.location.href = '/createPost';
+        }
+
         function goToBoard(category) {
             window.location.href = `/board/${category}`;
         }
-    }
     </script>
 </head>
 <body>
     <div class="header">
         <div class="logo">BUSS</div>
         <div class="user-info">
-            <% if (user === "guest") { %>
-                <span>비회원</span>
+            <button onclick="goToChat()">Assistant</button>
+            <button onclick="createPost()">게시물 작성</button>
+            <% if (user.id === "guest") { %>
                 <a href="/login" class="btn btn-primary">Login</a>
                 <a href="/register" class="btn btn-secondary">Register</a>
             <% } else { %>
-                <span><%= user.id %> 님</span>
-                <a href="/logout" class="btn btn-primary">Logout</a>
+                <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a style="color:black" href="/editProfile">정보수정</a>
+                    <a style="color:black" href="/logout">로그아웃</a>
+                </div>
             <% } %>
-            <button onclick="goToChat()">Assistant</button>
-            <button onclick="createPost()"">게시글 쓰기</button>
         </div>
     </div>
     <div class="navbar">
-        <a href="#">MAIN</a>
+        <a href="/">MAIN</a>
         <a href="#">ANALYSIS</a>
-        <a href="/editProfile">정보수정</a>
-        <a href="/createPost">글쓰기</a>
     </div>
     <div class="container">
         <div class="sidebar">
             <h3>Top Writers</h3>
-            <ul>
-                <li>account1 <span>점수 156</span></li>
-                <li>account1 <span>점수 120</span></li>
-                <li>account1 <span>점수 80</span></li>
-                <li>account1 <span>점수 50</span></li>
-                <li>account1 <span>점수 20</span></li>
-            </ul>
+            <ol style="margin: -15px -20px">
+                <% if (typeof topwriters !== 'undefined') { %>
+                    <% topwriters.forEach(writer => { %>
+                        <li><strong><%= writer.username %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
+                    <% }) %>
+                <% } else { %>
+                    <li>No top writers available.</li>
+                <% } %>
+            </ol>
         </div>
         <div class="content-grid">
             <div class="content">
                 <h2>WEEKLY BEST</h2>
+                <% weeklyBestPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>dltkdwjr</h3>
-                        <span>130 ♡ 33</span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
-                    <p>이상적인 루트의 로드맵 공유합니다.</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>Rnfxlqrhddbwk1</h3>
-                        <span>99 ♡ 23</span>
-                    </div>
-                    <p>AI에게 로드맵 자세하게 알아오는 방법.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>guswlrtkdnjs</h3>
-                        <span>80 ♡ 9</span>
-                    </div>
-                    <p>현재 사원의 FRONTEND 로드맵 입니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>clswjfgksaos</h3>
-                        <span>50 ♡ 8</span>
-                    </div>
-                    <p>BACKEND 로드맵.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>account1</h3>
-                        <span>10 ♡ 3</span>
-                    </div>
-                    <p>서버 오픈 방법</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
+                <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>Rnfxlqrhddbwk1</h3>
-                        <span>99 ♡ 23</span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
-                    <p>AI에게 로드맵 자세하게 알아오는 방법.</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>dkanakf</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>이거 로드맵 괜찮나요?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>dltkdwjr</h3>
-                        <span>130 ♡ 33</span>
-                    </div>
-                    <p>이상적인 루트의 로드맵 공유합니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>sksmshaffkdy</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>이거 뭐 어떻게 하나요 ?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>aoaoq123</h3>
-                        <span>1 ♡ 3</span>
-                    </div>
-                    <p>로드맵 괜찮을까요 ?</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
+                <% frontendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>account1</h3>
-                        <span>0 ♡ 0</span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
-                    <p>HTML 이거 맞나요 ?</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>wkfkdwlf1</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>제 FRONTEND 로드맵좀 봐주세요.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>rhtndlqlsek</h3>
-                        <span>0 ♡ 3</span>
-                    </div>
-                    <p>CSS 오류 수정 방법.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>guswlrtkdnjs</h3>
-                        <span>80 ♡ 9</span>
-                    </div>
-                    <p>현재 사원의 FRONTEND 로드맵 입니다.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>testdnjs</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>제 FRONTEND 로드맵좀 봐주세요.</p>
-                </div>
+                <% }) %>
             </div>
             <div class="content">
                 <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
+                <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3>epdlxjqpdltm</h3>
-                        <span>0 ♡ 2</span>
+                        <h3><%= post.author.name %></h3>
+                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
-                    <p>데이터 베이스 연동 어떻게 하나요 ?</p>
+                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>clswjfgksaos</h3>
-                        <span>50 ♡ 8</span>
-                    </div>
-                    <p>BACKEND 로드맵.</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>zhemafhfkdy</h3>
-                        <span>0 ♡ 0</span>
-                    </div>
-                    <p>C++ 이거 어떻게해 하나요?</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>carkhgowntpdy</h3>
-                        <span>10 ♡ 3</span>
-                    </div>
-                    <p>서버 오픈 방법</p>
-                </div>
-                <div class="post">
-                    <div class="info">
-                        <h3>xptmdls</h3>
-                        <span>0 ♡ 1</span>
-                    </div>
-                    <p>로드맵 괜찮을까요 ?</p>
-                </div>
+                <% }) %>
             </div>
         </div>
     </div>
