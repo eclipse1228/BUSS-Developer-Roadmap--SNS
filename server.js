@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
+// open AI Key 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
