@@ -29,13 +29,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
   saveUninitialized: true
-}));
-<<<<<<< HEAD
-// open AI Key 
-=======
-
-// OpenAI 클라이언트 설정
->>>>>>> origin
+}))
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
