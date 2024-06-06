@@ -78,12 +78,14 @@
       display: grid;
       gap: 20px;
     }
-
+    
     .post {
+        max-width:1000px;
         background-color: #ffffff;
         padding: 15px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        overflow: hidden;
     }
 
     .post h4 {
@@ -105,6 +107,9 @@
     .post p {
       margin: 0; /* 단락 간격 조정 */
       color: #888;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      hyphens: auto; /* 필요한 경우 하이픈으로 단어를 나눔 */
     }
 
     .info {
@@ -120,7 +125,6 @@
 
     /* 추가적인 스타일링 */
     h1 {
-      text-align: center; /* 중앙 정렬 */
       margin-top: 20px; /* 상단 마진 추가 */
     }
 
@@ -255,7 +259,7 @@
                 <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 두 번째 줄에 Bold체와 글자 크기 증가 -->
               </div>
               <div class="info">
-                <p><%= post.content.substring(0, 130) + (post.content.length > 130 ? '...' : '') %></p> <!-- 게시물 내용은 50자까지 표시 -->
+                <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p> <!-- 게시물 내용은 50자까지 표시 -->
               </div>
               <div class="info">
                 <div>
