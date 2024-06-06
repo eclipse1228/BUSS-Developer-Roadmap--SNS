@@ -64,27 +64,34 @@
     /* Container, Sidebar 및 Content 스타일 */
     .container {
         display: grid;
-        grid-template-columns: 1fr; /* 컨테이너 너비를 조정하여 페이지 중앙에 위치 */
+        grid-template-columns: 15% 75%; /* 사이드바를 15%로 설정, 나머지 콘텐츠를 75%로 설정 */
         gap: 20px;
         padding: 20px;
+    }
+
+    .sidebar {
+      background-color: #f1f1f1;
+      padding: 10px;
     }
 
     .posts {
       display: grid;
       gap: 20px;
     }
-
+    
     .post {
+        max-width:1000px;
         background-color: #ffffff;
         padding: 15px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        overflow: hidden;
     }
 
     .post h4 {
-      margin-top: 0; /* 기본 마진 제거 */
-      margin-bottom: 10px; /* 기본 마진 제거 */
-      font-size: 25px; /* 게시물 제목 글씨 크기 */
+      margin: 10px 0 10px 0; /* 기본 마진 제거 및 하단 마진 추가 */
+      font-size: 1.3em; /* 게시물 제목 글씨 크기 */
+      font-weight: bold; /* 게시물 제목 Bold체 */
       color: black; /* 게시물 제목 글씨 색상 */
     }
 
@@ -98,7 +105,11 @@
     }
 
     .post p {
-      margin: 0 0; /* 단락 간격 조정 */
+      margin: 0; /* 단락 간격 조정 */
+      color: #888;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      hyphens: auto; /* 필요한 경우 하이픈으로 단어를 나눔 */
     }
 
     .info {
@@ -114,7 +125,6 @@
 
     /* 추가적인 스타일링 */
     h1 {
-      text-align: center; /* 중앙 정렬 */
       margin-top: 20px; /* 상단 마진 추가 */
     }
 
@@ -151,10 +161,63 @@
     button[type="submit"]:hover {
       background-color: #0056b3;
     }
+
+    .header .user-info {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .header .user-info a,
+        .header .user-info button {
+            margin-left: 10px;
+            margin-right: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .header .user-info button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .header .user-info button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 150px;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: gray;
+        }
   </style>
   <script>       
       function goToChat() {
           window.location.href = '/chat';
+      }
+      function toggleDropdown() {
+          const dropdown = document.getElementById('dropdown-menu');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
+      function createPost() {
+          window.location.href = '/createPost';
       }
   </script>
 </head>
@@ -163,44 +226,53 @@
     <div class="logo">
       BUSS
     </div>
-    <div class="user-info">
-        <button onclick="goToChat()">Assistant</button>
+    <div class="user-info"> 
+      <button onclick="goToChat()">Assistant</button>
+      <button onclick="createPost()">게시물 작성</button>
+      <% if (user.id === "guest") { %>
+        <a href="/login" class="btn btn-primary">Login</a>
+        <a href="/register" class="btn btn-secondary">Register</a>
+    <% } else { %>
+        <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
+        <div id="dropdown-menu" class="dropdown-menu">
+            <a style="color:black" href="/editProfile">정보수정</a>
+            <a style="color:black" href="/logout">로그아웃</a>
+        </div>
+    <% } %>
     </div>
   </div>
   <div class="navbar">
       <a href="/">MAIN</a>
   </div>
   <div class="container">
-    <div class="sidebar">
-      <!-- <h3>Top Writers</h3>
-      <ul>
-          <% if (typeof topwriters !== 'undefined') { %>
-              <% topwriters.forEach(writer => { %>
-                  <li><%= writer.username %> <span>점수 <%= writer.postCount %></span></li>
-              <% }) %>
-          <% } else { %>
-              <li>No top writers available.</li>
-          <% } %>
-      </ul> -->
-    </div>
-    <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
-    <div class="posts">
-      <% if (posts.length > 0) { %>
-        <% posts.forEach(post => { %>
-          <div class="post">
-            <div class="info">
-              <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 맨 위에 위치 -->
-              <div>
-                <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
-                <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+    <div class="sidebar"></div>
+    <div class="content">
+      <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
+      <div class="posts">
+        <% if (posts.length > 0) { %>
+          <% posts.forEach(post => { %>
+            <div class="post">
+              <div class="info">
+                <span>작성자: <%= post.author.name %></span> <!-- 사용자 이름을 첫 줄에 표시 -->
+              </div>
+              <div class="info">
+                <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 두 번째 줄에 Bold체와 글자 크기 증가 -->
+              </div>
+              <div class="info">
+                <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p> <!-- 게시물 내용은 50자까지 표시 -->
+              </div>
+              <div class="info">
+                <div>
+                  <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
+                  <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+                </div>
               </div>
             </div>
-            <p><%= post.content.substring(0, 50) + (post.content.length > 50 ? '...' : '') %></p> <!-- 본문내용은 50자까지 표현 -->
-          </div>
-        <% }); %>
-      <% } else { %>
-        <p>해당 카테고리에 게시물이 없습니다.</p>
-      <% } %>
+          <% }); %>
+        <% } else { %>
+          <p>해당 카테고리에 게시물이 없습니다.</p>
+        <% } %>
+      </div>
     </div>
   </div>
 </body>

@@ -128,7 +128,61 @@
     button[type="submit"]:hover {
       background-color: #0056b3;
     }
+    .header .user-info {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .header .user-info a,
+        .header .user-info button {
+            margin-left: 10px;
+            margin-right: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .header .user-info button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .header .user-info button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 150px;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .dropdown-menu a:hover {
+            background-color: gray;
+        }
   </style>
+  <script>       
+      function goToChat() {
+          window.location.href = '/chat';
+      }
+      function toggleDropdown() {
+          const dropdown = document.getElementById('dropdown-menu');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
+  </script>
 </head>
 <body>
   <div class="header">
@@ -137,24 +191,23 @@
     </div>
     <div class="user-info">
         <button onclick="goToChat()">Assistant</button>
+        <% if (user.id === "guest") { %>
+          <a href="/login" class="btn btn-primary">Login</a>
+          <a href="/register" class="btn btn-secondary">Register</a>
+      <% } else { %>
+          <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
+          <div id="dropdown-menu" class="dropdown-menu">
+              <a style="color:black" href="/editProfile">정보수정</a>
+              <a style="color:black" href="/logout">로그아웃</a>
+          </div>
+      <% } %>
     </div>
   </div>
   <div class="navbar">
       <a href="/">MAIN</a>
   </div>
   <div class="container">
-      <div class="sidebar">
-          <!-- <h3>Top Writers</h3>
-          <ul>
-              <% if (typeof topwriters !== 'undefined') { %>
-                  <% topwriters.forEach(writer => { %>
-                      <li><%= writer.username %> <span>점수 <%= writer.postCount %></span></li>
-                  <% }) %>
-              <% } else { %>
-                  <li>No top writers available.</li>
-              <% } %>
-          </ul> -->
-      </div>
+      <div class="sidebar"></div>
       <div class="content">
         <h1>게시물 작성</h1>
         <form id="createPostForm" method="POST" action="/createPost">
