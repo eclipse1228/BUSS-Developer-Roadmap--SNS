@@ -10,7 +10,10 @@
     const { category } = req.params;
     try {
       const posts = await Post.find({ category }).populate('author', 'name').sort({ createdAt: -1 });
-      res.render('board', { category, posts });
+
+      const user = req.session.user || { id: 'guest' };
+
+      res.render('board', { category, posts, user });
     } catch (error) {
       console.error('게시물 조회 중 오류 발생:', error);
       res.status(500).send('게시물 조회 중 오류가 발생했습니다.');
