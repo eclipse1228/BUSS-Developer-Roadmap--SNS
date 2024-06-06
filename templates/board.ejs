@@ -170,8 +170,19 @@
   <div class="navbar">
       <a href="/">MAIN</a>
   </div>
-
   <div class="container">
+    <div class="sidebar">
+      <!-- <h3>Top Writers</h3>
+      <ul>
+          <% if (typeof topwriters !== 'undefined') { %>
+              <% topwriters.forEach(writer => { %>
+                  <li><%= writer.username %> <span>점수 <%= writer.postCount %></span></li>
+              <% }) %>
+          <% } else { %>
+              <li>No top writers available.</li>
+          <% } %>
+      </ul> -->
+    </div>
     <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
     <div class="posts">
       <% if (posts.length > 0) { %>
