@@ -5,6 +5,185 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= post.title %> - 게시물</title>
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* Header 스타일 */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+    .header .logo {
+        font-size: 24px;
+    }
+    .header .user-info {
+        display: flex;
+        align-items: center;
+    }
+    .header .user-info span,
+    .header .user-info a,
+    .header .user-info button {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: white;
+        text-decoration: none;
+    }
+    .header .user-info button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .header .user-info button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Navbar 스타일 */
+    .navbar {
+        display: flex;
+        justify-content: flex-start;
+        background-color: #444;
+    }
+    .navbar a {
+        color: white;
+        padding: 14px 20px;
+        text-decoration: none;
+        text-align: center;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    /* Sidebar 스타일 */
+    .sidebar {
+      background-color: #f1f1f1;
+      padding: 10px;
+    }
+
+    /* Content 스타일 */
+    header, main, footer {
+      padding: 20px;
+    }
+
+    .content {
+      max-width: 1000px; /* 내용이 표시되는 최대 너비 */
+      margin: 0 0 auto; /* 가운데 정렬을 위해 추가 */
+      overflow-wrap: break-word; /* 단어 단위로 줄 바꿈 */
+    }
+
+    /* 폼 스타일 */
+    form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button[type="button"] {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* Container 스타일 */
+    .container {
+        display: grid;
+        grid-template-columns: 15% 75%; /* 사이드바를 15%로 설정, 나머지 콘텐츠를 75%로 설정 */
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* 댓글 박스 크기 고정 */
+    textarea {
+      resize: none;
+    }
+
+    /* 댓글 박스와 좋아요 버튼 위치 조정 */
+    form {
+      position: relative;
+    }
+
+    form button[type="button"] {
+      position: absolute;
+      top: -50px; /* 댓글 폼의 위쪽에 위치시킴 */
+      right: 0;
+    }
+
+    /* 댓글 구역 스타일링 */
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    ul li {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* 댓글 내용 및 작성자, 작성 시각 스타일링 */
+    ul li .comment-content {
+      font-weight: bold;
+    }
+
+    ul li .comment-meta {
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: -10px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      width: 150px;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      text-decoration: none;
+    }
+    .dropdown-menu a:hover {
+      background-color: gray;
+  }
+  </style>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       loadComments();
@@ -20,7 +199,11 @@
             commentList.innerHTML = ''; // 기존 댓글 비우기
             data.comments.reverse().forEach(comment => { // 최신 댓글이 맨 위로 오도록 reverse
               const li = document.createElement('li');
-              li.textContent = `${comment.content} - ${comment.author.name}`;
+              li.innerHTML = `
+                <div class="comment-content">${comment.content}</div>
+                <div class="comment-meta">
+                  ${comment.author.name} - ${new Date(comment.createdAt).toLocaleString()}
+                </div>`;
               commentList.appendChild(li);
             });
           } else {
@@ -61,7 +244,8 @@
 
     function addLike() {
       const postId = '<%= post._id %>';
-      fetch(`/addLike/${postId}`, {
+      fetch(`/addLike/${postId}`,
+      {
         method: 'POST'
       })
       .then(response => response.json())
@@ -77,37 +261,80 @@
         alert('서버 오류가 발생했습니다.');
       });
     }
+    function goToChat() {
+        window.location.href = '/chat';
+    }
+    function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown-menu');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+    function createPost() {
+        window.location.href = '/createPost';
+    }
   </script>
 </head>
 <body>
-  <header>
-    <h1><%= post.title %></h1>
-    <p>작성자: <%= post.author.name %></p>
-    <p>카테고리: <%= post.category %></p>
-  </header>
-  <main>
-    <article>
-      <p><%= post.content %></p>
-    </article>
-    <section>
-      <h2>댓글</h2>
-      <form>
-        <textarea id="commentContent" rows="4" cols="50" placeholder="댓글을 입력하세요"></textarea>
-        <button type="button" onclick="addComment()">댓글 달기</button>
-      </form>
-      <ul id="commentList">
-        <% post.comments.reverse().forEach(comment => { %> <!-- 최신 댓글이 맨 위로 -->
-          <li><%= comment.content %> - <%= comment.author.name %></li>
-        <% }) %>
-      </ul>
-    </section>
-    <section>
-      <button type="button" onclick="addLike()">좋아요</button>
-      <span id="likeCount"><%= post.likes %></span> Likes
-    </section>
-  </main>
-  <footer>
-    <p>&copy; BUSS</p>
-  </footer>
+  <div class="header">
+    <div class="logo">
+      BUSS
+    </div>
+    <div class="user-info"> 
+      <button onclick="goToChat()">Assistant</button>
+      <button onclick="createPost()">게시물 작성</button>
+      <% if (user.id === "guest") { %>
+        <a href="/login" class="btn btn-primary">Login</a>
+        <a href="/register" class="btn btn-secondary">Register</a>
+    <% } else { %>
+        <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
+        <div id="dropdown-menu" class="dropdown-menu">
+            <a style="color:black" href="/editProfile">정보수정</a>
+            <a style="color:black" href="/logout">로그아웃</a>
+        </div>
+    <% } %>
+    </div>
+  </div>
+  <div class="navbar">
+      <a href="/">MAIN</a>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <!-- Sidebar 내용 추가 -->
+      <!-- 여기에 원하는 내용을 추가하세요 -->
+    </div>
+    <div class="content">
+      <section>
+        <button type="button" onclick="addLike()">좋아요</button>
+        <span id="likeCount"><%= post.likes %></span> Likes
+      </section>
+      <header>
+        <p style="margin-bottom: -10px">카테고리: <%= post.category %></p>
+        <p style="margin-bottom: -10px">작성자: <%= post.author.name %></p>
+        <p>작성일: <%= new Date(post.createdAt).toLocaleString() %></p>
+        <h1 style="margin-bottom: -10px;"><%= post.title %></h1>
+      </header>
+      <main>
+        <article>
+          <p><%= post.content %></p>
+        </article>
+        <hr>
+        <section>
+          <h2>댓글</h2>
+          <form>
+            <textarea id="commentContent" rows="4" cols="50" placeholder="댓글을 입력하세요"></textarea>
+            <button type="button" onclick="addComment()">댓글 달기</button>
+          </form>
+          <ul id="commentList">
+            <% post.comments.reverse().forEach(comment => { %> <!-- 최신 댓글이 맨 위로 -->
+              <li>
+                <div class="comment-author"><%= comment.author.name %></div>
+                <div class="comment-meta"><%= new Date(comment.createdAt).toLocaleString() %></div>
+                <div class="comment-content"><%= comment.content %></div>
+              </li>       
+            <% }) %>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </div>
 </body>
 </html>

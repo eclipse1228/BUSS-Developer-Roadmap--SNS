@@ -4,53 +4,176 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    /* Header 및 Navbar 스타일 */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        padding-bottom: 50px; /* 추가된 부분 */
+    }
+    .header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+    .header .logo {
+        font-size: 24px;
+    }
+    .header .user-info {
+        display: flex;
+        align-items: center;
+    }
+    .header .user-info span,
+    .header .user-info a,
+    .header .user-info button {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: white;
+        text-decoration: none;
+    }
+    .header .user-info button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .header .user-info button:hover {
+        background-color: #0056b3;
+    }
+    .navbar {
+        display: flex;
+        justify-content: flex-start;
+        background-color: #444;
+    }
+    .navbar a {
+        color: white;
+        padding: 14px 20px;
+        text-decoration: none;
+        text-align: center;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    .container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 40px; /* 패딩 증가 */
+        max-width: 800px; /* 최대 너비 증가 */
+        margin: 0 auto;
+        background-color: #ffffff; /* 배경색 추가 */
+        border-radius: 5px; /* 모서리 둥글게 */
+        box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 그림자 추가 */
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    input[type="text"][readonly] {
+        background-color: rgba(200, 200, 200, 0.5); /* 반투명한 회색 배경 */
+    }
+    button[type="submit"] {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
+  <div class="header">
+    <div class="logo">BUSS</div>
+  </div>
+  <div class="navbar">
+      <a href="/">MAIN</a>
+  </div>
+
   <div class="container">
-    <h2 class="mt-5">Edit Profile</h2>
+    <h2>회원 정보 수정</h2>
     <form id="editProfileForm">
       <div class="form-group">
-        <label for="id">ID</label>
-        <input type="text" class="form-control" id="id" name="id" value="<%= user.id %>" readonly>
+        <label for="id">아이디</label>
+        <input type="text" id="id" name="id" value="<%= user.id %>" readonly>
       </div>
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" value="<%= user.name %>">
       </div>
       <div class="form-group">
-        <label for="age">Age</label>
-        <input type="number" class="form-control" id="age" name="age" value="<%= user.age %>">
+        <label for="age">나이</label>
+        <input type="number" id="age" name="age" value="<%= user.age %>">
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>">
+        <label for="email">이메일</label>
+        <input type="email" id="email" name="email" value="<%= user.email %>">
       </div>
       <div class="form-group">
-        <label for="job">Job</label>
-        <input type="text" class="form-control" id="job" name="job" value="<%= user.job %>">
+        <label for="job">직업</label>
+        <input type="text" id="job" name="job" value="<%= user.job %>">
       </div>
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-      <a href="/" class="btn btn-secondary">Main Page</a>
+      <button type="submit">변경 내용 저장</button>
     </form>
   </div>
 
   <script>
-    $(document).ready(function() {
-      $("#editProfileForm").on("submit", function(event) {
-        event.preventDefault();
-        const formData = $(this).serialize();
-        
-        $.post("/editProfile", formData, function(data) {
-          if (data.success) {
-            alert("Profile updated successfully");
-            window.location.href = '/editProfile';
-          } else {
-            alert("No changes to update");
-          }
+    document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('/editProfile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
         });
-      });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(result.message);
+          window.location.reload();
+        } else {
+          alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error('프로필 업데이트 중 오류 발생:', error);
+        alert('프로필 업데이트 중 오류가 발생했습니다.');
+      }
     });
   </script>
 </body>

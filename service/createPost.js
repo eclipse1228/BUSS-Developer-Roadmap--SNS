@@ -17,6 +17,9 @@ router.post('/', async (req, res) => {
   const { title, content, category } = req.body;
   const author = req.session.user._id;
 
+  // const user = req.session.user || { id: 'guest' };
+  // res.render('createPost', { user });
+
   if (!title || !content || !category) {
     return res.status(400).json({ message: '모든 필드를 입력해주세요.' });
   }
@@ -32,10 +35,11 @@ router.post('/', async (req, res) => {
     await newPost.save();
 
     // 클라이언트로 성공 메시지와 함께 메인 페이지 이동 요청
-    res.status(201).json({ message: '게시물이 작성되었습니다.', redirectTo: '/' });
+    return res.status(201).json({ message: '게시물이 작성되었습니다.', redirectTo: '/' });
+    
   } catch (error) {
     console.error('게시물 작성 중 오류 발생:', error);
-    res.status(500).json({ message: '게시물 작성 중 오류가 발생했습니다.' });
+    return res.status(500).json({ message: '게시물 작성 중 오류가 발생했습니다.' });
   }
 });
 

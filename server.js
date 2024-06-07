@@ -29,9 +29,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
   saveUninitialized: true
-}));
-
-// OpenAI 클라이언트 설정
+}))
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -92,7 +90,7 @@ const upload = multer({ storage: storage });
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
 app.use("/login", require("./service/login"));
-app.use("/", require("./service/gettopwriter"));
+app.use("/", require("./service/main"));
 app.use("/logout", require("./service/logout"));
 app.use("/editProfile", require("./service/editProfile"));
 app.use("/createPost", require("./service/createPost")); // 게시물 작성 API 라우트 추가
@@ -102,7 +100,7 @@ app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
 app.use('/getComments', require('./service/getComments')); 
 app.use('/addLike', addLikeRouter);
-app.use("/", require("./service/gettopwriter")); 
+app.use("/gettopwriter", require("./service/gettopwriter")); 
 
 app.get("/login", (req, res) => {
   res.render("login");
@@ -184,6 +182,7 @@ app.post("/chat", async (req, res) => {
 app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'uploads', req.file.originalname);
+
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${filePath}`);
