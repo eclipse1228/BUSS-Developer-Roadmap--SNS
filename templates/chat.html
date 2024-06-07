@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat with Assistant</title>
   <style>
-    /* 기존 스타일 유지 */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -203,7 +202,7 @@
       botMessageContainer.classList.add('message-container', 'bot');
       const botMessage = document.createElement('div');
       botMessage.classList.add('message', 'bot');
-      botMessage.textContent = data.message;
+      botMessage.textContent = data.response; // response.message 대신 response.response 사용
       botMessageContainer.appendChild(botMessage);
       chat.appendChild(botMessageContainer);
 
