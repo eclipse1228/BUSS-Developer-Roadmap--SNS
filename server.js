@@ -29,12 +29,14 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
   saveUninitialized: true
-}))
+}));
+
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 let assistant;
+let vectorStoreId;
 
 (async () => {
   try {
@@ -54,6 +56,8 @@ let assistant;
       name: "RoadMap",
       expires_after: { "anchor": "last_active_at", "days": 1 }
     });
+
+    vectorStoreId = vectorStore.id;
 
     await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
       files: file,
@@ -183,7 +187,6 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'uploads', req.file.originalname);
 
-
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${filePath}`);
     }
@@ -206,11 +209,28 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
       tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
     });
 
+    vectorStoreId = vectorStore.id;
+
     console.log('File successfully uploaded to vector store');
     res.status(200).json({ message: 'File uploaded and processed successfully' });
   } catch (error) {
     console.error("Error during file upload and processing:", error);
     res.status(500).json({ message: 'Error during file upload and processing' });
+  }
+});
+
+// 벡터 스토어 내용 확인 라우트 추가
+app.get('/vectorstore/files', async (req, res) => {
+  try {
+    if (!vectorStoreId) {
+      return res.status(400).json({ message: 'Vector store ID not found' });
+    }
+
+    const vectorStoreFiles = await client.beta.vectorStores.files.list(vectorStoreId);
+    res.status(200).json(vectorStoreFiles);
+  } catch (error) {
+    console.error("Error fetching vector store files:", error);
+    res.status(500).json({ message: 'Error fetching vector store files' });
   }
 });
 
