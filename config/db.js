@@ -3,7 +3,6 @@
   성공하면 연결 메시지를 콘솔에 출력하며, 실패하면 에러 메시지를 출력하고 프로세스를 종료. 
   connectDB 함수는 다른 파일에서 사용할 수 있도록 모듈로 내보냄.
 */
-
 // 모듈 가져오기
 const mongoose = require("mongoose");
 // const config = require("config");

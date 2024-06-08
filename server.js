@@ -11,6 +11,7 @@ const connectDB = require("./config/db");
 const addLikeRouter = require('./service/addlike');
 const { getTopWriters } = require('./service/topwriter');
 const Post = require('./db/Post');
+const Roadmap = require('./db/Roadmap');
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // 세션 설정
 app.use(session({
@@ -30,44 +32,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-let assistant;
-
-(async () => {
-  try {
-    assistant = await client.beta.assistants.create({
-      instructions: "You are a career counselor for computer science students. You receive a student's self-introduction letter, and suggest advice and a career roadmap.",
-      name: "career counselor",
-      tools: [{ type: "file_search" }],
-      model: "gpt-4-turbo",
-    });
-
-    console.log("Assistant created:", assistant);
-
-    const filePath = path.join(__dirname, 'static', 'backend_java.json');
-    const file = [filePath].map((filePath) => fs.createReadStream(filePath));
-
-    let vectorStore = await client.beta.vectorStores.create({
-      name: "RoadMap",
-      expires_after: { "anchor": "last_active_at", "days": 1 }
-    });
-
-    await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
-      files: file,
-    });
-
-    await client.beta.assistants.update(assistant.id, {
-      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
-    });
-
-    console.log("Vector store created and files uploaded");
-  } catch (error) {
-    console.error("Error during initialization:", error);
-  }
-})();
 
 // connectDB 함수 호출
 connectDB();
@@ -75,17 +39,6 @@ connectDB();
 app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
-
-// Multer 설정 (파일 업로드를 위한 미들웨어)
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // 파일 업로드 경로
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname); // 원본 파일 이름 사용
-  }
-});
-const upload = multer({ storage: storage });
 
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
@@ -100,18 +53,18 @@ app.use('/showPost', require('./service/showPost'));
 app.use('/addComment', require('./service/addComment'));
 app.use('/getComments', require('./service/getComments')); 
 app.use('/addLike', addLikeRouter);
-app.use("/gettopwriter", require("./service/gettopwriter")); 
-
+app.use("/gettopwriter", require("./service/gettopwriter"));
+app.use('/chat', require('./service/chat'));
+app.use('/upload', require('./service/chat'));
+app.use('/store-response', require('./service/chat'));
+app.use('/process-pdf', require('./service/chat'));
+// app.use('/mypage',require('/servic/mypage'));
 app.get("/login", (req, res) => {
   res.render("login");
 });
 
 app.get("/register", (req, res) => {
   res.render("register");
-});
-
-app.get('/upload', (req, res) => {
-  res.render('upload');
 });
 
 // 댓글 테스트 페이지 라우팅
@@ -130,88 +83,6 @@ app.get('/api/auth/user', (req, res) => {
     return res.status(401).json({ message: 'Not authenticated' });
   }
   res.status(200).json(req.session.user);
-});
-
-// /chat 라우트 추가
-app.get("/chat", (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
-});
-
-app.post("/chat", async (req, res) => {
-  try {
-    const { prompt } = req.body;
-
-    const thread = await client.beta.threads.create({
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const stream = client.beta.threads.runs
-      .stream(thread.id, { assistant_id: assistant.id })
-      .on("textCreated", () => console.log("assistant >"))
-      .on("toolCallCreated", (event) => console.log("assistant " + event.type))
-      .on("messageDone", async (event) => {
-        if (event.content[0].type === "text") {
-          const { text } = event.content[0];
-          const { annotations } = text;
-          const citations = [];
-
-          let index = 0;
-          for (let annotation of annotations) {
-            text.value = text.value.replace(annotation.text, "[" + index + "]");
-            const { file_citation } = annotation;
-            if (file_citation) {
-              const citedFile = await client.files.retrieve(file_citation.file_id);
-              citations.push("[" + index + "]" + citedFile.filename);
-            }
-            index++;
-          }
-
-          console.log(text.value);
-          console.log(citations.join("\n"));
-
-          res.status(200).send({ bot: text.value });
-        }
-      });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-});
-
-// 파일 업로드 라우트 추가
-app.post('/upload', upload.single('pdf'), async (req, res) => {
-  try {
-    const filePath = path.join(__dirname, 'uploads', req.file.originalname);
-
-
-    if (!fs.existsSync(filePath)) {
-      throw new Error(`File not found: ${filePath}`);
-    }
-
-    const file = fs.createReadStream(filePath);
-
-    let vectorStore = await client.beta.vectorStores.create({
-      name: "RoadMap",
-      expires_after: {
-        "anchor": "last_active_at",
-        "days": 1
-      }
-    });
-
-    await client.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
-      files: [file],
-    });
-
-    await client.beta.assistants.update(assistant.id, {
-      tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
-    });
-
-    console.log('File successfully uploaded to vector store');
-    res.status(200).json({ message: 'File uploaded and processed successfully' });
-  } catch (error) {
-    console.error("Error during file upload and processing:", error);
-    res.status(500).json({ message: 'Error during file upload and processing' });
-  }
 });
 
 // 서버 시작
