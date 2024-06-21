@@ -91,6 +91,7 @@
             background-color: #ccc;
             padding: 10px;
             margin: 0 0 10px 0;
+            position: relative; /* 포지셔닝 컨텍스트 생성 */
         }
         .content h2 span {
             cursor: pointer;
@@ -150,6 +151,12 @@
         .dropdown-menu a:hover {
             background-color: gray;
         }
+        .group_svg { 
+          position: absolute;
+          right: 100px; /* 오른쪽 여백 조정 */
+          top:-25px;
+        }
+
     </style>
     <script>
         function toggleDropdown() {
@@ -207,7 +214,9 @@
         </div>
         <div class="content-grid">
             <div class="content">
-                <h2>WEEKLY BEST</h2>
+                <h2>WEEKLY BEST
+                    <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% weeklyBestPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -219,7 +228,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
+                <h2><span onclick="goToBoard('community')">COMMUNITY</span>
+                <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-62px;">
+                </h2>
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -231,9 +242,12 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
+                <h2>
+                    <span onclick="goToBoard('frontend')">FRONTEND</span>
+                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% frontendPosts.forEach(post => { %>
-                <div class="post">
+                <div class="post">  
                     <div class="info">
                         <h3><%= post.author.name %></h3>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -243,7 +257,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
+                <h2><span onclick="goToBoard('backend')">BACKEND</span>
+                    <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -54px;">
+                </h2>
                 <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
