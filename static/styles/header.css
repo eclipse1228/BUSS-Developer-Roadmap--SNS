@@ -1,0 +1,84 @@
+.header {
+    background-color: #f9f9f9;
+    color: black;
+    font-weight: bolder;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px 0 20px;
+    position: relative;
+}
+.header .logo {
+    font-size: 40px;
+    font-weight: bolder;
+    color: black; /* 글씨체를 검은색으로 설정 */
+    text-decoration: none; /* 밑줄 없애기 */
+}
+.header .navbar {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #f9f9f9;
+    margin-left: 30px; /* Adjust margin-left as needed */
+}
+.header .navbar a {
+    font-weight: normal;
+    color: black;
+    padding: 14px 20px;
+    font-size: 0.9em;
+    text-decoration: none;
+    text-align: center;
+}
+.header .navbar a:hover {
+    color: #007bff;
+    cursor: pointer;
+}
+.header .user-info {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 20px;
+}
+.header .user-info a {
+    margin-left: 10px;
+    margin-right: 10px;
+    color: black;
+    text-decoration: none;
+}
+.header .user-info a:hover {
+    color: #007bff;
+    cursor: pointer;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+    width: 200px;
+}
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+}
+.dropdown-menu a svg {
+    margin-right: 10px; /* 아이콘과 텍스트 사이의 간격 조정 */
+}
+.dropdown-menu span {
+    display: block;
+    padding: 10px 15px;
+    text-align: left;
+    color: #333;
+    font-size: 0.9em;
+}
+.group_svg { 
+    position: absolute;
+    right: 100px; /* 오른쪽 여백 조정 */
+    top: -5px;
+}

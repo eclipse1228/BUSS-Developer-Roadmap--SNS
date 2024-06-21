@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat with Assistant</title>
+  <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
-    /* 기존 스타일 유지 */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -14,38 +14,6 @@
       height: 100vh;
       margin: 0;
       background-color: #f9f9f9;
-    }
-    .header {
-      background-color: #333;
-      color: #fff;
-      padding: 10px 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding-left: 16px;
-      box-sizing: border-box;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-    .navbar {
-      display: flex;
-      justify-content: flex-start;
-      background-color: #444;
-      width: 100%;
-      padding-left: 6px;
-      box-sizing: border-box;
-    }
-    .navbar a {
-      color: white;
-      padding: 14px 20px;
-      text-decoration: none;
-      text-align: center;
-    }
-    .navbar a:hover {
-      background-color: #ddd;
-      color: black;
     }
     #chat {
       width: 65%;
@@ -181,14 +149,7 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>BUSS</h1>
-  </div>
-  <div class="navbar">
-    <a href="/">MAIN</a>
-    <a href="#">MYPAGE</a>
-  </div>
-  
+  <%- include('header') %> 
   <div id="chat"></div>
   <div class="message-input-container">
     <input type="text" id="message" placeholder="Type your message...">
