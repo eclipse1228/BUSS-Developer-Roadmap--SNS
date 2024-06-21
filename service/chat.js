@@ -94,6 +94,12 @@ const saveResponseToMongoDB = async (response, userId) => {
 // chat 라우트 추가
 router.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '../templates', 'chat.html'));
+
+    const user = req.session.user;
+    if (!user) {
+      return res.redirect('/login');
+    }
+    res.sendFile(path.join(__dirname, '../templates', 'chat.html'));
   });
   
 router.post("/", async (req, res) => {
