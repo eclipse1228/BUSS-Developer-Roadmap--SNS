@@ -119,7 +119,7 @@ router.post("/", async (req, res) => {
           if (event.content[0].type === "text") {
             const { text } = event.content[0];
             // Save to MongoDB here
-            await saveResponseToMongoDB({ text: text.value }, userId);
+            await saveResponseToMongoDB({ text: text.value }, {userid: userId});
             res.status(200).send({ bot: "로드맵을 업데이트했습니다." });
           }
         });

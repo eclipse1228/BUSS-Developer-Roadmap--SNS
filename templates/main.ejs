@@ -71,6 +71,8 @@
         .sidebar {
             background-color: #f1f1f1;
             padding: 10px;
+            position: relative;
+            top:-230px;
         }
         .content-grid {
             display: grid;
@@ -85,9 +87,13 @@
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
         .content h2 {
-            background-color: #ccc;
-            padding: 10px;
+            background-color: #d7d7db;
+            padding: 20px;
             margin: 0 0 10px 0;
+            position: relative; /* 포지셔닝 컨텍스트 생성 */
+            border-radius: 10px; /* 모서리 둥글게 만들기 */
+            background-image: url('/static/pattern.svg'); /* SVG 패턴 파일 경로 */
+
         }
         .content h2 span {
             cursor: pointer;
@@ -96,6 +102,11 @@
             color: #007bff;
             cursor: pointer;
         }
+        .content h2 .text-container {
+            position: relative;
+            right: -30px; /* 오른쪽으로 10px 이동 */        
+        }
+
         .post {
             background-color: white;
             margin: 10px 0;
@@ -155,6 +166,12 @@
             color: #333;
             font-size: 0.9em;
         }
+        .group_svg { 
+          position: absolute;
+          right: 100px; /* 오른쪽 여백 조정 */
+          top:-5px;
+        }
+
     </style>
     <script>
         function toggleDropdown() {
@@ -195,6 +212,13 @@
         </div>
     </div>
     <hr style="color:#333;">
+    <div class="navbar">
+        <a href="/">MAIN</a>
+        <a href="#">ANALYSIS</a>
+    </div>
+    <div class="banner" style="left:550px; position:relative;">
+        <img src="/static/buss banner.png" alt="" style="height: 100px%; width: 700px;">
+    </div>
     <div class="container">
         <div class="sidebar">
             <h3>Top Writers</h3>
@@ -208,9 +232,12 @@
                 <% } %>
             </ol>
         </div>
+        
         <div class="content-grid">
             <div class="content">
-                <h2>WEEKLY BEST</h2>
+                <h2> <span class="text-container">WEEKLY BEST</span>
+                    <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% weeklyBestPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -222,7 +249,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
+                <h2><span onclick="goToBoard('community')"  class="text-container">COMMUNITY</span>
+                <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
+                </h2>
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -234,9 +263,12 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
+                <h2>
+                    <span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
+                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% frontendPosts.forEach(post => { %>
-                <div class="post">
+                <div class="post">  
                     <div class="info">
                         <h3><%= post.author.name %></h3>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -246,7 +278,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
+                <h2><span onclick="goToBoard('backend')"  class="text-container">BACKEND</span>
+                    <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
+                </h2>
                 <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
