@@ -13,67 +13,66 @@
             padding-bottom: 50px;
         }
         .header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
+            background-color: #f9f9f9;
+            color: black;
+            font-weight: bolder;
             font-size: 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 10px 20px 00px 20px;
+            position: relative;
         }
         .header .logo {
-            font-size: 24px;
+            font-size: 40px;
+            font-weight: bolder;
+            color: black; /* 글씨체를 검은색으로 설정 */
+            text-decoration: none; /* 밑줄 없애기 */
+        }
+        .header .navbar {
+            display: flex;
+            justify-content: flex-start;
+            background-color: #f9f9f9;
+            margin-left: 30px; /* Adjust margin-left as needed */
+        }
+        .header .navbar a {
+            font-weight: normal;
+            color: black;
+            padding: 14px 20px;
+            font-size:0.9em;
+            text-decoration: none;
+            text-align: center;
+        }
+        .header .navbar a:hover {
+            color: #007bff;
+            cursor: pointer;
         }
         .header .user-info {
             display: flex;
             align-items: center;
-            position: relative;
+            position: absolute;
+            right: 20px;
         }
-        .header .user-info a,
-        .header .user-info button {
+        .header .user-info a {
             margin-left: 10px;
             margin-right: 10px;
-            color: white;
-            text-decoration: none;
-        }
-        .header .user-info button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .header .user-info button:hover {
-            background-color: #0056b3;
-        }
-        .navbar {
-            display: flex;
-            justify-content: flex-start;
-            background-color: #444;
-        }
-        .navbar a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
             color: black;
+            text-decoration: none;
+        }
+        .header .user-info a:hover {
+            color: #007bff;
+            cursor: pointer;
         }
         .container {
             display: grid;
             grid-template-columns: 15% 75%;
             gap: 20px;
-            padding: 20px;
+            padding: 0px 20px 20px 20px;
         }
         .sidebar {
             background-color: #f1f1f1;
             padding: 10px;
+            position: relative;
+            top:-230px;
         }
         .content-grid {
             display: grid;
@@ -88,9 +87,13 @@
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
         .content h2 {
-            background-color: #ccc;
-            padding: 10px;
+            background-color: #d7d7db;
+            padding: 20px;
             margin: 0 0 10px 0;
+            position: relative; /* 포지셔닝 컨텍스트 생성 */
+            border-radius: 10px; /* 모서리 둥글게 만들기 */
+            background-image: url('/static/pattern.svg'); /* SVG 패턴 파일 경로 */
+
         }
         .content h2 span {
             cursor: pointer;
@@ -99,6 +102,11 @@
             color: #007bff;
             cursor: pointer;
         }
+        .content h2 .text-container {
+            position: relative;
+            right: -30px; /* 오른쪽으로 10px 이동 */        
+        }
+
         .post {
             background-color: white;
             margin: 10px 0;
@@ -133,23 +141,25 @@
             display: none;
             position: absolute;
             top: 100%;
-            right: -10px;
+            right: 0;
             background-color: #ffffff;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
             z-index: 1000;
-            width: 150px;
+            width: 200px;
         }
         .dropdown-menu a {
-            display: block;
+            display: flex;
+            align-items: center;
             padding: 10px 15px;
             color: #333;
             text-decoration: none;
         }
-        .dropdown-menu a:hover {
-            background-color: gray;
+        .dropdown-menu a svg {
+            margin-right: 10px; /* 아이콘과 텍스트 사이의 간격 조정 */
         }
+
         .footer {
             background-color: #ffffff;
             color: #ccc;
@@ -220,21 +230,26 @@
         .footer .footer-content .social-icons a:hover {
             color: #fff;
         }
+
+        .dropdown-menu span {
+            display: block;
+            padding: 10px 15px;
+            text-align: left;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .group_svg { 
+          position: absolute;
+          right: 100px; /* 오른쪽 여백 조정 */
+          top:-5px;
+        }
+
     </style>
     <script>
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdown-menu');
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
-
-        function goToChat() {
-            window.location.href = '/chat';
-        }
-
-        function createPost() {
-            window.location.href = '/createPost';
-        }
-
         function goToBoard(category) {
             window.location.href = `/board/${category}`;
         }
@@ -242,25 +257,39 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">BUSS</div>
+        <a href="/" class="logo"><img width="100px" height="50px" src="../static/logo3.png" alt="BUSS Logo">BUSS</a>
+        <div class="navbar">
+            <a href="/">MAIN</a>
+            <a href="#">ANALYSIS</a>
+            <a href="/chat">ASSISTANT</a>
+            <a href="/createPost">게시물 작성</a>
+        </div>
         <div class="user-info">
-            <button onclick="goToChat()">Assistant</button>
-            <button onclick="createPost()">게시물 작성</button>
             <% if (user.id === "guest") { %>
                 <a href="/login" class="btn btn-primary">Login</a>
                 <a href="/register" class="btn btn-secondary">Register</a>
             <% } else { %>
                 <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
                 <div id="dropdown-menu" class="dropdown-menu">
-                    <a style="color:black" href="/editProfile">정보수정</a>
-                    <a style="color:black" href="/logout">로그아웃</a>
+                    <span>내 계정</span>
+                    <a href="/editProfile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg> 정보수정</a>
+                    <hr>
+                    <a style="margin-bottom:10px" href="/logout"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 4.01472 4.01472 2 6.5 2H12C14.2091 2 16 3.79086 16 6V7C16 7.55228 15.5523 8 15 8C14.4477 8 14 7.55228 14 7V6C14 4.89543 13.1046 4 12 4H6.5C5.11929 4 4 5.11929 4 6.5V17.5C4 18.8807 5.11929 20 6.5 20H12C13.1046 20 14 19.1046 14 18V17C14 16.4477 14.4477 16 15 16C15.5523 16 16 16.4477 16 17V18C16 20.2091 14.2091 22 12 22H6.5C4.01472 22 2 19.9853 2 17.5V6.5ZM18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289L22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071C17.9024 15.3166 17.9024 14.6834 18.2929 14.2929L19.5858 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11L19.5858 11L18.2929 9.70711C17.9024 9.31658 17.9024 8.68342 18.2929 8.29289Z" fill="#0F1729"/>
+                        </svg> 로그아웃</a>
                 </div>
             <% } %>
         </div>
     </div>
+    <hr style="color:#333;">
     <div class="navbar">
         <a href="/">MAIN</a>
         <a href="#">ANALYSIS</a>
+    </div>
+    <div class="banner" style="left:550px; position:relative;">
+        <img src="/static/buss banner.png" alt="" style="height: 100px%; width: 700px;">
     </div>
     <div class="container">
         <div class="sidebar">
@@ -275,9 +304,12 @@
                 <% } %>
             </ol>
         </div>
+        
         <div class="content-grid">
             <div class="content">
-                <h2>WEEKLY BEST</h2>
+                <h2> <span class="text-container">WEEKLY BEST</span>
+                    <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% weeklyBestPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -289,7 +321,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('community')">COMMUNITY</span></h2>
+                <h2><span onclick="goToBoard('community')"  class="text-container">COMMUNITY</span>
+                <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
+                </h2>
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
@@ -301,9 +335,12 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('frontend')">FRONTEND</span></h2>
+                <h2>
+                    <span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
+                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg" >
+                </h2>
                 <% frontendPosts.forEach(post => { %>
-                <div class="post">
+                <div class="post">  
                     <div class="info">
                         <h3><%= post.author.name %></h3>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -313,7 +350,9 @@
                 <% }) %>
             </div>
             <div class="content">
-                <h2><span onclick="goToBoard('backend')">BACKEND</span></h2>
+                <h2><span onclick="goToBoard('backend')"  class="text-container">BACKEND</span>
+                    <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
+                </h2>
                 <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
