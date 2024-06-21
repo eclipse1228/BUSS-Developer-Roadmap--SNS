@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= post.title %> - 게시물</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
     /* Header 스타일 */
     body {
@@ -13,64 +14,6 @@
         margin: 0;
         padding: 0;
     }
-    .header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 0;
-        text-align: center;
-        font-size: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-    }
-    .header .logo {
-        font-size: 24px;
-    }
-    .header .user-info {
-        display: flex;
-        align-items: center;
-    }
-    .header .user-info span,
-    .header .user-info a,
-    .header .user-info button {
-        margin-left: 10px;
-        margin-right: 10px;
-        color: white;
-        text-decoration: none;
-    }
-    .header .user-info button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-    .header .user-info button:hover {
-        background-color: #0056b3;
-    }
-
-    /* Navbar 스타일 */
-    .navbar {
-        display: flex;
-        justify-content: flex-start;
-        background-color: #444;
-    }
-    .navbar a {
-        color: white;
-        padding: 14px 20px;
-        text-decoration: none;
-        text-align: center;
-    }
-    .navbar a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-
     /* Sidebar 스타일 */
     .sidebar {
       background-color: #f1f1f1;
@@ -162,27 +105,6 @@
       color: #888;
       text-align: right;
     }
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: -10px;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      z-index: 1000;
-      width: 150px;
-    }
-    .dropdown-menu a {
-      display: block;
-      padding: 10px 15px;
-      color: #333;
-      text-decoration: none;
-    }
-    .dropdown-menu a:hover {
-      background-color: gray;
-  }
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -274,28 +196,7 @@
   </script>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">
-      BUSS
-    </div>
-    <div class="user-info"> 
-      <button onclick="goToChat()">Assistant</button>
-      <button onclick="createPost()">게시물 작성</button>
-      <% if (user.id === "guest") { %>
-        <a href="/login" class="btn btn-primary">Login</a>
-        <a href="/register" class="btn btn-secondary">Register</a>
-    <% } else { %>
-        <a href="javascript:void(0);" onclick="toggleDropdown()"><%= user.name %> 님</a>
-        <div id="dropdown-menu" class="dropdown-menu">
-            <a style="color:black" href="/editProfile">정보수정</a>
-            <a style="color:black" href="/logout">로그아웃</a>
-        </div>
-    <% } %>
-    </div>
-  </div>
-  <div class="navbar">
-      <a href="/">MAIN</a>
-  </div>
+  <%- include('header') %> 
   <div class="container">
     <div class="sidebar">
       <!-- Sidebar 내용 추가 -->
