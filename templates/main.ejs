@@ -13,57 +13,50 @@
             padding-bottom: 50px;
         }
         .header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
+            background-color: #f9f9f9;
+            color: black;
+            font-weight: bolder;
             font-size: 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
+            position: relative;
         }
         .header .logo {
             font-size: 24px;
         }
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-        .header .user-info a,
-        .header .user-info button {
-            margin-left: 10px;
-            margin-right: 10px;
-            color: white;
-            text-decoration: none;
-        }
-        .header .user-info button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .header .user-info button:hover {
-            background-color: #0056b3;
-        }
-        .navbar {
+        .header .navbar {
             display: flex;
             justify-content: flex-start;
-            background-color: #444;
+            background-color: #f9f9f9;
+            margin-left: 150px; /* Adjust margin-left as needed */
         }
-        .navbar a {
-            color: white;
+        .header .navbar a {
+            font-weight: normal;
+            color: black;
             padding: 14px 20px;
             text-decoration: none;
             text-align: center;
         }
-        .navbar a:hover {
-            background-color: #ddd;
+        .header .navbar a:hover {
+            color: #007bff;
+            cursor: pointer;
+        }
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 20px;
+        }
+        .header .user-info a {
+            margin-left: 10px;
+            margin-right: 10px;
             color: black;
+            text-decoration: none;
+        }
+        .header .user-info a:hover {
+            color: #007bff;
+            cursor: pointer;
         }
         .container {
             display: grid;
@@ -109,7 +102,7 @@
         .post h3 {
             margin: 0;
             margin-left: 5px;
-            font-weight:100;
+            font-weight: 100;
         }
         .post h4 {
             margin: 5px;
@@ -133,7 +126,7 @@
             display: none;
             position: absolute;
             top: 100%;
-            right: -10px;
+            right: 0;
             background-color: #ffffff;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -173,9 +166,13 @@
 <body>
     <div class="header">
         <div class="logo">BUSS</div>
+        <div class="navbar">
+            <a href="/">MAIN</a>
+            <a href="#">ANALYSIS</a>
+            <a href="/chat">Assistant</a>
+            <a href="/createPost">게시물 작성</a>
+        </div>
         <div class="user-info">
-            <button onclick="goToChat()">Assistant</button>
-            <button onclick="createPost()">게시물 작성</button>
             <% if (user.id === "guest") { %>
                 <a href="/login" class="btn btn-primary">Login</a>
                 <a href="/register" class="btn btn-secondary">Register</a>
@@ -187,10 +184,6 @@
                 </div>
             <% } %>
         </div>
-    </div>
-    <div class="navbar">
-        <a href="/">MAIN</a>
-        <a href="#">ANALYSIS</a>
     </div>
     <div class="container">
         <div class="sidebar">
