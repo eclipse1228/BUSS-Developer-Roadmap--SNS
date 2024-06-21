@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNS Main Page</title>
+    <title>Main Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,7 +109,7 @@
         .post h3 {
             margin: 0;
             margin-left: 5px;
-            font-weight:100;
+            font-weight: 100;
         }
         .post h4 {
             margin: 5px;
@@ -149,6 +149,76 @@
         }
         .dropdown-menu a:hover {
             background-color: gray;
+        }
+        .footer {
+            background-color: #ffffff;
+            color: #ccc;
+            padding: 10px 0; /* 여백을 줄임 */
+            text-align: center;
+            font-size: 12px;
+            border-top: 2px solid #007bff;
+        }
+        .footer .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto ;
+
+        }
+        .footer .footer-content .top-section {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .footer .footer-content .logo {
+            display: flex;
+            flex-direction: column; /* Add this line */
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            margin-left: 30px;
+        }
+        .footer .footer-content .logo img {
+            height: 80px; /* 원하는 크기로 조정 */
+            width: 100px;
+
+        }
+        .footer .footer-content .links {
+            display: flex;
+            gap: 15px;
+        }
+        .footer .footer-content .links a {
+            color: black; /* 글자색을 검은색으로 설정 */
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 40px; /* 링크를 왼쪽으로 이동 */
+        }
+        .footer .footer-content .links a:hover {
+            color: black; /* 마우스를 올렸을 때도 검은색으로 유지 */
+        }
+        .footer .footer-content .info {
+            text-align: left; /* 텍스트를 왼쪽 정렬 */
+            padding-right: 10px;
+
+        }
+        .footer .footer-content .info p {
+            margin: 2px 0;
+            line-height: 1;
+            color: black; /* 글자색을 검은색으로 설정 */
+        }
+        .footer .footer-content .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .footer .footer-content .social-icons a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .footer .footer-content .social-icons a:hover {
+            color: #fff;
         }
     </style>
     <script>
@@ -253,6 +323,40 @@
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
                 <% }) %>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-content">
+            <div class="top-section">
+                <div class="logo">
+                    <img src="static/logo.png" alt="Logo" >
+                    <p style="font-size: 16px; color: black; text-align: left;"><strong>BUSS</strong></p>
+                    <p style="font-size: 10px; color: black; text-align: left;">All That Developer</p>
+                 </div>
+
+                <div class="links">
+                    <a href="#">회사소개</a>
+                    <a href="#">공지사항</a>
+                    <a href="#">연락처</a>
+                    <a href="#">광고문의</a>
+                    <a href="#">채용</a>
+                    <a href="#">버그제보</a>
+                    <a href="#">개인정보 처리방침</a>
+                    <a href="#">통합 서비스 이용약관</a>
+                </div>
+            </div>
+            <div class="info" style="margin-top: 0;"> <!-- margin-top을 0으로 설정 -->
+                <p>상호명: (주)버스 코리아 | 대표명: 고병수</p>
+                <p>사업자등록번호: 000-00-02117 | 통신판매업신고번호: xxxx | 직업정보 제공사업 신고번호: xxxx-xxxxxx-xxx</p>
+                <p>주소: 부산광역시 낙동대로 550번길 37 506 | 이메일: quodtnrh@gmail.com | (운영시간 평일 10:00~17:00) 주말, 공휴일 휴무</p>
+                <p>© 2024 (주)버스 코리아, Inc. All rights reserved.</p>
+            </div>
+
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
     </div>
