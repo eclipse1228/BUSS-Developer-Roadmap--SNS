@@ -5,9 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNS Main Page</title>
     <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
+    <link rel="stylesheet" href="../static/styles/footer.css"> <!-- 푸터 스타일을 포함한 CSS 파일-->
     <style>
+
+        @font-face {
+            font-family: 'neon';
+            src: url('/static/styles/font/Pretendard-ExtraLight.otf') format('truetype');
+        }
+
+        @font-face{
+            font-family: 'neon2';
+            src: url('/static/styles/font/Pretendard-ExtraBold.otf') format('truetype');
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'neon';
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
@@ -18,12 +30,6 @@
             grid-template-columns: 15% 75%;
             gap: 20px;
             padding: 0px 20px 20px 20px;
-        }
-        .sidebar {
-            background-color: #f1f1f1;
-            padding: 10px;
-            position: relative;
-            top: -230px;
         }
         .content-grid {
             display: grid;
@@ -53,6 +59,7 @@
             cursor: pointer;
         }
         .content h2 .text-container {
+            font-family: 'neon2';
             position: relative;
             right: -30px; /* 오른쪽으로 10px 이동 */        
         }
@@ -85,6 +92,53 @@
         .post .info {
             display: flex;
             justify-content: space-between;
+        }   
+
+
+        .sidebar {
+            background-color: #f9f9f9;
+            padding: 10px;
+            position: relative;
+            top: -230px;
+        }
+        .top-writers {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        }
+        .top-writers li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        }
+        .top-writers img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .writer-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .writer-name {
+            font-weight: bold;
+        }
+        .writer-points {
+            display: flex;
+            align-items: center;
+            color: gray;
+        }
+        .writer-points img {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+        .sidebar hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
         }
     </style>
     <script>
@@ -103,7 +157,7 @@
         <img src="/static/buss banner.png" alt="" style="height: 100px%; width: 700px;">
     </div>
     <div class="container">
-        <div class="sidebar">
+        <!-- <div class="sidebar">
             <h3>Top Writers</h3>
             <ol style="margin: -15px -20px">
                 <% if (typeof topwriters !== 'undefined') { %>
@@ -114,8 +168,31 @@
                     <li>No top writers available.</li>
                 <% } %>
             </ol>
+        </div> -->
+
+        <div class="sidebar">
+            <h3>Top Writers</h3>
+            <hr>
+            <ol class="top-writers">
+                <% if (typeof topwriters !== 'undefined') { %>
+                    <% topwriters.forEach(writer => { %>
+                        <li>
+                            <img src="<%= writer.avatar %>" alt="<%= writer.username %>">
+                            <div class="writer-info">
+                                <span class="writer-name"><%= writer.username %></span>
+                                <span class="writer-points">
+                                    <img src="/static/trophy-icon.png" alt="Trophy Icon">
+                                    <%= writer.postCount %>
+                                </span>
+                            </div>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <li>No top writers available.</li>
+                <% } %>
+            </ol>
         </div>
-        
+
         <div class="content-grid">
             <div class="content">
                 <h2> <span class="text-container">WEEKLY BEST</span>
@@ -176,5 +253,6 @@
             </div>
         </div>
     </div>
+    <%- include('footer') %> <!-- 푸터 포함 -->
 </body>
 </html>

@@ -16,7 +16,7 @@ const Roadmap = require('./db/Roadmap');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware 설정
 app.use(cors());
