@@ -19,26 +19,26 @@
             font-size: 24px;
             display: flex;
             align-items: center;
-            padding: 10px 20px 00px 20px;
+            padding: 10px 20px 0 20px;
             position: relative;
         }
         .header .logo {
             font-size: 40px;
             font-weight: bolder;
-            color: black; /* 글씨체를 검은색으로 설정 */
-            text-decoration: none; /* 밑줄 없애기 */
+            color: black;
+            text-decoration: none;
         }
         .header .navbar {
             display: flex;
             justify-content: flex-start;
             background-color: #f9f9f9;
-            margin-left: 30px; /* Adjust margin-left as needed */
+            margin-left: 30px;
         }
         .header .navbar a {
             font-weight: normal;
             color: black;
             padding: 14px 20px;
-            font-size:0.9em;
+            font-size: 0.9em;
             text-decoration: none;
             text-align: center;
         }
@@ -72,7 +72,7 @@
             background-color: #f1f1f1;
             padding: 10px;
             position: relative;
-            top:-230px;
+            top: -230px;
         }
         .content-grid {
             display: grid;
@@ -90,10 +90,9 @@
             background-color: #d7d7db;
             padding: 20px;
             margin: 0 0 10px 0;
-            position: relative; /* 포지셔닝 컨텍스트 생성 */
-            border-radius: 10px; /* 모서리 둥글게 만들기 */
-            background-image: url('/static/pattern.svg'); /* SVG 패턴 파일 경로 */
-
+            position: relative;
+            border-radius: 10px;
+            background-image: url('/static/pattern.svg');
         }
         .content h2 span {
             cursor: pointer;
@@ -104,9 +103,8 @@
         }
         .content h2 .text-container {
             position: relative;
-            right: -30px; /* 오른쪽으로 10px 이동 */        
+            right: -30px;
         }
-
         .post {
             background-color: white;
             margin: 10px 0;
@@ -136,6 +134,17 @@
         .post .info {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+        .post .author-info {
+            display: flex;
+            align-items: center;
+        }
+        .post .author-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
         .dropdown-menu {
             display: none;
@@ -157,13 +166,12 @@
             text-decoration: none;
         }
         .dropdown-menu a svg {
-            margin-right: 10px; /* 아이콘과 텍스트 사이의 간격 조정 */
+            margin-right: 10px;
         }
-
         .footer {
             background-color: #ffffff;
             color: #ccc;
-            padding: 10px 0; /* 여백을 줄임 */
+            padding: 10px 0;
             text-align: center;
             font-size: 12px;
             border-top: 2px solid #007bff;
@@ -173,8 +181,7 @@
             flex-direction: column;
             align-items: center;
             max-width: 1200px;
-            margin: 0 auto ;
-
+            margin: 0 auto;
         }
         .footer .footer-content .top-section {
             display: flex;
@@ -183,39 +190,37 @@
         }
         .footer .footer-content .logo {
             display: flex;
-            flex-direction: column; /* Add this line */
+            flex-direction: column;
             align-items: center;
             position: relative;
             z-index: 1;
             margin-left: 30px;
         }
         .footer .footer-content .logo img {
-            height: 80px; /* 원하는 크기로 조정 */
+            height: 80px;
             width: 100px;
-
         }
         .footer .footer-content .links {
             display: flex;
             gap: 15px;
         }
         .footer .footer-content .links a {
-            color: black; /* 글자색을 검은색으로 설정 */
+            color: black;
             text-decoration: none;
             font-size: 14px;
-            margin-left: 40px; /* 링크를 왼쪽으로 이동 */
+            margin-left: 40px;
         }
         .footer .footer-content .links a:hover {
-            color: black; /* 마우스를 올렸을 때도 검은색으로 유지 */
+            color: black;
         }
         .footer .footer-content .info {
-            text-align: left; /* 텍스트를 왼쪽 정렬 */
+            text-align: left;
             padding-right: 10px;
-
         }
         .footer .footer-content .info p {
             margin: 2px 0;
             line-height: 1;
-            color: black; /* 글자색을 검은색으로 설정 */
+            color: black;
         }
         .footer .footer-content .social-icons {
             display: flex;
@@ -230,7 +235,6 @@
         .footer .footer-content .social-icons a:hover {
             color: #fff;
         }
-
         .dropdown-menu span {
             display: block;
             padding: 10px 15px;
@@ -239,11 +243,10 @@
             font-size: 0.9em;
         }
         .group_svg { 
-          position: absolute;
-          right: 100px; /* 오른쪽 여백 조정 */
-          top:-5px;
+            position: absolute;
+            right: 100px;
+            top: -5px;
         }
-
     </style>
     <script>
         function toggleDropdown() {
@@ -313,7 +316,10 @@
                 <% weeklyBestPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.name %></h3>
+                        <div class="author-info">
+                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <h3><%= post.author.name %></h3>
+                        </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
@@ -327,7 +333,10 @@
                 <% communityPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.name %></h3>
+                        <div class="author-info">
+                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <h3><%= post.author.name %></h3>
+                        </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
@@ -337,12 +346,15 @@
             <div class="content">
                 <h2>
                     <span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
-                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg" >
+                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg">
                 </h2>
                 <% frontendPosts.forEach(post => { %>
-                <div class="post">  
+                <div class="post">
                     <div class="info">
-                        <h3><%= post.author.name %></h3>
+                        <div class="author-info">
+                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <h3><%= post.author.name %></h3>
+                        </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
@@ -356,7 +368,10 @@
                 <% backendPosts.forEach(post => { %>
                 <div class="post">
                     <div class="info">
-                        <h3><%= post.author.name %></h3>
+                        <div class="author-info">
+                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <h3><%= post.author.name %></h3>
+                        </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                     </div>
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
@@ -369,11 +384,10 @@
         <div class="footer-content">
             <div class="top-section">
                 <div class="logo">
-                    <img src="static/logo.png" alt="Logo" >
+                    <img src="static/logo.png" alt="Logo">
                     <p style="font-size: 16px; color: black; text-align: left;"><strong>BUSS</strong></p>
                     <p style="font-size: 10px; color: black; text-align: left;">All That Developer</p>
-                 </div>
-
+                </div>
                 <div class="links">
                     <a href="#">회사소개</a>
                     <a href="#">공지사항</a>
@@ -385,13 +399,12 @@
                     <a href="#">통합 서비스 이용약관</a>
                 </div>
             </div>
-            <div class="info" style="margin-top: 0;"> <!-- margin-top을 0으로 설정 -->
+            <div class="info" style="margin-top: 0;">
                 <p>상호명: (주)버스 코리아 | 대표명: 고병수</p>
                 <p>사업자등록번호: 000-00-02117 | 통신판매업신고번호: xxxx | 직업정보 제공사업 신고번호: xxxx-xxxxxx-xxx</p>
                 <p>주소: 부산광역시 낙동대로 550번길 37 506 | 이메일: quodtnrh@gmail.com | (운영시간 평일 10:00~17:00) 주말, 공휴일 휴무</p>
                 <p>© 2024 (주)버스 코리아, Inc. All rights reserved.</p>
             </div>
-
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
