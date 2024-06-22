@@ -1,26 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const User = require('./models/User'); // User 모델을 가져옵니다.
 
 const app = express();
-const PORT = process.env.PORT || 3000; // 환경 변수에서 포트 번호를 가져오고, 없으면 기본값 3000 사용
-const SECRET_KEY = 'your_secret_key';
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
 
 app.use(bodyParser.json());
 
-const users = [
-    { username: 'admin', password: 'password123' }
-];
+mongoose.connect('mongodb://localhost:27017/your_database', { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password);
-
-    if (user) {
-        const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' });
-        res.json({ token });
-    } else {
-        res.status(401).send('로그인 실패');
+    try {
+        const user = await User.findOne({ id: username });
+        if (user && await bcrypt.compare(password, user.pw)) {
+            const token = jwt.sign({ username: user.id }, SECRET_KEY, { expiresIn: '1h' });
+            res.json({ token });
+        } else {
+            res.status(401).send('로그인 실패');
+        }
+    } catch (err) {
+        res.status(500).send('서버 오류');
     }
 });
 
@@ -39,4 +43,15 @@ app.get('/admin', (req, res) => {
     }
 });
 
-app.listen(PORT);
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).send('서버 오류');
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
