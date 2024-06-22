@@ -1,8 +1,9 @@
 const Post = require('../db/Post');
+const { ObjectId } = require('mongodb');
 
 async function getTopWriters(limit = 5) {
     try {
-        const topwriters = await Post.aggregate([
+        const pipeline = [
             {
                 $group: {
                     _id: '$author',
@@ -20,21 +21,26 @@ async function getTopWriters(limit = 5) {
                     from: 'users',
                     localField: '_id',
                     foreignField: '_id',
-                    as: 'author'
+                    as: 'authorDetails'
                 }
             },
             {
-                $unwind: '$author'
+                $unwind: '$authorDetails'
             },
             {
                 $project: {
-                    username: '$author.name',
-                    postCount: 1
+                    _id: 0,
+                    authorId: '$_id',
+                    postCount: 1,
+                    name: '$authorDetails.name',  // name 필드를 추가
+                    profileImageUrl: '$authorDetails.profileImageUrl'
                 }
             }
-        ]);
+        ];
 
-        console.log('Top writers:', topwriters); // 디버깅용 출력
+        const topwriters = await Post.aggregate(pipeline);
+
+        console.log('Top writers after pipeline:', JSON.stringify(topwriters, null, 2)); // 디버깅용 출력
 
         return topwriters;
     } catch (error) {
