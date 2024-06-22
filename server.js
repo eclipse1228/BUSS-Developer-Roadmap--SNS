@@ -58,6 +58,7 @@ app.use('/chat', require('./service/chat'));
 app.use('/upload', require('./service/chat'));
 app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
+app.use('/profile', require('./service/profile'));
 // app.use('/profile', require('./service/public_profile'));
 
 // app.use('/mypage',require('/servic/mypage'));
