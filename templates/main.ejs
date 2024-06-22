@@ -273,7 +273,9 @@
             <ol style="margin: -15px -20px">
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
-                        <li><strong><%= writer.username %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
+                        <li>
+                            <img src="<%= writer.profileImageUrl|| '/static/usericon.png' %>" alt="<%= writer.username %>'s profile picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                            <strong><%= writer.name %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
                     <% }) %>
                 <% } else { %>
                     <li>No top writers available.</li>
@@ -290,7 +292,7 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -307,7 +309,7 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -325,7 +327,7 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -342,7 +344,7 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
