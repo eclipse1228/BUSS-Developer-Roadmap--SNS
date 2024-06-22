@@ -212,9 +212,9 @@
 </head>
 <body>
     <%- include('header') %> 
-    <div class="banner" style="left:550px; position:relative;">
-        <img src="/static/buss banner.png" alt="" style="height: 100px%; width: 700px;">
-    </div>
+    <div class="banner" style="left:275px; position:relative;">
+        <img src="/static/buss banner.png" alt="" style="width:1050px; height: 250px;">
+    </div>  
     <div class="container">
         <div class="sidebar">
             <h3>Top Writers</h3>
@@ -240,7 +240,8 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -257,7 +258,8 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -275,7 +277,8 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
@@ -292,7 +295,8 @@
                 <div class="post">
                     <div class="info">
                         <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image">
+                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+
                             <h3><%= post.author.name %></h3>
                         </div>
                         <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>

@@ -3,7 +3,6 @@ const router = express.Router();
 const Post = require('../db/Post'); // Post 모델 가져오기
 const Comment = require('../db/Comment'); // Comment 모델 가져오기
 
-
 // 게시물 상세 보기 라우트
 router.get('/:id', async (req, res) => {
   try {

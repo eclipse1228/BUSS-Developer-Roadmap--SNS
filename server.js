@@ -59,8 +59,12 @@ app.use('/chat', require('./service/chat'));
 app.use('/upload', require('./service/chat'));
 app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
+<<<<<<< HEAD
 app.use('/updateRoadmap', require('./service/chat')); // roadmap 업데이트 
 
+=======
+app.use('/profile', require('./service/profile'));
+>>>>>>> origin
 // app.use('/profile', require('./service/public_profile'));
 
 // app.use('/mypage',require('/servic/mypage'));
