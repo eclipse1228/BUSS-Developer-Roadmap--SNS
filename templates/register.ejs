@@ -55,6 +55,17 @@
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .profile-preview {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .profile-preview img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -91,15 +102,64 @@
                 <label for="job">직업</label>
                 <input type="text" id="job" name="job">
             </div>
+            <div class="form-group">
+                <label for="githubUsername">GitHub 아이디 (선택)</label>
+                <input type="text" id="githubUsername" name="githubUsername">
+                <div class="profile-preview" id="profilePreview" style="display:none;">
+                    <img id="githubProfileImage" src="" alt="GitHub Profile Image">
+                    <span id="githubProfileName"></span>
+                </div>
+            </div>
             <button type="submit">회원가입</button>
         </form>
     </div>
 
     <script>
+        document.getElementById('githubUsername').addEventListener('input', async function() {
+            const githubUsername = this.value;
+            const profilePreview = document.getElementById('profilePreview');
+            const githubProfileImage = document.getElementById('githubProfileImage');
+            const githubProfileName = document.getElementById('githubProfileName');
+
+            if (githubUsername) {
+                try {
+                    const response = await fetch(`https://api.github.com/users/${githubUsername}`);
+                    if (response.ok) {
+                        const githubData = await response.json();
+                        githubProfileImage.src = githubData.avatar_url;
+                        githubProfileName.textContent = githubData.name || githubData.login;
+                        profilePreview.style.display = 'flex';
+                    } else {
+                        profilePreview.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('GitHub 사용자 정보를 가져오는 중 오류 발생:', error);
+                    profilePreview.style.display = 'none';
+                }
+            } else {
+                profilePreview.style.display = 'none';
+            }
+        });
+
         document.getElementById('registerForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const formData = new FormData(event.target);
             const formObject = Object.fromEntries(formData.entries());
+
+            if (formObject.githubUsername) {
+                try {
+                    const response = await fetch(`https://api.github.com/users/${formObject.githubUsername}`);
+                    if (response.ok) {
+                        const githubData = await response.json();
+                        formObject.profileImageUrl = githubData.avatar_url;
+                    } else {
+                        alert('GitHub 사용자 정보를 가져올 수 없습니다.');
+                    }
+                } catch (error) {
+                    console.error('GitHub 사용자 정보를 가져오는 중 오류 발생:', error);
+                    alert('GitHub 사용자 정보를 가져오는 중 오류가 발생했습니다.');
+                }
+            }
 
             try {
                 const response = await fetch('/register', {
