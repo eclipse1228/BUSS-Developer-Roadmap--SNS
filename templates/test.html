@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Example</title>
+    <style>
+        .clickable-group:hover rect {
+            fill: orange; /* 마우스를 올렸을 때 색 변경 */
+        }
+    </style>
+</head>
+<body>
+    <svg width="100%" height="100%">
+        <g class="clickable-group" data-group-id="100-internet" id="internet-group">
+            <rect x="698.35" y="463.35" width="172.3" height="47.3" rx="2" fill="rgb(255,255,0)" fill-opacity="1" stroke="rgb(0,0,0)" stroke-width="2.7"></rect>
+            <text x="754" y="493.5" fill="rgb(0,0,0)" font-style="normal" font-weight="normal" font-size="17px">
+                <tspan>Internet</tspan>
+            </text>
+        </g>
+    </svg>
+
+    <script>
+        document.getElementById('internet-group').addEventListener('click', function() {
+            alert('Internet group clicked!');
+        });
+    </script>
+</body>
+</html>

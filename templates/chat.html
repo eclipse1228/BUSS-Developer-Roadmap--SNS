@@ -83,33 +83,21 @@
     #pdf-file {
       display: none;
     }
-    canvas {
-      position:relative;
-      display: flex;
+    .svg-container {
+      position: relative;
+      /* display: flex; */
       width: 42%;
-      max-width: 800px;
+      /* max-width: px; */
       height: 73%;
       padding: 20px;
       overflow-y: scroll;
       background-color: white;
-      margin-top: 20px;
+      /* margin-top: 200px; */
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: absolute;
       left: 919px;
       top: 100px;
-
-    }
-    .node {
-      position: absolute;
-      background-color: rgb(219, 251, 12);
-      border: 1px solid black;
-      text-align: center;
-      line-height: 1.5;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
     }
     .modal {
       display: none;
@@ -141,11 +129,6 @@
       text-decoration: none;
       cursor: pointer;
     }
-    .chat_inbox {
-      left: 5px;
-    }
-
-
   </style>
 </head>
 <body>
@@ -156,8 +139,8 @@
     <button id="send">Send</button>
     <input type="file" id="pdf-file" accept="application/pdf">
   </div>
-  <div class="canvas-container">
-  <canvas id="roadmapCanvas"></canvas>
+  <div class="svg-container">
+    <svg id="roadmapSvg" width="10000" height="10000"></svg>
   </div>
   <!-- Roadmap Modal -->
   <div id="courseModal" class="modal">
@@ -218,36 +201,46 @@
       }
     });
 
+    function drawNode(svg, x, y, label, size) {
+      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      group.setAttribute('class', 'clickable-group');
+      group.setAttribute('data-label', label);
 
-    function drawNode(ctx, x, y, label, size) {
-      ctx.fillStyle = 'yellow';
-      ctx.fillRect(x, y, size.width, size.height);
-      ctx.strokeStyle = 'black';
-      ctx.strokeRect(x, y, size.width, size.height);
-      ctx.fillStyle = 'black';
-      ctx.font = '30px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(label, x + size.width / 2, y + size.height / 2);
-      return { x, y, width: size.width, height: size.height };
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', size.width);
+      rect.setAttribute('height', size.height);
+      rect.setAttribute('rx', 2);
+      rect.setAttribute('fill', 'yellow');
+      rect.setAttribute('stroke', 'black');
+      rect.setAttribute('stroke-width', 2.7);
+      group.appendChild(rect);
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', x + size.width / 2);
+      text.setAttribute('y', y + size.height / 2);
+      text.setAttribute('fill', 'black');
+      text.setAttribute('font-size', '17px');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.textContent = label;
+      group.appendChild(text);
+
+      svg.appendChild(group);
+      return group;
     }
 
-
-    // ########################### Roadmap
     function drawRoadmap(data) {
-      const canvas = document.getElementById('roadmapCanvas');
-      const ctx = canvas.getContext('2d');
-
-      // Set canvas dimensions
-      canvas.width = 1500; // 넓게 설정하여 스크롤 가능하게 함
-      canvas.height = 2000; // 높게 설정하여 스크롤 가능하게 함
+      const svg = document.getElementById('roadmapSvg');
+      svg.innerHTML = ''; // Clear existing content
 
       // Define node sizes
-      const nodeSize = { width: 200, height: 100 };
-      const itemSize = { width: 400, height: 100 };
+      const nodeSize = { width: 260, height: 50 };
+      const itemSize = { width: 200, height: 50 };
 
       // Define initial positions
-      const startX = 500;
+      const startX = 200;
       const startY = 100;
       const xOffset = 300;
       const yOffset = 100;
@@ -260,14 +253,14 @@
       for (const [category, categoryData] of Object.entries(data.frontEnd)) {
         const categoryX = startX;
         const categoryY = currentY;
-        const categoryNode = drawNode(ctx, categoryX, categoryY, category.toUpperCase(), nodeSize);
-        categoryNodes[category] = { ...categoryNode, items: [] };
+        const categoryGroup = drawNode(svg, categoryX, categoryY, category.toUpperCase(), nodeSize);
+        categoryNodes[category] = { group: categoryGroup, x: categoryX, y: categoryY, width: nodeSize.width, height: nodeSize.height, items: [] };
 
         let itemY = categoryY + nodeSize.height + 20;
         for (const [item, itemData] of Object.entries(categoryData)) {
-          const itemNode = drawNode(ctx, categoryX + itemXOffset, itemY, item, itemSize);
-          categoryNodes[category].items.push({ ...itemNode, data: itemData });
-          drawConnection(ctx, categoryX + nodeSize.width, categoryY + nodeSize.height / 2, itemNode.x, itemNode.y + itemSize.height / 2);
+          const itemGroup = drawNode(svg, categoryX + itemXOffset, itemY, item, itemSize);
+          categoryNodes[category].items.push({ group: itemGroup, x: categoryX + itemXOffset, y: itemY, width: itemSize.width, height: itemSize.height, data: itemData });
+          drawConnection(svg, categoryX + nodeSize.width, categoryY + nodeSize.height / 2, categoryX + itemXOffset, itemY + itemSize.height / 2);
           itemY += itemSize.height + 20;
         }
 
@@ -281,21 +274,24 @@
         const nextCategory = categoryOrder[i + 1];
         const currentNode = categoryNodes[currentCategory];
         const nextNode = categoryNodes[nextCategory];
-        drawVerticalConnection(ctx, currentNode.x + nodeSize.width / 2, currentNode.y + nodeSize.height, nextNode.y + nodeSize.height / 2);
+        drawVerticalConnection(svg, currentNode.x + nodeSize.width / 2, currentNode.y + nodeSize.height, nextNode.y + nodeSize.height / 60);
       }
 
       // Add click event listeners for nodes
-      canvas.addEventListener('click', (event) => {
-        const x = event.offsetX;
-        const y = event.offsetY;
+      svg.addEventListener('click', (event) => {
+        const point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        const cursorPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
         for (const category in categoryNodes) {
           const categoryNode = categoryNodes[category];
-          if (isInsideNode(x, y, categoryNode)) {
+          if (isInsideNode(cursorPoint.x, cursorPoint.y, categoryNode)) {
             openModal(categoryNode);
             return;
           }
           for (const itemNode of categoryNode.items) {
-            if (isInsideNode(x, y, itemNode)) {
+            if (isInsideNode(cursorPoint.x, cursorPoint.y, itemNode)) {
               openModal(itemNode);
               return;
             }
@@ -304,22 +300,26 @@
       });
     }
 
-    function drawConnection(ctx, x1, y1, x2, y2) {
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = '#888'; // 줄 색상 변경
-      ctx.lineWidth = 2; // 줄 두께 변경
-      ctx.stroke();
+    function drawConnection(svg, x1, y1, x2, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
     }
 
-    function drawVerticalConnection(ctx, x, y1, y2) {
-      ctx.beginPath();
-      ctx.moveTo(x, y1);
-      ctx.lineTo(x, y2);
-      ctx.strokeStyle = '#888'; // 줄 색상 변경
-      ctx.lineWidth = 2; // 줄 두께 변경
-      ctx.stroke();
+    function drawVerticalConnection(svg, x, y1, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
     }
 
     function isInsideNode(x, y, node) {
