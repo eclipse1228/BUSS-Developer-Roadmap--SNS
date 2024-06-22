@@ -113,7 +113,8 @@ router.post("/", async (req, res) => {
       const thread = await client.beta.threads.create({
         messages: [{ role: "user", content: prompt }],
       });
-  
+
+      
       const stream = client.beta.threads.runs
         .stream(thread.id, { assistant_id: assistant.id })
         .on("textCreated", () => console.log("assistant >"))
@@ -122,13 +123,44 @@ router.post("/", async (req, res) => {
           if (event.content[0].type === "text") {
             const { text } = event.content[0];
             // Save to MongoDB here
-                    await saveResponseToMongoDB({ text: text.value , id:userId});
+            await saveResponseToMongoDB({ text: text.value , id:userId});
             res.status(200).send({ bot: "로드맵을 업데이트했습니다." });
           }
         });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
+    }
+  });
+
+  router.post("/updateRoadmap", async (req, res) => {
+    try {
+      if (!req.session.user) {
+        return res.status(401).json({ error: "Unauthorized: User not logged in" });
+      }
+      const userId = req.session.user.id;
+  
+      // MongoDB에서 최신 로드맵 데이터 조회
+      const client = new MongoClient(mongoUrl);
+      await client.connect();
+      const db = client.db(dbName);
+      const roadmapCollection = db.collection('Roadmap');
+      
+      const latestRoadmap = await roadmapCollection.findOne(
+        { id: userId },
+        { sort: { _id: -1 } }
+      );
+  
+      await client.close();
+  
+      if (latestRoadmap) {
+        res.status(200).json(JSON.parse(latestRoadmap.text));
+      } else {
+        res.status(404).json({ error: "Roadmap not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching roadmap:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 

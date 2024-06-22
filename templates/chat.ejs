@@ -199,6 +199,40 @@
     </div>
   </div>
   <script>
+    function showLoading() {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading';
+    loadingDiv.textContent = 'Loading...';
+    loadingDiv.style.position = 'absolute';
+    loadingDiv.style.top = '50%';
+    loadingDiv.style.left = '50%';
+    loadingDiv.style.transform = 'translate(-50%, -50%)';
+    loadingDiv.style.fontSize = '24px';
+    document.querySelector('.svg-container').appendChild(loadingDiv);
+  }
+
+  function hideLoading() {
+    const loadingDiv = document.getElementById('loading');
+    if (loadingDiv) {
+      loadingDiv.remove();
+    }
+  }
+
+  async function updateRoadmap() {
+    try {
+      const response = await fetch('/updateRoadmap', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const roadmapData = await response.json();
+      drawRoadmap(roadmapData);
+    } catch (error) {
+      console.error('Error updating roadmap:', error);
+    }
+  }
+  
       function toggleDropdown() {
           const dropdown = document.getElementById('dropdown-menu');
           dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
@@ -221,6 +255,14 @@
       userMessageContainer.appendChild(userMessage);
       chat.appendChild(userMessageContainer);
 
+      // 보내는 동안 채팅창이 아닌, roadmap 스페이스 위에 loading.. 글자 나타내기 (이후에 응답이 오면, loading 없애기)
+      // const roadmap = document.getElementById('svg-container'); 
+      // (1) roadmap 위에 loading html 화면 띄우기
+      // (2) 
+
+      // 로딩 화면 표시
+      showLoading();
+
       // Send message to server
       const response = await fetch('/chat', {
         method: 'POST',
@@ -229,8 +271,11 @@
         },
         body: JSON.stringify({ prompt: message })
       });
-
       const data = await response.json();
+
+    
+
+    
 
       // Display bot message
       const botMessageContainer = document.createElement('div');
@@ -242,6 +287,16 @@
       chat.appendChild(botMessageContainer);
 
       chat.scrollTop = chat.scrollHeight;
+
+      // (3) response가 왔으면, loading html 제거하기
+      // 로딩 화면 숨기기
+      hideLoading();
+      // (4) post 요청으로 ./updateRoadmap 
+      // chat.js에서 DB에서 로드맵 조회한 결과를 const roadmap_response 로 받아오기 
+      // 로드맵 업데이트 요청
+      updateRoadmap();
+
+
     }
 
     document.getElementById('send').addEventListener('click', sendMessage);
@@ -303,7 +358,7 @@
       const categoryNodes = {};
       let currentY = startY;
 
-      for (const [category, categoryData] of Object.entries(data.frontEnd)) {
+      for (const [category, categoryData] of Object.entries(data.frontEnd)) { // frontEnd 인지 BackEnd 인지, Devobs인지 모른다. 따라서  frontEnd라고 컬럼 고정하면 안됨 
         const categoryX = startX;
         const categoryY = currentY;
         const categoryGroup = drawNode(svg, categoryX, categoryY, category.toUpperCase(), nodeSize);
@@ -411,6 +466,10 @@
         closeModal();
       }
     }
+
+    // 아래의 예시처럼 db에서 roadmap json 조회해서온다. 
+
+    
 
     // Fetch data and draw roadmap on load and resize
     fetch('../static/frontend.json')
