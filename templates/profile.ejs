@@ -1,40 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile</title>
   <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
-    /* Header 및 Navbar 스타일 */
     body {
         font-family: Arial, sans-serif;
         background-color: #f9f9f9;
         margin: 0;
         padding: 0;
-        padding-bottom: 50px; /* 추가된 부분 */
+    }
+    .layout {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .sidebar {
+        width: 300px;
+        background-color: #f1f1f1;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 40px; /* 패딩 증가 */
-        max-width: 800px; /* 최대 너비 증가 */
-        margin: 0 auto;
-        background-color: #ffffff; /* 배경색 추가 */
-        border-radius: 5px; /* 모서리 둥글게 */
-        box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 그림자 추가 */
+        flex: 1;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .form-group {
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
         margin-bottom: 20px;
     }
-    .container button {
+    .profile-header img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+    }
+    .profile-details {
+        flex: 1;
+    }
+    .profile-details h2 {
+        margin: 0;
+    }
+    .profile-details p {
+        margin: 5px 0;
+        color: #888;
+    }
+    .edit-profile-button {
         padding: 10px 20px;
         background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        text-decoration: none; /* 링크 스타일 제거 */
+        display: inline-block; /* 블록 요소로 표시 */
+        margin-top: 20px;
+    }
+    .github-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+    .github-link:hover {
+        text-decoration: underline;
     }
     label {
         font-weight: bold;
@@ -51,45 +87,32 @@
         box-sizing: border-box;
     }
     input[type="text"][readonly] {
-        background-color: rgba(200, 200, 200, 0.5); /* 반투명한 회색 배경 */
+        background-color: rgba(200, 200, 200, 0.5);
     }
-
   </style>
 </head>
 <body>
-  <%- include('header') %> 
-  <div class="container">
-    <h2>회원 정보 수정</h2>
-    <form id="editProfileForm">
-      <div class="form-group">
-        <label for="id">아이디</label>
-        <input type="text" id="id" name="id" value="<%= user.id %>" readonly>
+  <%- include('header') %>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="profile-header">
+        <img id="githubProfileImage" src="<%= user.profileImageUrl %>" alt="GitHub Profile Image" style="display: <%= user.profileImageUrl ? 'block' : 'none' %>;">
+        <div class="profile-details">
+          <h2><%= user.name %></h2>
+          <p>아이디: <%= user.id %></p>
+          <p>이메일: <%= user.email %></p>
+          <p>직업: <%= user.job %></p>
+          <p>나이: <%= user.age %></p>
+          <p>GitHub: <a class="github-link" href="https://github.com/<%= user.githubUsername %>" target="_blank"><%= user.githubUsername %></a></p>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="name">이름</label>
-        <input type="text" id="name" name="name" value="<%= user.name %>">
-      </div>
-      <div class="form-group">
-        <label for="age">나이</label>
-        <input type="number" id="age" name="age" value="<%= user.age %>">
-      </div>
-      <div class="form-group">
-        <label for="email">이메일</label>
-        <input type="email" id="email" name="email" value="<%= user.email %>">
-      </div>
-      <div class="form-group">
-        <label for="job">직업</label>
-        <input type="text" id="job" name="job" value="<%= user.job %>">
-      </div>
-      <div class="form-group">
-        <label for="githubUsername">GitHub 아이디</label>
-        <input type="text" id="githubUsername" name="githubUsername" value="<%= user.githubUsername %>">
-      </div>
-      <div class="form-group">
-        <img id="githubProfileImage" src="<%= user.profileImageUrl %>" alt="GitHub Profile Image" style="display: <%= user.profileImageUrl ? 'block' : 'none' %>; width: 100px; height: 100px; border-radius: 50%;">
-      </div>
-      <button type="submit">변경 내용 저장</button>
-    </form>
+      <a class="edit-profile-button" href="/editProfile">프로필 수정</a>
+    </div>
+    <div class="container">
+      <!-- 여기에 다른 내용을 추가할 수 있습니다 -->
+      <h2>다른 내용</h2>
+      <p>이곳에 추가적인 정보를 넣을 수 있습니다.</p>
+    </div>
   </div>
 
   <script>

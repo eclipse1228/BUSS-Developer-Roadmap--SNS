@@ -99,7 +99,7 @@
     border-color: #007bff; /* Change border color on focus */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: add a subtle shadow */
 }
-.search-container button {
+.search-container button{
     position: absolute;
     right: 5px; /* Adjust position of the search button */
     top: 50%;
