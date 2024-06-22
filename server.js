@@ -30,7 +30,8 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
 }))
 
 // connectDB 함수 호출
@@ -58,6 +59,7 @@ app.use('/chat', require('./service/chat'));
 app.use('/upload', require('./service/chat'));
 app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
+
 // app.use('/profile', require('./service/public_profile'));
 
 // app.use('/mypage',require('/servic/mypage'));
