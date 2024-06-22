@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat with Assistant</title>
-  <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
+  <link rel="stylesheet" href="../static/styles/header.css"> <!-- Include header styles -->
   <style>
+    /* Existing styles */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -27,7 +28,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       position: relative;
-      left: 54px; /* 오른쪽으로 5px 이동 */
+      left: 54px; /* Move right by 54px */
     }
     .message-container {
       display: flex;
@@ -58,7 +59,7 @@
       display: flex;
       margin-top: 20px;
       position: relative;
-      left: 54px; /* 오른쪽으로 5px 이동 */
+      left: 54px; /* Move right by 54px */
     }
     #message {
       width: 100%;
@@ -95,11 +96,26 @@
       /* margin-top: 200px; */
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      position: absolute;
+      position: absolute; 
       left: 919px;
       top: 100px;
+     }
+    .node {
+      position: absolute;
+      background-color: rgb(219, 251, 12);
+      border: 1px solid black;
+      text-align: center;
+      line-height: 1.5;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .clickable-group:hover rect {
+      fill: #ffeb3b;
     }
     .modal {
+      
       display: none;
       position: fixed;
       z-index: 1;
@@ -111,11 +127,17 @@
       background-color: rgba(0,0,0,0.5);
     }
     .modal-content {
+      position: absolute;
+    top: 50%;
+    left: 50%;
+      transform: translate(-50%, -50%);
       background-color: #fefefe;
-      margin: 15% auto;
+    width: 300px;
+    height: 150px;
       padding: 20px;
       border: 1px solid #888;
-      width: 80%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
     }
     .close {
       color: #aaa;
@@ -128,6 +150,32 @@
       color: black;
       text-decoration: none;
       cursor: pointer;
+    }
+    .chat_inbox {
+      left: 5px;
+    }
+    .coursemodal { 
+      
+    }
+    /* 추가된 스타일 */
+    .button-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+
+    }
+    .button-link:hover {
+      background-color: #0056b3;
+    }
+    /* 글꼴 크기 키우는 스타일 */
+    .large-font {
+      font-size: 1.5em;
     }
   </style>
 </head>
@@ -147,10 +195,11 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <p id="courseDescription"></p>
-      <a id="courseLink" href="" target="_blank">Go to Course</a>
+      <a id="courseLink" class="button-link" href="" target="_blank">Go to Course</a>
     </div>
   </div>
   <script>
+
     async function sendMessage() {
       const messageInput = document.getElementById('message');
       const message = messageInput.value;
@@ -234,6 +283,7 @@
     function drawRoadmap(data) {
       const svg = document.getElementById('roadmapSvg');
       svg.innerHTML = ''; // Clear existing content
+
 
       // Define node sizes
       const nodeSize = { width: 260, height: 50 };
@@ -333,6 +383,11 @@
 
       courseDescription.textContent = node.data.description;
       courseLink.href = `https://${node.data.course}`;
+
+      // 글꼴 크기를 키우는 클래스 추가
+      courseDescription.classList.add('large-font');
+      courseLink.classList.add('large-font');
+
       modal.style.display = 'block';
     }
 
@@ -354,6 +409,7 @@
       }
     }
 
+    // Fetch data and draw roadmap on load and resize
     fetch('../static/frontend.json')
       .then(response => response.json())
       .then(data => {

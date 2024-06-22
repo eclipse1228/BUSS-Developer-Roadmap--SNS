@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'templates')));
 
 // 루트 라우트 설정
 app.get("/chat", (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+  res.sendFile(path.join(__dirname, 'templates', 'chat.ejs'));
 });
 
 /* Chating Room */
