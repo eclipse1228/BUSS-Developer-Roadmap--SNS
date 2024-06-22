@@ -164,6 +164,10 @@
     </div>
   </div>
   <script>
+      function toggleDropdown() {
+          const dropdown = document.getElementById('dropdown-menu');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
     async function sendMessage() {
       const messageInput = document.getElementById('message');
       const message = messageInput.value;
