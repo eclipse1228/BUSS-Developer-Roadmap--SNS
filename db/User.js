@@ -37,7 +37,17 @@ const UserSchema = new mongoose.Schema({
     roadmaps: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Roadmap'
-    }]
+    }],
+    mentor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    },
+    mentee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
+    }
 });
 
 module.exports = mongoose.model("User", UserSchema);
