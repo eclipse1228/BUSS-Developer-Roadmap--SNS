@@ -1,5 +1,5 @@
-# BUSS
-SNS for student major in computer Science 
+###자소서 리뷰를 통한 진로설계 로드맵 제안 사이트
+*
 
 ## 프로젝트 이름
 ***
