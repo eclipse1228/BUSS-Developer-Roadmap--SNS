@@ -252,10 +252,6 @@
       messageInput.value = '';
 
 
-
-
-
-
       // Display user message
       const chat = document.getElementById('chat');
       const userMessageContainer = document.createElement('div');
@@ -271,35 +267,48 @@
       // 로딩 화면 표시
       showLoading();
 
-      // Send message to server
-      const response = await fetch('/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ contents: message })
-      });
-      console.log("send message:", message);
+    const response = await fetch('/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ contents: message })
+    });
+    console.log("send message:", message);
 
-      const data = await response.json();
-      // 로드맵 업데이트
-      if (data.roadmap) {
-            drawRoadmap(data.roadmap);
-      }
+  const data = await response.json();
+  console.log("Received data:", data);  // 디버깅을 위해 추가
+  
+  // Display bot message
+  const botMessageContainer = document.createElement('div');
+  botMessageContainer.classList.add('message-container', 'bot');
+  const botMessage = document.createElement('div');
+  botMessage.classList.add('message', 'bot');
+  
+  switch(data.type) {
+    case 'roadmap':
+    botMessage.textContent = data.message;
+    drawRoadmap(data.roadmap);
+      break;
+    case 'advice':
+    case 'message':
+    botMessage.textContent = data.message;
+      break;
+    case 'error':
+      botMessage.textContent = data.message;
+      console.error('Error:', data.message);
+      break;
+    default:
+      botMessage.textContent = "알 수 없는 응답 유형입니다.";
+      console.error('Unknown response type:', data);
+  }
+  
+  botMessageContainer.appendChild(botMessage);
+  chat.appendChild(botMessageContainer);
+  chat.scrollTop = chat.scrollHeight;
 
-      // Display bot message
-      const botMessageContainer = document.createElement('div');
-      botMessageContainer.classList.add('message-container', 'bot');
-      const botMessage = document.createElement('div');
-      botMessage.classList.add('message', 'bot');
-      botMessage.textContent = data.bot;
-      botMessageContainer.appendChild(botMessage);
-      chat.appendChild("로드맵이 업데이트 되었습니다.");
-      chat.scrollTop = chat.scrollHeight;
-
-      hideLoading();
-
-    }
+  hideLoading();
+}
 
     document.getElementById('send').addEventListener('click', sendMessage);
 

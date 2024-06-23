@@ -26,8 +26,9 @@ let threadId;
   try {
     // 상담용 채팅 어시스턴트
     assistant = await client.beta.assistants.create({
-      instructions: `You are a career counselor for computer science students. Your task is to create a roadmap JSON based on the user's input. The JSON should strictly follow this structure:
-
+      instructions: `You are a career counselor for computer science students. Your task is to either create a roadmap JSON or provide advice based on the user's input.
+      Respond only with the JSON, no additional text.
+      If the user asks for a roadmap or career path, respond with a JSON following this structure: 
       {
         "category": {
           "topic": {
@@ -37,16 +38,6 @@ let threadId;
           }
         }
       }
-    
-      Rules:
-      1. 'category' must be one of: "frontend", "backend", or "devops".
-      2. Include only relevant topics based on the user's input.
-      3. Do not include any explanatory text outside the JSON structure.
-      4. Ensure all JSON keys and values are enclosed in double quotes.
-      5. The 'recommendation' value must be one of the three options provided.
-      6. For 'course', provide a plausible URL or leave it as "URL to the course" if unknown.
-      7. Limit the response to 5-7 topics maximum.
-    
       Example for a frontend query:
       {
         "frontend": {
@@ -62,8 +53,20 @@ let threadId;
           }
         }
       }
-    
-      Respond only with the JSON, no additional text.`,
+
+      
+      Rules for roadmap JSON:
+      1. 'category' must be one of: "frontend", "backend", or "devops".
+      2. Include only relevant topics based on the user's input.
+      3. Do not include any explanatory text outside the JSON structure
+      4. Ensure all JSON keys and values are enclosed in double quotes.
+      5. The 'recommendation' value must be one of the three options provided.
+      6. For 'course', provide a plausible URL or leave it as "URL to the course" if unknown.
+      7. Limit the response to 5-7 topics maximum.
+      
+      If the user asks a question or seeks advice, respond conversationally with helpful information. Do not use JSON format for these responses. 
+      
+      Begin your response with "ROADMAP:" for roadmap requests or "ADVICE:" for other queries to help identify the type of response.` ,
       name: "career counselor",
       tools: [{ type: "file_search" }],
       model: "gpt-3.5-turbo-0125",
@@ -170,12 +173,37 @@ router.get("/", (req, res) => {
 
       if (assistantMessage && assistantMessage.content[0].type === 'text') {
         const responseText = assistantMessage.content[0].text.value;
-      console.log("responseText:", responseText);
-      const savedRoadmap = await saveResponseToMongoDB({ text: responseText }, userId);
-      res.status(200).json({ 
-        message: "로드맵을 업데이트했습니다.",
-        roadmap: savedRoadmap.roadmap
-      });
+        console.log("responseText:",responseText);
+        if (responseText.startsWith("{")) {
+          // const roadmapJson = responseText.slice(8).trim(); // Remove "ROADMAP:" prefix and trim
+          try {
+            const roadmapData = JSON.parse(responseText);
+            console.log(roadmapData);
+            const savedRoadmap = await saveResponseToMongoDB({ text: responseText }, userId);
+            res.status(200).json({ 
+            type: 'roadmap',
+            roadmap: roadmapData,
+            message: "로드맵이 업데이트 되었습니다."
+            });
+          } catch (jsonError) {
+            console.error("Error parsing roadmap JSON:", jsonError);
+            res.status(200).json({ 
+            type: 'error',
+              message: "로드맵 데이터를 처리하는 중 오류가 발생했습니다."
+            });
+          }
+        } else if (responseText.startsWith("ADVICE:")) {
+          const advice = responseText.slice(7).trim(); // Remove "ADVICE:" prefix and trim
+          res.status(200).json({ 
+            type: 'advice',
+            message: advice
+          });
+        } else {
+          res.status(200).json({ 
+          type: 'message',
+          message: responseText
+          });
+        }
       } else {
         throw new Error('No valid response from assistant');
       }
@@ -183,7 +211,7 @@ router.get("/", (req, res) => {
       console.log(error);
       res.status(500).send(error);
     }
-});
+  });
 
   // 로드맵 업데이트하고, response에 데이터 넘겨주기, (ejs에서는 받은 response로 로드맵을 그린다.)
   router.post("/updateRoadmap", async (req, res) => {
