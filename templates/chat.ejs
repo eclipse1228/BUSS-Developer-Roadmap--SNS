@@ -297,12 +297,8 @@
       chat.appendChild("로드맵이 업데이트 되었습니다.");
       chat.scrollTop = chat.scrollHeight;
 
-      // (3) response가 왔으면, loading html 제거하기
       hideLoading();
-      // (4) post 요청으로 ./updateRoadmap 
-      // chat.js에서 DB에서 로드맵 조회한 결과를 const roadmap_response 로 받아오기 
-      // 로드맵 업데이트 요청
-      // updateRoadmap();
+
     }
 
     document.getElementById('send').addEventListener('click', sendMessage);
@@ -483,28 +479,6 @@
         closeModal();
       }
     }
-
-    // 아래의 예시처럼 db에서 roadmap json 조회해서온다. (예시는 DB가 아닌, 그냥 임의의 json 파일로 예시를 들었음.)
-    // Fetch data and draw roadmap on load and resize
-    // fetch('../static/frontend.json')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     drawRoadmap(data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-
-    // window.addEventListener('resize', () => {
-    //   fetch('../static/frontend.json')
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       drawRoadmap(data);
-    //     })
-    //     .catch(error => {
-    //       console.error('Error:', error);
-    //     });
-    // });
 
   </script>
 </body>

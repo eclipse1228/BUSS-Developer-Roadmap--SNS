@@ -34,7 +34,7 @@
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .container {
-        flex: 1;
+        /* flex: 1; */
         background-color: #ffffff;
         padding: 40px;
         border-radius: 5px;
@@ -99,6 +99,84 @@
     input[type="text"][readonly] {
         background-color: rgba(200, 200, 200, 0.5);
     }
+    .svg-container {
+      /* position: relative; */
+      /* display: flex; */
+      width: 55%;
+      /* max-width: px; */
+      display: flex;
+      height: 83%;
+      padding: 20px;
+      overflow-y: scroll;
+      background-color: white;
+      /* margin-top: 200px; */
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: absolute; 
+      left: 530px;
+      top: 89px;
+     }
+     .modal {
+      
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      position: absolute;
+    top: 50%;
+    left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fefefe;
+    width: 300px;
+    height: 150px;
+      padding: 20px;
+      border: 1px solid #888;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .chat_inbox {
+      left: 5px;
+    }
+
+    /* 추가된 스타일 */
+    .button-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+
+    }
+    .button-link:hover {
+      background-color: #0056b3;
+    }
+    /* 글꼴 크기 키우는 스타일 */
+    .large-font {
+      font-size: 1.5em;
+    }
   </style>
 </head>
 <body>
@@ -116,67 +194,319 @@
       <a class="edit-profile-button" href="/editProfile">프로필 수정</a>
     </div>
     <div class="container">
-      <!-- 여기에 다른 내용을 추가할 수 있습니다 -->
-      <h2>다른 내용</h2>
-      <p>이
-곳에 추가적인 정보를 넣을 수 있습니다.</p>
+      <div class="svg-container">
+        <svg id="roadmapSvg" width="10000" height="10000"></svg>
+      </div>
+      <div id="courseModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p id="courseDescription"></p>
+          <a id="courseLink" class="button-link" href="" target="_blank">Go to Course</a>
+        </div>
+      </div>
+    </div>
 </div>
 
   </div>
   <script>
+// function toggleDropdown() {
+    //     const dropdown = document.getElementById('dropdown-menu');
+    //     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    // }
+
+    // document.getElementById('githubUsername').addEventListener('blur', async (event) => {
+    //   const githubUsername = event.target.value;
+    //   if (githubUsername) {
+    //     try {
+    //       const response = await fetch(`https://api.github.com/users/${githubUsername}`);
+    //       if (response.ok) {
+    //         const data = await response.json();
+    //         const profileImageUrl = data.avatar_url;
+    //         const profileImageElement = document.getElementById('githubProfileImage');
+    //         profileImageElement.src = profileImageUrl;
+    //         profileImageElement.style.display = 'block';
+    //       } else {
+    //         alert('GitHub 사용자 정보를 가져올 수 없습니다.');
+    //       }
+    //     } catch (error) {
+    //       console.error('GitHub 사용자 정보를 가져오는 중 오류 발생:', error);
+    //       alert('GitHub 사용자 정보를 가져오는 중 오류가 발생했습니다.');
+    //     }
+    //   }
+    // });
+
+    // document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
+    //   event.preventDefault();
+    //   const formData = new FormData(event.target);
+    //   const data = Object.fromEntries(formData.entries());
+
+    //   try {
+    //     const response = await fetch('/editProfile', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify(data)
+    //     });
+
+    //     const result = await response.json();
+
+    //     if (response.ok) {
+    //       alert(result.message);
+    //       window.location.reload();
+    //     } else {
+    //       alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
+    //     }
+    //   } catch (error) {
+    //     console.error('프로필 업데이트 중 오류 발생:', error);
+    //     alert('프로필 업데이트 중 오류가 발생했습니다.');
+    //   }
+    // });
+
+    function drawNode(svg, x, y, label, size) {
+      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      group.setAttribute('class', 'clickable-group');
+      group.setAttribute('data-label', label);
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', size.width);
+      rect.setAttribute('height', size.height);
+      rect.setAttribute('rx', 2);
+      rect.setAttribute('fill', 'yellow');
+      rect.setAttribute('stroke', 'black');
+      rect.setAttribute('stroke-width', 2.7);
+      group.appendChild(rect);
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', x + size.width / 2);
+      text.setAttribute('y', y + size.height / 2);
+      text.setAttribute('fill', 'black');
+      text.setAttribute('font-size', '12px');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.textContent = label;
+      group.appendChild(text);
+
+      svg.appendChild(group);
+      return group;
+    }
+    function drawRoadmap(data) {
+  console.log('Drawing roadmap with data:', data);
+  const svg = document.getElementById('roadmapSvg');
+  if (!svg) {
+    console.error('SVG element not found');
+    return;
+  }
+  svg.innerHTML = '';
+  
+  if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
+      console.error('Invalid roadmap data');
+      return;
+      }
+
+      // Define node sizes
+      const nodeSize = { width: 160, height: 50 };
+      const itemSize = { width: 100, height: 50 };
+
+      // Define initial positions
+      const startX = 100;
+      const startY = 50;
+      const xOffset = 50;
+      const yOffset = 50;
+      const itemXOffset = 250;
+
+      // Draw nodes
+      const categoryNodes = {};
+      let currentY = startY;
+
+      try { 
+  // data 객체의 첫 번째 키-값 쌍을 사용
+      const [mainCategory, categories] = Object.entries(data)[0];
+
+    const categoryGroup = drawNode(svg, startX, currentY, mainCategory.toUpperCase(), nodeSize);
+    categoryNodes[mainCategory] = { group: categoryGroup, x: startX, y: currentY, width: nodeSize.width, height: nodeSize.height, items: [] };
+
+    currentY += nodeSize.height + yOffset;
+
+    for (const [category, topics] of Object.entries(categories)) {
+      const categoryX = startX + itemXOffset;
+        const categoryY = currentY;
+      const categoryGroup = drawNode(svg, categoryX, categoryY, category, nodeSize);
+        categoryNodes[category] = { group: categoryGroup, x: categoryX, y: categoryY, width: nodeSize.width, height: nodeSize.height, items: [] };
+
+      drawConnection(svg, startX + nodeSize.width, startY + nodeSize.height / 2, categoryX, categoryY + nodeSize.height / 2);
+
+        let itemY = categoryY + nodeSize.height + 20;
+      for (const [topic, topicData] of Object.entries(topics)) {
+        const itemGroup = drawNode(svg, categoryX + itemXOffset, itemY, topic, itemSize);
+        categoryNodes[category].items.push({ group: itemGroup, x: categoryX + itemXOffset, y: itemY, width: itemSize.width, height: itemSize.height, data: topicData });
+          drawConnection(svg, categoryX + nodeSize.width, categoryY + nodeSize.height / 2, categoryX + itemXOffset, itemY + itemSize.height / 2);
+          itemY += itemSize.height + 20;
+        }
+
+      currentY = Math.max(itemY, currentY + nodeSize.height + yOffset);
+      }
+
+      // Add click event listeners for nodes
+      svg.addEventListener('click', (event) => {
+        const point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        const cursorPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+        
+        for (const category in categoryNodes) {
+          const categoryNode = categoryNodes[category];
+          if (isInsideNode(cursorPoint.x, cursorPoint.y, categoryNode)) {
+            openModal(categoryNode);
+            return;
+          }
+          for (const itemNode of categoryNode.items) {
+            if (isInsideNode(cursorPoint.x, cursorPoint.y, itemNode)) {
+              openModal(itemNode);
+              return;
+            }
+          }
+        }
+      });
+    }
+    catch (error){
+      console.error('Error processing roadmap data:', error);
+     }
+    }
+
+    function drawConnection(svg, x1, y1, x2, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
+    }
+
+    function drawVerticalConnection(svg, x, y1, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
+    }
+
+    function isInsideNode(x, y, node) {
+      return x >= node.x && x <= node.x + node.width && y >= node.y && y <= node.y + node.height;
+    }
+
+    function openModal(node) {
+      const modal = document.getElementById('courseModal');
+      const courseDescription = document.getElementById('courseDescription');
+      const courseLink = document.getElementById('courseLink');
+
+      courseDescription.textContent = node.data.description;
+      courseLink.href = `https://${node.data.course}`;
+
+      // 글꼴 크기를 키우는 클래스 추가
+      courseDescription.classList.add('large-font');
+      courseLink.classList.add('large-font');
+
+      modal.style.display = 'block';
+    }
+
+    
+
+    function closeModal() {
+      const modal = document.getElementById('courseModal');
+      modal.style.display = 'none';
+    }
+
+    // Close modal when the user clicks on <span> (x)
+    document.getElementsByClassName('close')[0].onclick = function() {
+      closeModal();
+    }
+
+    // Close modal when the user clicks anywhere outside of the modal
+    window.onclick = function(event) {
+      const modal = document.getElementById('courseModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+
     function toggleDropdown() {
         const dropdown = document.getElementById('dropdown-menu');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
 
-    document.getElementById('githubUsername').addEventListener('blur', async (event) => {
-      const githubUsername = event.target.value;
-      if (githubUsername) {
-        try {
-          const response = await fetch(`https://api.github.com/users/${githubUsername}`);
-          if (response.ok) {
-            const data = await response.json();
-            const profileImageUrl = data.avatar_url;
-            const profileImageElement = document.getElementById('githubProfileImage');
-            profileImageElement.src = profileImageUrl;
-            profileImageElement.style.display = 'block';
-          } else {
-            alert('GitHub 사용자 정보를 가져올 수 없습니다.');
-          }
-        } catch (error) {
-          console.error('GitHub 사용자 정보를 가져오는 중 오류 발생:', error);
-          alert('GitHub 사용자 정보를 가져오는 중 오류가 발생했습니다.');
-        }
-      }
-    });
+    // document.getElementById('githubUsername').addEventListener('blur', async (event) => {
+    //   const githubUsername = event.target.value;
+    //   if (githubUsername) {
+    //     try {
+    //       const response = await fetch(`https://api.github.com/users/${githubUsername}`);
+    //       if (response.ok) {
+    //         const data = await response.json();
+    //         const profileImageUrl = data.avatar_url;
+    //         const profileImageElement = document.getElementById('githubProfileImage');
+    //         profileImageElement.src = profileImageUrl;
+    //         profileImageElement.style.display = 'block';
+    //       } else {
+    //         alert('GitHub 사용자 정보를 가져올 수 없습니다.');
+    //       }
+    //     } catch (error) {
+    //       console.error('GitHub 사용자 정보를 가져오는 중 오류 발생:', error);
+    //       alert('GitHub 사용자 정보를 가져오는 중 오류가 발생했습니다.');
+    //     }
+    //   }
+    // });
 
-    document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
+    // document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
+    //   event.preventDefault();
+    //   const formData = new FormData(event.target);
+    //   const data = Object.fromEntries(formData.entries());
 
-      try {
-        const response = await fetch('/editProfile', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+    //   try {
+    //     const response = await fetch('/editProfile', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify(data)
+    //     });
 
-        const result = await response.json();
+    //     const result = await response.json();
 
-        if (response.ok) {
-          alert(result.message);
-          window.location.reload();
-        } else {
-          alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
-        }
-      } catch (error) {
-        console.error('프로필 업데이트 중 오류 발생:', error);
-        alert('프로필 업데이트 중 오류가 발생했습니다.');
-      }
-    });
+    //     if (response.ok) {
+    //       alert(result.message);
+    //       window.location.reload();
+    //     } else {
+    //       alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
+    //     }
+    //   } catch (error) {
+    //     console.error('프로필 업데이트 중 오류 발생:', error);
+    //     alert('프로필 업데이트 중 오류가 발생했습니다.');
+    //   }
+    // });
+   
+    window.roadmapData = <%- JSON.stringify(roadmap) %>;
+  console.log("Roadmap data in window:", window.roadmapData);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("Roadmap data in DOMContentLoaded:", window.roadmapData);
+    if (window.roadmapData && window.roadmapData.backend) {
+      drawRoadmap(window.roadmapData);
+    } else {
+      console.log('No valid roadmap data available');
+    }
+  });
+
+// 페이지 로드 시 로드맵 가져오기
+console.log()
+
   </script>
 </body>
 </html>

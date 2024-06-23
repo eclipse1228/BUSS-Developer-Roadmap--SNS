@@ -2,15 +2,44 @@ const express = require("express");
 const axios = require("axios");
 const User = require("../db/User");
 const Post = require("../db/Post");
+const path = require('path');
 const router = express.Router();
+const { MongoClient } = require('mongodb');
+const bodyParser = require('body-parser');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use('/static', express.static(path.join(__dirname, 'static')));
+
+const mongoUrl = "mongodb://127.0.0.1:27017";
+const dbName = 'test';
 
 // 프로필 수정 페이지 렌더링
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   const user = req.session.user;
   if (!user) {
     return res.redirect("/login"); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
   }
-  res.render("profile", { user });
+  try {
+    const client = new MongoClient(mongoUrl);
+    await client.connect();
+    const db = client.db(dbName);
+    const roadmapCollection = db.collection('Roadmap');
+
+ const latestRoadmap = await roadmapCollection.findOne(
+      { userId: user.id },
+      { sort: { _id: -1 } }
+    );
+    console.log("User ID:", user.id);
+    console.log("Fetched roadmap:", latestRoadmap);
+    await client.close();
+
+    res.render("profile", { user, roadmap: latestRoadmap ? latestRoadmap.roadmap : null });
+  } catch (error) {
+    console.error("Error fetching roadmap:", error);
+    // res.render("profile", { user, roadmap: null });
+    res.status(500).render("error", { message: "Failed to fetch roadmap data" });
+  }
 });
 
 // 사용자 프로필 수정 요청 처리
@@ -54,7 +83,9 @@ router.post("/", async (req, res) => {
     } else {
       return res.json({ success: false, message: "변경사항이 없습니다." });
     }
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
