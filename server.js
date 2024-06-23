@@ -12,6 +12,7 @@ const addLikeRouter = require('./service/addlike');
 const { getTopWriters } = require('./service/topwriter');
 const Post = require('./db/Post');
 const Roadmap = require('./db/Roadmap');
+const User = require('./db/User');  // 유저 모델 추가
 
 dotenv.config();
 
@@ -40,6 +41,12 @@ connectDB();
 app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
+
+// 로그인된 사용자 정보를 모든 EJS 템플릿에 전달
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.user || null;
+  next();
+});
 
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
@@ -89,6 +96,19 @@ app.get('/api/auth/user', (req, res) => {
     return res.status(401).json({ message: 'Not authenticated' });
   }
   res.status(200).json(req.session.user);
+});
+
+// 프로필 검색 라우팅 추가
+app.get('/searchprofile/name/:name', async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.params.name });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.render('userProfile', { user });
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
 });
 
 // 서버 시작

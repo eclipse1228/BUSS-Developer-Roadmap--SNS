@@ -119,6 +119,13 @@
         .writer-info {
             align-items: center;
         }
+        .writer-name {
+            text-decoration: none; /* 링크 밑줄 없애기 */
+            color: inherit; /* 기본 텍스트 색상 유지 */
+        }
+        .writer-name:hover {
+            color: #007bff; /* 호버 시 텍스트 색상 변경 */
+        }
         .banner {
             padding: 10px 20px;
             display: flex;
@@ -152,6 +159,14 @@
         function goToBoard(category) {
             window.location.href = `/board/${category}`;
         }
+        function goToMyProfile() {
+            const currentUserId = '<%= currentUser ? currentUser.id : "" %>';
+            if (currentUserId) {
+                window.location.href = `/profile/${currentUserId}`;
+            } else {
+                alert('로그인이 필요합니다.');
+            }
+        }
     </script>
 </head>
 <body>
@@ -166,9 +181,9 @@
                         <li>
                             <img src="<%= writer.profileImageUrl %>" alt="<%= writer.profileImageUrl %>">
                             <div class="writer-info">
-                                <span class="writer-name"><%= writer.name %></span>
+                                <a href="/searchprofile/name/<%= writer.name %>" class="writer-name"><%= writer.name %></a>
                                 <span class="writer-points">
-                                    - <%= writer.postCount %>점
+                                    -<%= writer.postCount %>점
                                 </span>
                             </div>
                         </li>
@@ -192,8 +207,10 @@
                     <div class="post">
                         <div class="info">
                             <div class="author-info">
-                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                <h3><%= post.author.name %></h3>
+                                <a href="/searchprofile/name/<%= post.author.name %>">
+                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                </a>
+                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
                             </div>
                             <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                         </div>
@@ -209,8 +226,10 @@
                     <div class="post">
                         <div class="info">
                             <div class="author-info">
-                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                <h3><%= post.author.name %></h3>
+                                <a href="/searchprofile/name/<%= post.author.name %>">
+                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                </a>
+                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
                             </div>
                             <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                         </div>
@@ -226,8 +245,10 @@
                     <div class="post">
                         <div class="info">
                             <div class="author-info">
-                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                <h3><%= post.author.name %></h3>
+                                <a href="/searchprofile/name/<%= post.author.name %>">
+                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                </a>
+                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
                             </div>
                             <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                         </div>
@@ -243,8 +264,10 @@
                     <div class="post">
                         <div class="info">
                             <div class="author-info">
-                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                <h3><%= post.author.name %></h3>
+                                <a href="/searchprofile/name/<%= post.author.name %>">
+                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                </a>
+                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
                             </div>
                             <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                         </div>
