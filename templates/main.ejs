@@ -179,7 +179,7 @@
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
                         <li>
-                            <img src="<%= writer.profileImageUrl %>" alt="<%= writer.profileImageUrl %>">
+                            <img src="<%= writer.profileImageUrl || '/static/usericon.png' %>" alt="<%= writer.profileImageUrl %>">
                             <div class="writer-info">
                                 <a href="/searchprofile/name/<%= writer.name %>" class="writer-name"><%= writer.name %></a>
                                 <span class="writer-points">
@@ -196,7 +196,9 @@
 
         <div class="content-area">
             <div class="banner">
-                <img src="/static/buss_banner.png" alt="Banner">
+                <a href="/">
+                    <img src="/static/buss_banner.png" alt="Banner">
+                </a>
             </div>
             <div class="content-grid">
                 <div class="content">
