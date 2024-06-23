@@ -106,13 +106,13 @@
   <div class="layout">
     <div class="sidebar">
       <div class="profile-header">
-        <img id="githubProfileImage" src="<%= user.profileImageUrl %>" alt="GitHub Profile Image" style="display: <%= user.profileImageUrl ? 'block' : 'none' %>;">
+          <img id="githubProfileImage" src="<%= user.profileImageUrl || '/static/usericon.png' %>" alt="GitHub Profile Image">
         <div class="profile-details">
           <h2><%= user.name %></h2>
           <p>아이디: <%= user.id %></p>
           <p>이메일: <%= user.email %></p>
-          <p>직업: <%= user.job %></p>
-          <p>나이: <%= user.age %></p>
+          <p>직업:   <%= user.job %></p>
+          <p>나이:   <%= user.age %></p>
           <p>GitHub: <a class="github-link" href="https://github.com/<%= user.githubUsername %>" target="_blank"><%= user.githubUsername %></a></p>
         </div>
       </div>
@@ -121,10 +121,11 @@
     <div class="container">
       <!-- 여기에 다른 내용을 추가할 수 있습니다 -->
       <h2>다른 내용</h2>
-      <p>이곳에 추가적인 정보를 넣을 수 있습니다.</p>
-    </div>
-  </div>
+      <p>이
+곳에 추가적인 정보를 넣을 수 있습니다.</p>
+</div>
 
+  </div>
   <script>
     function toggleDropdown() {
         const dropdown = document.getElementById('dropdown-menu');

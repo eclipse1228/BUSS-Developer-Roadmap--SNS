@@ -134,3 +134,16 @@
     cursor: pointer;
     outline: none; /* Remove default outline */
 }
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+    padding: 10px; /* 추가된 패딩 */
+}
+
+.profile-image {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
