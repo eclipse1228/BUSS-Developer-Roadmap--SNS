@@ -4,13 +4,32 @@ const User = require("../db/User");
 const Post = require("../db/Post");
 const router = express.Router();
 
-// 프로필 수정 페이지 렌더링
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   const user = req.session.user;
   if (!user) {
     return res.redirect("/login"); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
   }
-  res.render("profile", { user });
+
+  try {
+    // 멘토와 멘티의 정보 조회
+    let mentorName = "";
+    let menteeName = "";
+    
+    if (user.mentor) {
+      const mentor = await User.findOne({ id: user.mentor });
+      mentorName = mentor ? mentor.name : "";
+    }
+
+    if (user.mentee) {
+      const mentee = await User.findOne({ id: user.mentee });
+      menteeName = mentee ? mentee.name : "";
+    }
+
+    res.render("profile", { user, mentorName, menteeName });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 // 사용자 프로필 수정 요청 처리
@@ -30,12 +49,10 @@ router.post("/", async (req, res) => {
     if (age && age !== user.age) { user.age = age; isUpdated = true; }
     if (email && email !== user.email) { user.email = email; isUpdated = true; }
     if (job && job !== user.job) { user.job = job; isUpdated = true; }
-    
+
     if (githubUsername && githubUsername !== user.githubUsername) {
       user.githubUsername = githubUsername; 
-      isUpdated = true;
-
-      // GitHub API를 사용하여 프로필 이미지 URL 가져오기
+      isUpdated = true;      // GitHub API를 사용하여 프로필 이미지 URL 가져오기
       const response = await axios.get(`https://api.github.com/users/${githubUsername}`);
       user.profileImageUrl = response.data.avatar_url;
 
@@ -61,3 +78,5 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
+
