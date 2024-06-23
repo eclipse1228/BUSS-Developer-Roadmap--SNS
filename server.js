@@ -13,6 +13,8 @@ const { getTopWriters } = require('./service/topwriter');
 const Post = require('./db/Post');
 const Roadmap = require('./db/Roadmap');
 const User = require('./db/User');  // 유저 모델 추가
+const mentorRequestRouter = require('./service/mentorRequest'); 
+const mentoringRouter = require('./service/mentoring');
 
 dotenv.config();
 
@@ -69,12 +71,11 @@ app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
 app.use('/updateRoadmap', require('./service/chat')); // roadmap 업데이트 
 app.use('/searchPost', require('./service/searchPost'));
-
-
 app.use('/profile', require('./service/profile'));
 // app.use('/profile', require('./service/public_profile'));
-
 // app.use('/mypage',require('/servic/mypage'));
+app.use('/mentor', mentorRequestRouter); 
+app.use('/mentoring', mentoringRouter); // 멘토링 라우트 사용
 app.get("/login", (req, res) => {
   res.render("login");
 });

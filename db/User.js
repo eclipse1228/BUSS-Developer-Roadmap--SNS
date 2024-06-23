@@ -37,6 +37,18 @@ const UserSchema = new mongoose.Schema({
     roadmaps: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Roadmap'
+    }],
+    mentor: {
+        type: String,
+        required: false
+    },
+    mentee: {
+        type: String,
+        required: false
+    },
+    menteeRequests: [{
+        type: String,
+        required: false
     }]
 });
 

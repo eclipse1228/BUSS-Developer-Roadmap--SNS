@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentoring</title>
+  <link rel="stylesheet" href="/static/styles/header.css">
+  <style>
+    /* 스타일 추가 */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .request {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .request span {
+      flex: 1;
+    }
+    .request button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <%- include('header') %>
+  <div class="container">
+    <h2>Mentoring Requests</h2>
+    <% if (user.menteeRequests.length > 0) { %>
+      <% user.menteeRequests.forEach(request => { %>
+        <div class="request">
+          <span><%= request %></span>
+          <button onclick="handleAccept('<%= request %>')">Accept</button>
+          <button onclick="handleReject('<%= request %>')">Reject</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No mentoring requests.</p>
+    <% } %>
+  </div>
+  <script>
+    function handleAccept(menteeName) {
+      fetch('/mentoring/accept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ menteeName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Mentoring request accepted.');
+          location.reload();
+        } else {
+          alert('Failed to accept mentoring request.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error accepting mentoring request.');
+      });
+    }
+
+    function handleReject(menteeName) {
+      fetch('/mentoring/reject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ menteeName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Mentoring request rejected.');
+          location.reload();
+        } else {
+          alert('Failed to reject mentoring request.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error rejecting mentoring request.');
+      });
+    }
+  </script>
+</body>
+</html>

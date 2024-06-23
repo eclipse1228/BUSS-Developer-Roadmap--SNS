@@ -82,22 +82,16 @@
     .github-link:hover {
         text-decoration: underline;
     }
-    label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
-    }
-    input[type="text"],
-    input[type="number"],
-    input[type="email"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
+    .mentor-request-button {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
         border-radius: 5px;
-        box-sizing: border-box;
-    }
-    input[type="text"][readonly] {
-        background-color: rgba(200, 200, 200, 0.5);
+        cursor: pointer;
+        text-decoration: none; /* 링크 스타일 제거 */
+        display: inline-block; /* 블록 요소로 표시 */
+        margin-top: 10px;
     }
   </style>
 </head>
@@ -112,6 +106,7 @@
           <p>직업: <%= user.job %></p>
           <p>GitHub: <a class="github-link" href="https://github.com/<%= user.githubUsername %>" target="_blank"><%= user.githubUsername %></a></p>
         </div>
+        <button class="mentor-request-button" id="mentorRequestButton">멘토 신청</button>
       </div>
     </div>
     <div class="container">
@@ -120,6 +115,34 @@
       <p>이곳에 추가적인 정보를 넣을 수 있습니다.</p>
     </div>
   </div>
-</body>
+  <script>
+    document.getElementById('mentorRequestButton').addEventListener('click', function() {
+      const requestData = { userName: '<%= user.name %>' };
+      console.log('Sending request:', requestData); // 요청 데이터 콘솔에 출력
+      fetch('/mentor/mentor-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Response received:', data); // 응답 데이터 콘솔에 출력
+        if (data.success) {
+          alert('멘토 신청이 완료되었습니다.');
+        } else {
+          alert('멘토 신청에 실패했습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('멘토 신청 중 오류가 발생했습니다.');
+      });
+    });
+  </script>
+  
+  
 
+</body>
 </html>
