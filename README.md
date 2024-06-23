@@ -1,11 +1,11 @@
 # BUSS
 SNS for student major in computer Science 
 
-프로젝트 이름
+## 프로젝트 이름
 ***
 BBUS
 
-팀원
+## 팀원
 ***
 2006430 고병수 
 2024262 강민규
