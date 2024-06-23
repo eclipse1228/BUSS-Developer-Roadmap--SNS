@@ -106,7 +106,7 @@
         const dropdown = document.getElementById('dropdown-menu');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
-
+  
     document.getElementById('githubUsername').addEventListener('blur', async (event) => {
       const githubUsername = event.target.value;
       if (githubUsername) {
@@ -127,12 +127,12 @@
         }
       }
     });
-
+  
     document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const formData = new FormData(event.target);
       const data = Object.fromEntries(formData.entries());
-
+  
       try {
         const response = await fetch('/editProfile', {
           method: 'POST',
@@ -141,12 +141,12 @@
           },
           body: JSON.stringify(data)
         });
-
+  
         const result = await response.json();
-
+  
         if (response.ok) {
           alert(result.message);
-          window.location.reload();
+          window.location.href = '/profile';
         } else {
           alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
         }
@@ -156,5 +156,6 @@
       }
     });
   </script>
+  
 </body>
 </html>
