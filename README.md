@@ -23,7 +23,7 @@ BUSS
 - **실행**
 
 ```jsx
-npm start
+npm run server
 ```
 뭐 입력해야함 키 
 
