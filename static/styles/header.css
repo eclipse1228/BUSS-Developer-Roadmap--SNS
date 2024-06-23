@@ -2,18 +2,41 @@
     background-color: #f9f9f9;
     color: black;
     font-weight: bolder;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     padding: 10px 20px 0 20px;
-    position: relative;
+    position: sticky; /* 스크롤 시 상단에 고정 */
+    top: 0; /* 페이지의 최상단에 고정 */
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 */
+    border-bottom: 1px solid #e7e7e7;
+    padding-bottom: 10px;
 }
+
 .header .logo {
-    font-size: 40px;
+
+    font-family: 'PR';
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
     font-weight: bolder;
-    color: black; /* 글씨체를 검은색으로 설정 */
-    text-decoration: none; /* 밑줄 없애기 */
+    color: black;
+    text-decoration: none;
+    line-height: 1;
+    text-decoration: none; 
+
 }
+
+.header .logo img {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.header .logo span{
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .header .navbar {
     display: flex;
     justify-content: flex-start;
@@ -24,7 +47,7 @@
     font-weight: normal;
     color: black;
     padding: 14px 20px;
-    font-size: 0.9em;
+    font-size: 0.7em;
     text-decoration: none;
     text-align: center;
 }
@@ -33,6 +56,7 @@
     cursor: pointer;
 }
 .header .user-info {
+    font-size: 0.7em;
     display: flex;
     align-items: center;
     position: absolute;
@@ -83,8 +107,9 @@
     top: -5px;
 }
 .search-container {
-    position: relative;
-    margin-right: 20px; /* Add some right margin for spacing */
+    position: absolute;
+    right: 160px;
+    margin-right:
 }
 .search-container input[type=text] {
     padding: 10px 20px; /* Adjust padding as needed */
@@ -109,3 +134,16 @@
     cursor: pointer;
     outline: none; /* Remove default outline */
 }
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+    padding: 10px; /* 추가된 패딩 */
+}
+
+.profile-image {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+

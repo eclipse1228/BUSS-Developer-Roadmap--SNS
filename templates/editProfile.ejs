@@ -6,9 +6,17 @@
   <title>Edit Profile</title>
   <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
+
+    @font-face {
+        font-family: 'PR';
+        src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
+
     /* Header 및 Navbar 스타일 */
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'PR';
         background-color: #f9f9f9;
         margin: 0;
         padding: 0;
@@ -86,6 +94,7 @@
         <input type="text" id="githubUsername" name="githubUsername" value="<%= user.githubUsername %>">
       </div>
       <div class="form-group">
+        <label for="job">프로필 이미지</label>
         <img id="githubProfileImage" src="<%= user.profileImageUrl %>" alt="GitHub Profile Image" style="display: <%= user.profileImageUrl ? 'block' : 'none' %>; width: 100px; height: 100px; border-radius: 50%;">
       </div>
       <button type="submit">변경 내용 저장</button>
@@ -97,7 +106,7 @@
         const dropdown = document.getElementById('dropdown-menu');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
-
+  
     document.getElementById('githubUsername').addEventListener('blur', async (event) => {
       const githubUsername = event.target.value;
       if (githubUsername) {
@@ -118,12 +127,12 @@
         }
       }
     });
-
+  
     document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const formData = new FormData(event.target);
       const data = Object.fromEntries(formData.entries());
-
+  
       try {
         const response = await fetch('/editProfile', {
           method: 'POST',
@@ -132,12 +141,12 @@
           },
           body: JSON.stringify(data)
         });
-
+  
         const result = await response.json();
-
+  
         if (response.ok) {
           alert(result.message);
-          window.location.reload();
+          window.location.href = '/profile';
         } else {
           alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
         }
@@ -147,5 +156,6 @@
       }
     });
   </script>
+  
 </body>
 </html>

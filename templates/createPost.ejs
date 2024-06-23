@@ -6,72 +6,81 @@
   <title>Create Post</title>
   <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
+
+    @font-face {
+        font-family: 'PR';
+        src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
     /* Header 및 Navbar 스타일 */
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'PR';
         background-color: #f9f9f9;
         margin: 0;
         padding: 0;
     }
     /* Container, Sidebar 및 Content 스타일 */
     .container {
-        display: grid;
-        grid-template-columns: 15% 75%; /* 사이드바를 25%로 설정, 나머지 콘텐츠를 75%로 설정 */
-        gap: 20px;
-        padding: 20px;
-    }
-
+            display: grid;
+            grid-template-columns: 250px 1fr 250px; /* 사이드바를 고정 너비로 설정 */
+            gap: 20px;
+            padding: 0px 20px 20px 20px;
+        }
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            width: 100%;
+        }
+    .container button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    } 
     .sidebar {
-      background-color: #f1f1f1;
-      padding: 10px;
-    }
-
+            background-color: #f9f9f9;
+            padding: 10px;
+            position: relative;
+            width: 250px; /* 사이드바 너비 고정 */
+        }
     .content {
         background-color: #ffffff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-
-    /* 폼 스타일 */
-
     form {
       display: grid;
       grid-template-columns: 1fr;
       gap: 20px;
     }
-
     label {
       font-weight: bold;
     }
-
     input[type="text"],
     textarea,
-    select {
+    select,
+    input[type="file"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
     }
-
     textarea {
       height: 300px; /* 원하는 높이 설정 */
       resize: none;  /* 크기 조절 비활성화 */
-    }
-
-
-    button[type="submit"] {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
     }
   </style>
   <script>       
@@ -90,11 +99,12 @@
       <div class="sidebar"></div>
       <div class="content">
         <h1>게시물 작성</h1>
-        <form id="createPostForm" method="POST" action="/createPost">
+        <form id="createPostForm" method="POST" action="/createPost" enctype="multipart/form-data">
           <div>
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>
           </div>
+          <br>
           <div>
               <label for="category">카테고리:</label>
               <select id="category" name="category" required>
@@ -105,9 +115,15 @@
                 <!-- Add more options as needed -->
               </select>
             </div>
+          <br>
           <div>
             <label for="content">내용:</label>
             <textarea id="content" name="content" required></textarea>
+          </div>
+          <br>
+          <div>
+            <label for="image">이미지 업로드:</label>
+            <input type="file" id="image" name="image">
           </div>
 
           <button type="submit">게시물 작성</button>
@@ -125,10 +141,7 @@
       try {
         const response = await fetch('/createPost', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+          body: formData  // 이미지 업로드를 위해 FormData 객체 전송
         });
 
         const result = await response.json();

@@ -7,8 +7,16 @@
     <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
     <style>
         /* Header 및 Navbar 스타일 */
+
+        @font-face {
+            font-family: 'PR';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'PR';
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
@@ -70,11 +78,10 @@
 </head>
 <body>
     <div class="header">
-        <a href="/" class="logo"><img width="100px" height="50px" src="../static/logo3.png" alt="BUSS Logo">BUSS</a>
+        <a href="/" class="logo"><img width="100px" height="50px" src="../static/logo3.png" alt="BUSS Logo">BBUS</a>
         <div class="navbar"></div>
         <div class="user-info"></div>
     </div>
-    <hr style="color:#333;">
     <div class="container">
         <h2>Register</h2>
         <form id="registerForm">

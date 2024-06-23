@@ -12,6 +12,9 @@ const addLikeRouter = require('./service/addlike');
 const { getTopWriters } = require('./service/topwriter');
 const Post = require('./db/Post');
 const Roadmap = require('./db/Roadmap');
+const User = require('./db/User');  // 유저 모델 추가
+const mentorRequestRouter = require('./service/mentorRequest'); 
+const mentoringRouter = require('./service/mentoring');
 
 dotenv.config();
 
@@ -25,6 +28,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'templates')));
 app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 세션 설정
 app.use(session({
@@ -40,6 +44,12 @@ connectDB();
 app.engine('ejs', require('ejs').__express);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "templates"));
+
+// 로그인된 사용자 정보를 모든 EJS 템플릿에 전달
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.user || null;
+  next();
+});
 
 // 서비스 라우트 설정
 app.use("/register", require("./service/register"));
@@ -59,11 +69,13 @@ app.use('/chat', require('./service/chat'));
 app.use('/upload', require('./service/chat'));
 app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
-app.use('/updateRoadmap', require('./service/chat')); 
+app.use('/updateRoadmap', require('./service/chat')); // roadmap 업데이트 
+app.use('/searchPost', require('./service/searchPost'));
 app.use('/profile', require('./service/profile'));
 // app.use('/profile', require('./service/public_profile'));
-
 // app.use('/mypage',require('/servic/mypage'));
+app.use('/mentor', mentorRequestRouter); 
+app.use('/mentoring', mentoringRouter); // 멘토링 라우트 사용
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -88,6 +100,19 @@ app.get('/api/auth/user', (req, res) => {
     return res.status(401).json({ message: 'Not authenticated' });
   }
   res.status(200).json(req.session.user);
+});
+
+// 프로필 검색 라우팅 추가
+app.get('/searchprofile/name/:name', async (req, res) => {
+  try {
+    const user = await User.findOne({ name: req.params.name });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.render('userProfile', { user });
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
 });
 
 // 서버 시작
