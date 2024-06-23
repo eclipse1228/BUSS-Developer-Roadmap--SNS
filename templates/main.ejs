@@ -205,77 +205,121 @@
                     <h2> <span class="text-container">WEEKLY BEST</span>
                         <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg">
                     </h2>
-                    <% weeklyBestPosts.forEach(post => { %>
-                    <div class="post">
-                        <div class="info">
-                            <div class="author-info">
-                                <a href="/searchprofile/name/<%= post.author.name %>">
-                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                </a>
-                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                    <% if (weeklyBestPosts.length > 0) { %>
+                        <% weeklyBestPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No weekly best posts available.</p>
+                    <% } %>
                 </div>
                 <div class="content">
                     <h2><span onclick="goToBoard('community')" class="text-container">COMMUNITY</span>
                         <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
                     </h2>
-                    <% communityPosts.forEach(post => { %>
-                    <div class="post">
-                        <div class="info">
-                            <div class="author-info">
-                                <a href="/searchprofile/name/<%= post.author.name %>">
-                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                </a>
-                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                    <% if (communityPosts.length > 0) { %>
+                        <% communityPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No community posts available.</p>
+                    <% } %>
                 </div>
                 <div class="content">
                     <h2><span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
                         <img src="/static/frontend.svg" alt="SVG Image" class="group_svg">
                     </h2>
-                    <% frontendPosts.forEach(post => { %>
-                    <div class="post">
-                        <div class="info">
-                            <div class="author-info">
-                                <a href="/searchprofile/name/<%= post.author.name %>">
-                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                </a>
-                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                    <% if (frontendPosts.length > 0) { %>
+                        <% frontendPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No frontend posts available.</p>
+                    <% } %>
                 </div>
                 <div class="content">
                     <h2><span onclick="goToBoard('backend')" class="text-container">BACKEND</span>
                         <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
                     </h2>
-                    <% backendPosts.forEach(post => { %>
-                    <div class="post">
-                        <div class="info">
-                            <div class="author-info">
-                                <a href="/searchprofile/name/<%= post.author.name %>">
-                                    <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-                                </a>
-                                <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                    <% if (backendPosts.length > 0) { %>
+                        <% backendPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                    </div>
-                    <% }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No backend posts available.</p>
+                    <% } %>
                 </div>
             </div>
         </div>
