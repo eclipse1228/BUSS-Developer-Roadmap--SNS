@@ -27,31 +27,32 @@
         gap: 20px;
         padding: 20px;
     }
-
+    .container button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    } 
     .sidebar {
       background-color: #f1f1f1;
       padding: 10px;
     }
-
     .content {
         background-color: #ffffff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-
-    /* 폼 스타일 */
-
     form {
       display: grid;
       grid-template-columns: 1fr;
       gap: 20px;
     }
-
     label {
       font-weight: bold;
     }
-
     input[type="text"],
     textarea,
     select {
@@ -61,24 +62,9 @@
       border-radius: 5px;
       box-sizing: border-box;
     }
-
     textarea {
       height: 300px; /* 원하는 높이 설정 */
       resize: none;  /* 크기 조절 비활성화 */
-    }
-
-
-    button[type="submit"] {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
     }
   </style>
   <script>       
