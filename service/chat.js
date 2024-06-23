@@ -174,7 +174,7 @@ router.get("/", (req, res) => {
       const savedRoadmap = await saveResponseToMongoDB({ text: responseText }, userId);
       res.status(200).json({ 
         message: "로드맵을 업데이트했습니다.",
-        roadmap: savedRoadmap.roadmap 
+        roadmap: savedRoadmap.roadmap
       });
       } else {
         throw new Error('No valid response from assistant');

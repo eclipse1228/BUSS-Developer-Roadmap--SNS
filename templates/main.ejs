@@ -5,31 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNS Main Page</title>
     <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
+    <link rel="stylesheet" href="../static/styles/footer.css"> <!-- 푸터 스타일을 포함한 CSS 파일-->
     <style>
+        @font-face {
+            font-family: 'PR';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'PR';
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-            padding-bottom: 50px;
         }
         .container {
             display: grid;
-            grid-template-columns: 15% 75%;
+            grid-template-columns: 250px 1fr 250px; /* 사이드바를 고정 너비로 설정 */
             gap: 20px;
             padding: 0px 20px 20px 20px;
         }
-        .sidebar {
-            background-color: #f1f1f1;
-            padding: 10px;
-            position: relative;
-            top: -230px;
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto;
             gap: 20px;
+            width: 100%;
         }
         .content {
             background-color: #ffffff;
@@ -44,18 +52,17 @@
             position: relative;
             border-radius: 10px;
             background-image: url('/static/pattern.svg');
-
         }
         .content h2 span {
             cursor: pointer;
         }
         .content h2 span:hover {
             color: #007bff;
-            cursor: pointer;
         }
         .content h2 .text-container {
+            font-family: 'PR';
             position: relative;
-            right: -30px;
+            right: -10px;
         }
         .post {
             background-color: white;
@@ -86,119 +93,63 @@
         .post .info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .post .author-info {
+        .sidebar {
+            background-color: #f9f9f9;
+            padding: 10px;
+            position: relative;
+            width: 250px; /* 사이드바 너비 고정 */
+        }
+        .top-writers {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .top-writers li {
             display: flex;
             align-items: center;
+            margin-bottom: 10px;
         }
-        .post .author-info img {
-            width: 50px;
-            height: 50px;
+        .top-writers img {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             margin-right: 10px;
         }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-            width: 200px;
-        }
-        .dropdown-menu a {
-            display: flex;
+        .writer-info {
             align-items: center;
-            padding: 10px 15px;
-            color: #333;
-            text-decoration: none;
         }
-        .dropdown-menu a svg {
-            margin-right: 10px;
+        .writer-name {
+            text-decoration: none; /* 링크 밑줄 없애기 */
+            color: inherit; /* 기본 텍스트 색상 유지 */
         }
-        .footer {
-            background-color: #ffffff;
-            color: #ccc;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 12px;
-            border-top: 2px solid #007bff;
+        .writer-name:hover {
+            color: #007bff; /* 호버 시 텍스트 색상 변경 */
         }
-        .footer .footer-content {
+        .banner {
+            padding: 10px 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .footer .footer-content .top-section {
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
         }
-        .footer .footer-content .logo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            margin-left: 30px;
+        .banner img {
+            max-width: 100%;
+            height: auto;
         }
-        .footer .footer-content .logo img {
-            height: 80px;
-            width: 100px;
+
+        /* 화면 크기가 768px 이하일 때 레이아웃 조정 */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                width: 100%; /* 작은 화면에서 사이드바 너비를 100%로 설정 */
+            }
         }
-        .footer .footer-content .links {
-            display: flex;
-            gap: 15px;
-        }
-        .footer .footer-content .links a {
-            color: black;
-            text-decoration: none;
-            font-size: 14px;
-            margin-left: 40px;
-        }
-        .footer .footer-content .links a:hover {
-            color: black;
-        }
-        .footer .footer-content .info {
-            text-align: left;
-            padding-right: 10px;
-        }
-        .footer .footer-content .info p {
-            margin: 2px 0;
-            line-height: 1;
-            color: black;
-        }
-        .footer .footer-content .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .footer .footer-content .social-icons a {
-            color: #ccc;
-            text-decoration: none;
-            font-size: 20px;
-        }
-        .footer .footer-content .social-icons a:hover {
-            color: #fff;
-        }
-        .dropdown-menu span {
-            display: block;
-            padding: 10px 15px;
-            text-align: left;
-            color: #333;
-            font-size: 0.9em;
-        }
-        .group_svg { 
-            position: absolute;
-            right: 100px;
-            top: -5px;
-        }
+   
     </style>
     <script>
         function toggleDropdown() {
@@ -208,136 +159,171 @@
         function goToBoard(category) {
             window.location.href = `/board/${category}`;
         }
+        function goToMyProfile() {
+            const currentUserId = '<%= currentUser ? currentUser.id : "" %>';
+            if (currentUserId) {
+                window.location.href = `/profile/${currentUserId}`;
+            } else {
+                alert('로그인이 필요합니다.');
+            }
+        }
     </script>
 </head>
 <body>
-    <%- include('header') %> 
-    <div class="banner" style="left:275px; position:relative;">
-        <img src="/static/buss banner.png" alt="" style="width:1050px; height: 250px;">
-    </div>  
+    <%- include('header') %>  
     <div class="container">
         <div class="sidebar">
             <h3>Top Writers</h3>
-            <ol style="margin: -15px -20px">
+            <hr>
+            <ol class="top-writers">
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
                         <li>
-                            <img src="<%= writer.profileImageUrl|| '/static/usericon.png' %>" alt="<%= writer.username %>'s profile picture" style="width: 30px; height: 30px; border-radius: 50%;">
-                            <strong><%= writer.name %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
+                            <img src="<%= writer.profileImageUrl || '/static/usericon.png' %>" alt="<%= writer.profileImageUrl %>">
+                            <div class="writer-info">
+                                <a href="/searchprofile/name/<%= writer.name %>" class="writer-name"><%= writer.name %></a>
+                                <span class="writer-points">
+                                    -<%= writer.postCount %>점
+                                </span>
+                            </div>
+                        </li>
                     <% }) %>
                 <% } else { %>
                     <li>No top writers available.</li>
                 <% } %>
             </ol>
         </div>
-        
-        <div class="content-grid">
-            <div class="content">
-                <h2> <span class="text-container">WEEKLY BEST</span>
-                    <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg" >
-                </h2>
-                <% weeklyBestPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
 
-                            <h3><%= post.author.name %></h3>
-                        </div>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
-                    </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                </div>
-                <% }) %>
+        <div class="content-area">
+            <div class="banner">
+                <a href="/">
+                    <img src="/static/buss_banner.png" alt="Banner">
+                </a>
             </div>
-            <div class="content">
-                <h2><span onclick="goToBoard('community')"  class="text-container">COMMUNITY</span>
-                <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
-                </h2>
-                <% communityPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-
-                            <h3><%= post.author.name %></h3>
+            <div class="content-grid">
+                <div class="content">
+                    <h2> <span class="text-container">WEEKLY BEST</span>
+                        <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg">
+                    </h2>
+                    <% if (weeklyBestPosts.length > 0) { %>
+                        <% weeklyBestPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            </div>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
-                    </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No weekly best posts available.</p>
+                    <% } %>
                 </div>
-                <% }) %>
-            </div>
-            <div class="content">
-                <h2>
-                    <span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
-                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg">
-                </h2>
-                <% frontendPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-
-                            <h3><%= post.author.name %></h3>
+                <div class="content">
+                    <h2><span onclick="goToBoard('community')" class="text-container">COMMUNITY</span>
+                        <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
+                    </h2>
+                    <% if (communityPosts.length > 0) { %>
+                        <% communityPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            </div>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
-                    </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No community posts available.</p>
+                    <% } %>
                 </div>
-                <% }) %>
-            </div>
-            <div class="content">
-                <h2><span onclick="goToBoard('backend')"  class="text-container">BACKEND</span>
-                    <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
-                </h2>
-                <% backendPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <div class="author-info">
-                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
-
-                            <h3><%= post.author.name %></h3>
+                <div class="content">
+                    <h2><span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
+                        <img src="/static/frontend.svg" alt="SVG Image" class="group_svg">
+                    </h2>
+                    <% if (frontendPosts.length > 0) { %>
+                        <% frontendPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            </div>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                         </div>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
-                    </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No frontend posts available.</p>
+                    <% } %>
                 </div>
-                <% }) %>
+                <div class="content">
+                    <h2><span onclick="goToBoard('backend')" class="text-container">BACKEND</span>
+                        <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
+                    </h2>
+                    <% if (backendPosts.length > 0) { %>
+                        <% backendPosts.forEach(post => { %>
+                        <div class="post">
+                            <div class="info">
+                                <div class="author-info">
+                                    <% if (post.author && post.author.name) { %>
+                                        <a href="/searchprofile/name/<%= post.author.name %>">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="/searchprofile/name/<%= post.author.name %>" class="writer-name"><%= post.author.name %></a></h3>
+                                    <% } else { %>
+                                        <a href="#">
+                                            <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                        </a>
+                                        <h3><a href="#" class="writer-name">Unknown Author</a></h3>
+                                    <% } %>
+                                </div>
+                                <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                            </div>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                        </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No backend posts available.</p>
+                    <% } %>
+                </div>
             </div>
         </div>
     </div>
-    <div class="footer">
-        <div class="footer-content">
-            <div class="top-section">
-                <div class="logo">
-                    <img src="static/logo.png" alt="Logo">
-                    <p style="font-size: 16px; color: black; text-align: left;"><strong>BUSS</strong></p>
-                    <p style="font-size: 10px; color: black; text-align: left;">All That Developer</p>
-                </div>
-                <div class="links">
-                    <a href="#">회사소개</a>
-                    <a href="#">공지사항</a>
-                    <a href="#">연락처</a>
-                    <a href="#">광고문의</a>
-                    <a href="#">채용</a>
-                    <a href="#">버그제보</a>
-                    <a href="#">개인정보 처리방침</a>
-                    <a href="#">통합 서비스 이용약관</a>
-                </div>
-            </div>
-            <div class="info" style="margin-top: 0;">
-                <p>상호명: (주)버스 코리아 | 대표명: 고병수</p>
-                <p>사업자등록번호: 000-00-02117 | 통신판매업신고번호: xxxx | 직업정보 제공사업 신고번호: xxxx-xxxxxx-xxx</p>
-                <p>주소: 부산광역시 낙동대로 550번길 37 506 | 이메일: quodtnrh@gmail.com | (운영시간 평일 10:00~17:00) 주말, 공휴일 휴무</p>
-                <p>© 2024 (주)버스 코리아, Inc. All rights reserved.</p>
-            </div>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fas fa-envelope"></i></a>
-            </div>
-        </div>
-    </div>
+    <%- include('footer') %> <!-- 푸터 포함 -->
 </body>
 </html>
