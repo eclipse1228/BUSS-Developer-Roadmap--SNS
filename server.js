@@ -16,7 +16,7 @@ const Roadmap = require('./db/Roadmap');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware 설정
 app.use(cors());
@@ -58,6 +58,7 @@ app.use('/chat', require('./service/chat'));
 app.use('/upload', require('./service/chat'));
 app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
+app.use('/profile', require('./service/profile'));
 // app.use('/profile', require('./service/public_profile'));
 
 // app.use('/mypage',require('/servic/mypage'));

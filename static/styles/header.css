@@ -2,18 +2,41 @@
     background-color: #f9f9f9;
     color: black;
     font-weight: bolder;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     padding: 10px 20px 0 20px;
-    position: relative;
+    position: sticky; /* 스크롤 시 상단에 고정 */
+    top: 0; /* 페이지의 최상단에 고정 */
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 */
+    border-bottom: 1px solid #e7e7e7;
+    padding-bottom: 10px;
 }
+
 .header .logo {
-    font-size: 40px;
+
+    font-family: 'PR';
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
     font-weight: bolder;
-    color: black; /* 글씨체를 검은색으로 설정 */
-    text-decoration: none; /* 밑줄 없애기 */
+    color: black;
+    text-decoration: none;
+    line-height: 1;
+    text-decoration: none; 
+
 }
+
+.header .logo img {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.header .logo span{
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .header .navbar {
     display: flex;
     justify-content: flex-start;
@@ -24,7 +47,7 @@
     font-weight: normal;
     color: black;
     padding: 14px 20px;
-    font-size: 0.9em;
+    font-size: 0.7em;
     text-decoration: none;
     text-align: center;
 }
@@ -33,6 +56,7 @@
     cursor: pointer;
 }
 .header .user-info {
+    font-size: 0.7em;
     display: flex;
     align-items: center;
     position: absolute;
@@ -81,4 +105,32 @@
     position: absolute;
     right: 100px; /* 오른쪽 여백 조정 */
     top: -5px;
+}
+.search-container {
+    position: absolute;
+    right: 160px;
+    margin-right:
+}
+.search-container input[type=text] {
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Control the roundness of the search bar */
+    outline: none; /* Remove default outline */
+    font-size: 14px; /* Adjust font size as needed */
+    width: 200px; /* Adjust width as needed */
+    transition: border-color 0.3s ease; /* Smooth transition for border color change */
+}
+.search-container input[type=text]:focus {
+    border-color: #007bff; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: add a subtle shadow */
+}
+.search-container button{
+    position: absolute;
+    right: 5px; /* Adjust position of the search button */
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none; /* Remove default outline */
 }

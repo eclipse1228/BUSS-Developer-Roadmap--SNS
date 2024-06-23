@@ -4,10 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat with Assistant</title>
-  <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
+  <link rel="stylesheet" href="../static/styles/header.css"> <!-- Include header styles -->
   <style>
+    @font-face {
+        font-family: 'PR';
+        src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
+    /* Existing styles */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'PR';
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -27,7 +34,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       position: relative;
-      left: 54px; /* 오른쪽으로 5px 이동 */
+      left: 54px; /* Move right by 54px */
     }
     .message-container {
       display: flex;
@@ -58,7 +65,7 @@
       display: flex;
       margin-top: 20px;
       position: relative;
-      left: 54px; /* 오른쪽으로 5px 이동 */
+      left: 54px; /* Move right by 54px */
     }
     #message {
       width: 100%;
@@ -84,8 +91,7 @@
       display: none;
     }
     canvas {
-      position:relative;
-      display: flex;
+      position: absolute;
       width: 42%;
       max-width: 800px;
       height: 73%;
@@ -95,10 +101,8 @@
       margin-top: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      position: absolute;
       left: 919px;
       top: 100px;
-
     }
     .node {
       position: absolute;
@@ -144,8 +148,6 @@
     .chat_inbox {
       left: 5px;
     }
-
-
   </style>
 </head>
 <body>
@@ -157,7 +159,7 @@
     <input type="file" id="pdf-file" accept="application/pdf">
   </div>
   <div class="canvas-container">
-  <canvas id="roadmapCanvas"></canvas>
+    <canvas id="roadmapCanvas"></canvas>
   </div>
   <!-- Roadmap Modal -->
   <div id="courseModal" class="modal">
@@ -168,6 +170,10 @@
     </div>
   </div>
   <script>
+      function toggleDropdown() {
+          const dropdown = document.getElementById('dropdown-menu');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
     async function sendMessage() {
       const messageInput = document.getElementById('message');
       const message = messageInput.value;
@@ -239,8 +245,8 @@
       const ctx = canvas.getContext('2d');
 
       // Set canvas dimensions
-      canvas.width = 1500; // 넓게 설정하여 스크롤 가능하게 함
-      canvas.height = 2000; // 높게 설정하여 스크롤 가능하게 함
+      canvas.width = 1500; // Make it wide for scrolling
+      canvas.height = 2000; // Make it tall for scrolling
 
       // Define node sizes
       const nodeSize = { width: 200, height: 100 };
@@ -308,8 +314,8 @@
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
-      ctx.strokeStyle = '#888'; // 줄 색상 변경
-      ctx.lineWidth = 2; // 줄 두께 변경
+      ctx.strokeStyle = '#888'; // Change line color
+      ctx.lineWidth = 2; // Change line width
       ctx.stroke();
     }
 
@@ -317,8 +323,8 @@
       ctx.beginPath();
       ctx.moveTo(x, y1);
       ctx.lineTo(x, y2);
-      ctx.strokeStyle = '#888'; // 줄 색상 변경
-      ctx.lineWidth = 2; // 줄 두께 변경
+      ctx.strokeStyle = '#888'; // Change line color
+      ctx.lineWidth = 2; // Change line width
       ctx.stroke();
     }
 
@@ -354,6 +360,7 @@
       }
     }
 
+    // Fetch data and draw roadmap on load and resize
     fetch('../static/frontend.json')
       .then(response => response.json())
       .then(data => {
