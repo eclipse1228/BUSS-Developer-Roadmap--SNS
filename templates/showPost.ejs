@@ -223,6 +223,9 @@
       <main>
         <article>
           <p><%= post.content %></p>
+          <% if (post.imageUrl) { %>
+            <img src="<%= post.imageUrl %>" alt="Post Image">
+          <% } %>
         </article>
         <hr>
         <section>

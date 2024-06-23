@@ -1,7 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer'); // multer 미들웨어 import
+const path = require('path');
+const fs = require('fs');
 const Post = require('../db/Post'); // Post 모델 가져오기
 const User = require('../db/User'); // User 모델 가져오기
+
+// multer 설정: 이미지를 uploads 폴더에 저장
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 // 게시물 작성 페이지 렌더링
 router.get('/', (req, res) => {
@@ -13,7 +28,7 @@ router.get('/', (req, res) => {
 });
 
 // 게시물 작성 API
-router.post('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   const { title, content, category } = req.body;
   const authorId = req.session.user._id;
   
@@ -27,12 +42,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: '유효하지 않은 작성자입니다.' });
     }
 
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // 이미지 URL 저장
+
     const newPost = new Post({
       title,
       content,
       category,
       author: author._id,
-      profileImageUrl: author.profileImageUrl // User의 profileImageUrl을 저장
+      profileImageUrl: author.profileImageUrl,
+      imageUrl // 이미지 URL 저장
     });
 
     await newPost.save();

@@ -22,6 +22,10 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  imageUrl: { // 이미지 경로 저장 필드 추가
+    type: String,
+    required: false
+  },
   likes: {
     type: Number,
     default: 0
