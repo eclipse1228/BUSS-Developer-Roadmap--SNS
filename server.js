@@ -26,6 +26,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'templates')));
 app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 세션 설정
 app.use(session({
@@ -68,7 +69,6 @@ app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
 app.use('/updateRoadmap', require('./service/chat')); // roadmap 업데이트 
 app.use('/searchPost', require('./service/searchPost'));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use('/profile', require('./service/profile'));
