@@ -1,6 +1,6 @@
 ## 프로젝트 이름
 
-BBSS
+**개발자 커리어 멘토 플랫폼 BBUS**
 
 ## 프로젝트 기획 배경
 
@@ -29,10 +29,10 @@ AI의 급격한 발전으로 인해 상위 10%를 제외한 기술 도메인의 
 npm run server
 ```
 
-- **코드 키 입력**
+- **OPEN AI API KEY 입력**
 
-```Code key
-키 입력해야함
+```Code key (.env)
+OPENAI_KEY=
 ```
 
 
