@@ -161,9 +161,7 @@
     .chat_inbox {
       left: 5px;
     }
-    .coursemodal { 
-      
-    }
+
     /* 추가된 스타일 */
     .button-link {
       display: inline-block;
@@ -218,29 +216,30 @@
     document.querySelector('.svg-container').appendChild(loadingDiv);
   }
 
-  function hideLoading() {
+    function hideLoading() {
     const loadingDiv = document.getElementById('loading');
     if (loadingDiv) {
       loadingDiv.remove();
     }
   }
 
-  async function updateRoadmap() {
+    async function updateRoadmap() {
     try {
       const response = await fetch('/updateRoadmap', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
       });
-      const roadmapData = await response.json();
-      drawRoadmap(roadmapData);
+    const roadmapData = await response.json();
+    console.log('Received roadmap data:', roadmapData);
+      drawRoadmap(roadmapData); 
     } catch (error) {
       console.error('Error updating roadmap:', error);
     }
   }
-  
-      function toggleDropdown() {
+
+    function toggleDropdown() {
           const dropdown = document.getElementById('dropdown-menu');
           dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
       }
@@ -252,20 +251,22 @@
       // Clear input immediately
       messageInput.value = '';
 
+
+
+
+
+
       // Display user message
       const chat = document.getElementById('chat');
       const userMessageContainer = document.createElement('div');
-      userMessageContainer.classList.add('message-container', 'user');
+      userMessageContainer.classList.add('message-container','user');
       const userMessage = document.createElement('div');
       userMessage.classList.add('message', 'user');
       userMessage.textContent = message;
       userMessageContainer.appendChild(userMessage);
       chat.appendChild(userMessageContainer);
 
-      // 보내는 동안 채팅창이 아닌, roadmap 스페이스 위에 loading.. 글자 나타내기 (이후에 응답이 오면, loading 없애기)
-      // const roadmap = document.getElementById('svg-container'); 
-      // (1) roadmap 위에 loading html 화면 띄우기
-      // (2) 
+      console.log('Sending message:', message);
 
       // 로딩 화면 표시
       showLoading();
@@ -276,13 +277,15 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: message })
+        body: JSON.stringify({ contents: message })
       });
+      console.log("send message:", message);
+
       const data = await response.json();
-
-    
-
-    
+      // 로드맵 업데이트
+      if (data.roadmap) {
+            drawRoadmap(data.roadmap);
+      }
 
       // Display bot message
       const botMessageContainer = document.createElement('div');
@@ -291,19 +294,15 @@
       botMessage.classList.add('message', 'bot');
       botMessage.textContent = data.bot;
       botMessageContainer.appendChild(botMessage);
-      chat.appendChild(botMessageContainer);
-
+      chat.appendChild("로드맵이 업데이트 되었습니다.");
       chat.scrollTop = chat.scrollHeight;
 
       // (3) response가 왔으면, loading html 제거하기
-      // 로딩 화면 숨기기
       hideLoading();
       // (4) post 요청으로 ./updateRoadmap 
       // chat.js에서 DB에서 로드맵 조회한 결과를 const roadmap_response 로 받아오기 
       // 로드맵 업데이트 요청
-      updateRoadmap();
-
-
+      // updateRoadmap();
     }
 
     document.getElementById('send').addEventListener('click', sendMessage);
@@ -345,10 +344,15 @@
       return group;
     }
 
-    function drawRoadmap(data) {
+  function drawRoadmap(data) {
+      console.log('Drawing roadmap with data:', data); // 추가된 로그
       const svg = document.getElementById('roadmapSvg');
       svg.innerHTML = ''; // Clear existing content
-
+      
+      if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
+      console.error('Invalid roadmap data');
+      return;
+      }
 
       // Define node sizes
       const nodeSize = { width: 260, height: 50 };
@@ -365,31 +369,32 @@
       const categoryNodes = {};
       let currentY = startY;
 
-      for (const [category, categoryData] of Object.entries(data.frontEnd)) { // frontEnd 인지 BackEnd 인지, Devobs인지 모른다. 따라서  frontEnd라고 컬럼 고정하면 안됨 
-        const categoryX = startX;
+      try { 
+  // data 객체의 첫 번째 키-값 쌍을 사용
+      const [mainCategory, categories] = Object.entries(data)[0];
+
+    const categoryGroup = drawNode(svg, startX, currentY, mainCategory.toUpperCase(), nodeSize);
+    categoryNodes[mainCategory] = { group: categoryGroup, x: startX, y: currentY, width: nodeSize.width, height: nodeSize.height, items: [] };
+
+    currentY += nodeSize.height + yOffset;
+
+    for (const [category, topics] of Object.entries(categories)) {
+      const categoryX = startX + itemXOffset;
         const categoryY = currentY;
-        const categoryGroup = drawNode(svg, categoryX, categoryY, category.toUpperCase(), nodeSize);
+      const categoryGroup = drawNode(svg, categoryX, categoryY, category, nodeSize);
         categoryNodes[category] = { group: categoryGroup, x: categoryX, y: categoryY, width: nodeSize.width, height: nodeSize.height, items: [] };
 
+      drawConnection(svg, startX + nodeSize.width, startY + nodeSize.height / 2, categoryX, categoryY + nodeSize.height / 2);
+
         let itemY = categoryY + nodeSize.height + 20;
-        for (const [item, itemData] of Object.entries(categoryData)) {
-          const itemGroup = drawNode(svg, categoryX + itemXOffset, itemY, item, itemSize);
-          categoryNodes[category].items.push({ group: itemGroup, x: categoryX + itemXOffset, y: itemY, width: itemSize.width, height: itemSize.height, data: itemData });
+      for (const [topic, topicData] of Object.entries(topics)) {
+        const itemGroup = drawNode(svg, categoryX + itemXOffset, itemY, topic, itemSize);
+        categoryNodes[category].items.push({ group: itemGroup, x: categoryX + itemXOffset, y: itemY, width: itemSize.width, height: itemSize.height, data: topicData });
           drawConnection(svg, categoryX + nodeSize.width, categoryY + nodeSize.height / 2, categoryX + itemXOffset, itemY + itemSize.height / 2);
           itemY += itemSize.height + 20;
         }
 
-        currentY += Math.max(itemY - categoryY, nodeSize.height + yOffset);
-      }
-
-      // Draw connections between categories
-      const categoryOrder = Object.keys(data.frontEnd);
-      for (let i = 0; i < categoryOrder.length - 1; i++) {
-        const currentCategory = categoryOrder[i];
-        const nextCategory = categoryOrder[i + 1];
-        const currentNode = categoryNodes[currentCategory];
-        const nextNode = categoryNodes[nextCategory];
-        drawVerticalConnection(svg, currentNode.x + nodeSize.width / 2, currentNode.y + nodeSize.height, nextNode.y + nodeSize.height / 60);
+      currentY = Math.max(itemY, currentY + nodeSize.height + yOffset);
       }
 
       // Add click event listeners for nodes
@@ -399,6 +404,7 @@
         point.y = event.clientY;
         const cursorPoint = point.matrixTransform(svg.getScreenCTM().inverse());
 
+        
         for (const category in categoryNodes) {
           const categoryNode = categoryNodes[category];
           if (isInsideNode(cursorPoint.x, cursorPoint.y, categoryNode)) {
@@ -413,6 +419,10 @@
           }
         }
       });
+    }
+    catch (error){
+      console.error('Error processing roadmap data:', error);
+     }
     }
 
     function drawConnection(svg, x1, y1, x2, y2) {
@@ -474,30 +484,28 @@
       }
     }
 
-    // 아래의 예시처럼 db에서 roadmap json 조회해서온다. 
-
-    
-
+    // 아래의 예시처럼 db에서 roadmap json 조회해서온다. (예시는 DB가 아닌, 그냥 임의의 json 파일로 예시를 들었음.)
     // Fetch data and draw roadmap on load and resize
-    fetch('../static/frontend.json')
-      .then(response => response.json())
-      .then(data => {
-        drawRoadmap(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    // fetch('../static/frontend.json')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     drawRoadmap(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
 
-    window.addEventListener('resize', () => {
-      fetch('../static/frontend.json')
-        .then(response => response.json())
-        .then(data => {
-          drawRoadmap(data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
+    // window.addEventListener('resize', () => {
+    //   fetch('../static/frontend.json')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       drawRoadmap(data);
+    //     })
+    //     .catch(error => {
+    //       console.error('Error:', error);
+    //     });
+    // });
+
   </script>
 </body>
 </html>
