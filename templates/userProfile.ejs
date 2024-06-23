@@ -132,7 +132,13 @@
         if (data.success) {
           alert('멘토 신청이 완료되었습니다.');
         } else {
-          alert('멘토 신청에 실패했습니다.');
+          if (data.message === 'Cannot request mentorship to oneself') {
+            alert('자기 자신에게는 멘토 신청을 할 수 없습니다.');
+          } else if (data.message === 'Already requested') {
+            alert('이미 멘토 신청을 했습니다.');
+          } else {
+            alert('멘토 신청에 실패했습니다.');
+          }
         }
       })
       .catch(error => {
@@ -140,7 +146,54 @@
         alert('멘토 신청 중 오류가 발생했습니다.');
       });
     });
+  
+    function handleAccept(menteeName) {
+      fetch('/mentoring/accept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ menteeName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Mentoring request accepted.');
+          location.reload();
+        } else {
+          alert('Failed to accept mentoring request.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error accepting mentoring request.');
+      });
+    }
+  
+    function handleReject(menteeName) {
+      fetch('/mentoring/reject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ menteeName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Mentoring request rejected.');
+          location.reload();
+        } else {
+          alert('Failed to reject mentoring request.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error rejecting mentoring request.');
+      });
+    }
   </script>
+  
   
   
 
