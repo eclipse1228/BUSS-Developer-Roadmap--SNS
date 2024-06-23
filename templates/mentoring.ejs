@@ -140,13 +140,13 @@
       const dropdown = document.getElementById('dropdown-menu');
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
-    function handleAccept(menteeName) {
+    function handleAccept(menteeId) {
       fetch('/mentoring/accept', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ menteeName })
+        body: JSON.stringify({ menteeId })
       })
       .then(response => response.json())
       .then(data => {
@@ -163,13 +163,13 @@
       });
     }
 
-    function handleReject(menteeName) {
+    function handleReject(menteeId) {
       fetch('/mentoring/reject', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ menteeName })
+        body: JSON.stringify({ menteeId })
       })
       .then(response => response.json())
       .then(data => {

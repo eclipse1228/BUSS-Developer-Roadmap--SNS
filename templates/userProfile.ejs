@@ -122,7 +122,7 @@
     }
 
     document.getElementById('mentorRequestButton').addEventListener('click', function() {
-      const requestData = { userName: '<%= user.name %>' };
+      const requestData = { userId: '<%= user.id %>' };
       console.log('Sending request:', requestData); // 요청 데이터 콘솔에 출력
       fetch('/mentor/mentor-request', {
         method: 'POST',
@@ -152,13 +152,13 @@
       });
     });
   
-    function handleAccept(menteeName) {
+    function handleAccept(menteeId) {
       fetch('/mentoring/accept', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ menteeName })
+        body: JSON.stringify({ menteeId })
       })
       .then(response => response.json())
       .then(data => {
@@ -175,13 +175,13 @@
       });
     }
   
-    function handleReject(menteeName) {
+    function handleReject(menteeId) {
       fetch('/mentoring/reject', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ menteeName })
+        body: JSON.stringify({ menteeId })
       })
       .then(response => response.json())
       .then(data => {
