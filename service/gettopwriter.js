@@ -6,14 +6,14 @@ const { getTopWriters } = require('./topwriter');
 router.get('/', async (req, res) => {
     try {
         const topwriters = await getTopWriters();
-        console.log('Top writers in route:', topwriters); // 디버깅용 출력
+        console.log('Top writers in route:', JSON.stringify(topwriters, null, 2)); // 디버깅용 출력
 
         const communityPosts = await Post.find({ category: 'community' }).populate('author').limit(5);
         const frontendPosts = await Post.find({ category: 'frontend' }).populate('author').limit(5);
         const backendPosts = await Post.find({ category: 'backend' }).populate('author').limit(5);
 
         const user = req.session.user || { id: 'guest' };
-        res.render('main', {  // 'mainpage' 대신 'main'
+        res.render('main', { 
             user, 
             topwriters, 
             communityPosts, 

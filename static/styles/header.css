@@ -15,6 +15,7 @@
 
 .header .logo {
 
+<<<<<<< HEAD
     font-family: 'neon2';
     display: flex;
     align-items: center;
@@ -30,6 +31,17 @@
     color: black; /* 글씨체를 검은색으로 설정 */
     text-decoration: none; /* 밑줄 없애기    */
 
+=======
+    font-family: 'PR';
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bolder;
+    color: black;
+    text-decoration: none;
+    line-height: 1;
+    text-decoration: none; 
+>>>>>>> main
 
 }
 
@@ -53,7 +65,7 @@
     font-weight: normal;
     color: black;
     padding: 14px 20px;
-    font-size: 0.9em;
+    font-size: 0.7em;
     text-decoration: none;
     text-align: center;
 }
@@ -62,6 +74,7 @@
     cursor: pointer;
 }
 .header .user-info {
+    font-size: 0.7em;
     display: flex;
     align-items: center;
     position: absolute;
@@ -111,7 +124,38 @@
     right: 100px; /* 오른쪽 여백 조정 */
     top: -5px;
 }
+<<<<<<< HEAD
 
 
 
 
+=======
+.search-container {
+    position: absolute;
+    right: 160px;
+    margin-right:
+}
+.search-container input[type=text] {
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Control the roundness of the search bar */
+    outline: none; /* Remove default outline */
+    font-size: 14px; /* Adjust font size as needed */
+    width: 200px; /* Adjust width as needed */
+    transition: border-color 0.3s ease; /* Smooth transition for border color change */
+}
+.search-container input[type=text]:focus {
+    border-color: #007bff; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: add a subtle shadow */
+}
+.search-container button{
+    position: absolute;
+    right: 5px; /* Adjust position of the search button */
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none; /* Remove default outline */
+}
+>>>>>>> main

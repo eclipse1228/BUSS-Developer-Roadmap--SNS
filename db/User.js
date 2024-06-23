@@ -1,4 +1,4 @@
-const mongoose = require("mongoose"); // mongoose 불러오기
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     id: { 
@@ -26,11 +26,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    profileImageUrl: {
+        type: String,
+        required: false
+    },
+    githubUsername: {
+        type: String,
+        required: false
+    },
     roadmaps: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Roadmap'
     }]
 });
 
-// 모델을 export
 module.exports = mongoose.model("User", UserSchema);

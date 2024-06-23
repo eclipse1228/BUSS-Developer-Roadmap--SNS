@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 정보</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        #userInfo, #filterForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>사용자 정보</h1>
+    <form id="loginForm">
+        <label for="username">사용자 이름:</label>
+        <input type="text" id="username" name="username">
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password">
+        <button type="submit">로그인</button>
+    </form>
+    <div id="userInfo">
+        <form id="filterForm">
+            <label for="job">직업 필터:</label>
+            <select name="job" id="job">
+                <option value="">모두 보기</option>
+            </select>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>나이</th>
+                    <th>이메일</th>
+                    <th>직업</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const jobSelect = document.getElementById('job');
+        const userTableBody = document.getElementById('userTableBody');
+        const loginForm = document.getElementById('loginForm');
+        const filterForm = document.getElementById('filterForm');
+        const userInfo = document.getElementById('userInfo');
+
+        async function fetchJobs() {
+            try {
+                const response = await fetch('/jobs', {
+                    headers: getAuthHeaders()
+                });
+                if (!response.ok) throw new Error('Failed to fetch jobs');
+                const jobs = await response.json();
+                jobs.forEach(job => {
+                    const option = document.createElement('option');
+                    option.value = job;
+                    option.textContent = job;
+                    jobSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+            }
+        }
+
+        async function fetchUsers(filterJob = "") {
+            try {
+                const response = await fetch('/users', {
+                    headers: getAuthHeaders()
+                });
+                if (!response.ok) throw new Error('Failed to fetch users');
+                const users = await response.json();
+                userTableBody.innerHTML = "";
+                users.filter(user => !filterJob || user.job === filterJob).forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.age}</td>
+                        <td>${user.email}</td>
+                        <td>${user.job}</td>
+                    `;
+                    userTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+
+        function getAuthHeaders() {
+            const token = localStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+                    loginForm.style.display = 'none';
+                    userInfo.style.display = 'block';
+                    await fetchJobs();
+                    await fetchUsers();
+                } else {
+                    alert('로그인 실패');
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('로그인 중 오류가 발생했습니다.');
+            }
+        });
+
+        jobSelect.addEventListener('change', () => {
+            fetchUsers(jobSelect.value);
+        });
+
+        async function checkAdmin() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin', {
+                    headers: getAuthHeaders()
+                });
+
+                if (response.ok) {
+                    loginForm.style.display = 'none';
+                    userInfo.style.display = 'block';
+                    await fetchJobs();
+                    await fetchUsers();
+                } else {
+                    alert('접근이 거부되었습니다.');
+                }
+            } catch (error) {
+                console.error('Error checking admin:', error);
+                alert('관리자 확인 중 오류가 발생했습니다.');
+            }
+        }
+
+        checkAdmin();
+    </script>
+</body>
+</html>

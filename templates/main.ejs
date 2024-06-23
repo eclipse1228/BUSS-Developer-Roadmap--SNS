@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
     <link rel="stylesheet" href="../static/styles/footer.css"> <!-- 푸터 스타일을 포함한 CSS 파일-->
     <style>
+<<<<<<< HEAD
 
         @font-face {
             font-family: 'neon';
@@ -20,22 +21,42 @@
 
         body {
             font-family: 'neon';
+=======
+        @font-face {
+            font-family: 'PR';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'PR';
+>>>>>>> main
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-            padding-bottom: 50px;
         }
         .container {
             display: grid;
-            grid-template-columns: 15% 75%;
+            grid-template-columns: 250px 1fr 250px; /* 사이드바를 고정 너비로 설정 */
             gap: 20px;
             padding: 0px 20px 20px 20px;
         }
+<<<<<<< HEAD
+=======
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+>>>>>>> main
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto;
             gap: 20px;
+            width: 100%;
         }
         .content {
             background-color: #ffffff;
@@ -47,21 +68,24 @@
             background-color: #d7d7db;
             padding: 20px;
             margin: 0 0 10px 0;
-            position: relative; /* 포지셔닝 컨텍스트 생성 */
-            border-radius: 10px; /* 모서리 둥글게 만들기 */
-            background-image: url('/static/pattern.svg'); /* SVG 패턴 파일 경로 */
+            position: relative;
+            border-radius: 10px;
+            background-image: url('/static/pattern.svg');
         }
         .content h2 span {
             cursor: pointer;
         }
         .content h2 span:hover {
             color: #007bff;
-            cursor: pointer;
         }
         .content h2 .text-container {
+<<<<<<< HEAD
             font-family: 'neon2';
+=======
+            font-family: 'PR';
+>>>>>>> main
             position: relative;
-            right: -30px; /* 오른쪽으로 10px 이동 */        
+            right: -10px;
         }
         .post {
             background-color: white;
@@ -140,6 +164,55 @@
             border-top: 1px solid #ccc;
             margin: 10px 0;
         }
+        .sidebar {
+            background-color: #f9f9f9;
+            padding: 10px;
+            position: relative;
+            width: 250px; /* 사이드바 너비 고정 */
+        }
+        .top-writers {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .top-writers li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .top-writers img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .writer-info {
+            align-items: center;
+        }
+        .banner {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .banner img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* 화면 크기가 768px 이하일 때 레이아웃 조정 */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                width: 100%; /* 작은 화면에서 사이드바 너비를 100%로 설정 */
+            }
+        }
+   
     </style>
     <script>
         function toggleDropdown() {
@@ -152,17 +225,24 @@
     </script>
 </head>
 <body>
-    <%- include('header') %> 
-    <div class="banner" style="left:550px; position:relative;">
-        <img src="/static/buss banner.png" alt="" style="height: 100px%; width: 700px;">
-    </div>
+    <%- include('header') %>  
     <div class="container">
         <!-- <div class="sidebar">
             <h3>Top Writers</h3>
-            <ol style="margin: -15px -20px">
+            <hr>
+            <ol class="top-writers">
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
-                        <li><strong><%= writer.username %></strong> <span style="color:gray;"><%= writer.postCount %>점</span></li>
+                        <li>
+                            <img src="<%= writer.avatar %>" alt="<%= writer.username %>">
+                            <div class="writer-info">
+                                <span class="writer-name"><%= writer.username %></span>
+                                <span class="writer-points">
+                                    <img src="/static/trophy-icon.png" alt="Trophy Icon">
+                                    <%= writer.postCount %>
+                                </span>
+                            </div>
+                        </li>
                     <% }) %>
                 <% } else { %>
                     <li>No top writers available.</li>
@@ -193,6 +273,7 @@
             </ol>
         </div>
 
+<<<<<<< HEAD
         <div class="content-grid">
             <div class="content">
                 <h2> <span class="text-container">WEEKLY BEST</span>
@@ -207,49 +288,81 @@
                     <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                 </div>
                 <% }) %>
+=======
+        <div class="content-area">
+            <div class="banner">
+                <img src="/static/buss_banner.png" alt="Banner">
+>>>>>>> main
             </div>
-            <div class="content">
-                <h2><span onclick="goToBoard('community')"  class="text-container">COMMUNITY</span>
-                <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
-                </h2>
-                <% communityPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <h3><%= post.author.name %></h3>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+            <div class="content-grid">
+                <div class="content">
+                    <h2> <span class="text-container">WEEKLY BEST</span>
+                        <img src="/static/weekly-best.svg" alt="SVG Image" class="group_svg">
+                    </h2>
+                    <% weeklyBestPosts.forEach(post => { %>
+                    <div class="post">
+                        <div class="info">
+                            <div class="author-info">
+                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                <h3><%= post.author.name %></h3>
+                            </div>
+                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                        </div>
+                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                     </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <% }) %>
                 </div>
-                <% }) %>
-            </div>
-            <div class="content">
-                <h2>
-                    <span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
-                    <img src="/static/frontend.svg" alt="SVG Image" class="group_svg" >
-                </h2>
-                <% frontendPosts.forEach(post => { %>
-                <div class="post">  
-                    <div class="info">
-                        <h3><%= post.author.name %></h3>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                <div class="content">
+                    <h2><span onclick="goToBoard('community')" class="text-container">COMMUNITY</span>
+                        <img src="/static/devops.svg" alt="SVG Image" class="group_svg" style="width: 150px; height: 150px; top:-42px;">
+                    </h2>
+                    <% communityPosts.forEach(post => { %>
+                    <div class="post">
+                        <div class="info">
+                            <div class="author-info">
+                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                <h3><%= post.author.name %></h3>
+                            </div>
+                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                        </div>
+                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                     </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <% }) %>
                 </div>
-                <% }) %>
-            </div>
-            <div class="content">
-                <h2><span onclick="goToBoard('backend')"  class="text-container">BACKEND</span>
-                    <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
-                </h2>
-                <% backendPosts.forEach(post => { %>
-                <div class="post">
-                    <div class="info">
-                        <h3><%= post.author.name %></h3>
-                        <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                <div class="content">
+                    <h2><span onclick="goToBoard('frontend')" class="text-container">FRONTEND</span>
+                        <img src="/static/frontend.svg" alt="SVG Image" class="group_svg">
+                    </h2>
+                    <% frontendPosts.forEach(post => { %>
+                    <div class="post">
+                        <div class="info">
+                            <div class="author-info">
+                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                <h3><%= post.author.name %></h3>
+                            </div>
+                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                        </div>
+                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
                     </div>
-                    <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    <% }) %>
                 </div>
-                <% }) %>
+                <div class="content">
+                    <h2><span onclick="goToBoard('backend')" class="text-container">BACKEND</span>
+                        <img src="/static/backend.svg" alt="SVG Image" class="group_svg" style="width:130px; height:130px; top: -36px;">
+                    </h2>
+                    <% backendPosts.forEach(post => { %>
+                    <div class="post">
+                        <div class="info">
+                            <div class="author-info">
+                                <img src="<%= post.profileImageUrl || '/static/usericon.png' %>" alt="Author's GitHub Profile Image" style="width: 42px; height: 42px; border-radius: 50%;">
+                                <h3><%= post.author.name %></h3>
+                            </div>
+                            <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
+                        </div>
+                        <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                    </div>
+                    <% }) %>
+                </div>
             </div>
         </div>
     </div>
