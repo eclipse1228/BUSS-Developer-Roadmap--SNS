@@ -26,11 +26,14 @@ BUSS
 ![VSCode](https://img.shields.io/badge/Visual_Studio-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
-- **실행**
+- **서버 실행 방법**
 
 ```jsx
 npm run server
 ```
+
+- **코드 키 입력**
+
 ```Code key
 키 입력해야함
 ``` 
