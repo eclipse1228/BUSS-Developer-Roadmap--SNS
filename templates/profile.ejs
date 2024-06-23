@@ -126,6 +126,11 @@
   </div>
 
   <script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown-menu');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
     document.getElementById('githubUsername').addEventListener('blur', async (event) => {
       const githubUsername = event.target.value;
       if (githubUsername) {

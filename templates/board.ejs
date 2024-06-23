@@ -114,6 +114,9 @@
     <div class="sidebar"></div>
     <div class="content">
       <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
+      <% if (typeof query !== 'undefined') { %>
+        <p>검색어: <%= query %></p> <!-- 검색어 표시 -->
+      <% } %>
       <div class="posts">
         <% if (posts.length > 0) { %>
           <% posts.forEach(post => { %>
@@ -125,7 +128,7 @@
                 <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 두 번째 줄에 Bold체와 글자 크기 증가 -->
               </div>
               <div class="info">
-                <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p> <!-- 게시물 내용은 50자까지 표시 -->
+                <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p> <!-- 게시물 내용은 185자까지 표시 -->
               </div>
               <div class="info">
                 <div>
@@ -142,4 +145,5 @@
     </div>
   </div>
 </body>
+
 </html>
