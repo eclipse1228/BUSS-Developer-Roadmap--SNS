@@ -111,11 +111,16 @@
     </div>
     <div class="container">
       <!-- 여기에 다른 내용을 추가할 수 있습니다 -->
-      <h2>다른 내용</h2>
-      <p>이곳에 추가적인 정보를 넣을 수 있습니다.</p>
+      <h2></h2>
+      <p></p>
     </div>
   </div>
   <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('dropdown-menu');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+    
     document.getElementById('mentorRequestButton').addEventListener('click', function() {
       const requestData = { userName: '<%= user.name %>' };
       console.log('Sending request:', requestData); // 요청 데이터 콘솔에 출력
@@ -141,8 +146,5 @@
       });
     });
   </script>
-  
-  
-
 </body>
 </html>

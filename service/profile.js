@@ -4,24 +4,26 @@ const User = require("../db/User");
 const Post = require("../db/Post");
 const router = express.Router();
 
+// 프로필 페이지 렌더링
 router.get("/", async (req, res) => {
   const user = req.session.user;
   if (!user) {
-    return res.redirect("/login"); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
+    return res.redirect("/login");
   }
 
   try {
-    // 멘토와 멘티의 정보 조회
     let mentorName = "";
     let menteeName = "";
-    
+
     if (user.mentor) {
       const mentor = await User.findOne({ id: user.mentor });
+      console.log("Mentor:", mentor); // 로그 추가
       mentorName = mentor ? mentor.name : "";
     }
 
     if (user.mentee) {
       const mentee = await User.findOne({ id: user.mentee });
+      console.log("Mentee:", mentee); // 로그 추가
       menteeName = mentee ? mentee.name : "";
     }
 

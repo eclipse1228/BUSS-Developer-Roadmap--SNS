@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentoring Chat</title>
+    <link rel="stylesheet" href="../static/styles/header.css"> <!-- Include header styles -->
+    <link rel="stylesheet" href="../static/styles/footer.css"> <!-- Include footer styles -->
+    <style>
+        body {
+            font-family: 'PR';
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        @font-face {
+            font-family: 'PR';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        .container {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message .sender {
+            font-weight: bold;
+        }
+        .message .timestamp {
+            font-size: 0.8em;
+            color: #888;
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .chat-input button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+  <%- include('header') %>  
+    <div class="container">
+        <div class="chat-header">
+            <h2>멘토-멘티 채팅 공간</h2> 
+            <p><%= mentor.name %> (멘토) - <%= mentee.name %> (멘티)</p>
+        </div>
+        <div class="content" id="chatMessages">
+            <% if (chat && chat.messages.length > 0) { %>
+                <% chat.messages.forEach(message => { %>
+                    <div class="message">
+                        <span class="sender"><%= message.sender %>:</span>
+                        <span class="text"><%= message.message %></span>
+                        <span class="timestamp"><%= new Date(message.timestamp).toLocaleString() %></span>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No messages yet.</p>
+            <% } %>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="메시지를 입력하세요">
+            <button onclick="sendMessage()">전송</button>
+        </div>
+    </div>
+    <%- include('footer') %>  
+    <script>
+      function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown-menu');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            if (!message) return;
+
+            const response = await fetch('/mentoringChat/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mentorId: '<%= mentor.id %>',
+                    menteeId: '<%= mentee.id %>',
+                    senderId: '<%= user.id %>',
+                    message
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.reload();
+            } else {
+                alert(result.message);
+            }
+        }
+    </script>
+</body>
+</html>

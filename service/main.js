@@ -13,6 +13,14 @@ router.get('/', async (req, res) => {
     // top writer 정보 추가
     const topwriters = await getTopWriters();
 
+    // WeeklyBestPosts
+    const now = new Date();
+    const weeklyBestPosts = await Post.find({ createdAt: {$gte: new Date(now.setDate(now.getDate() - 7))} })
+    .sort({ likes: -1 }) // 좋아요 순으로 정렬
+    .limit(5)
+    .populate('author', 'name')
+    .populate('comments');
+
     // 카테고리 별로 게시물 최신순 5개 
     const communityPosts = await Post.find({ category: 'community' })
       .sort({ createdAt: -1 })
@@ -31,14 +39,6 @@ router.get('/', async (req, res) => {
       .limit(5)
       .populate('author', 'name')
       .populate('comments');
-
-    // WeeklyBestPosts
-    const now = new Date();
-    const weeklyBestPosts = await Post.find({ createdAt: {$gte: new Date(now.setDate(now.getDate() - 7))} })
-    .sort({ likes: -1 }) // 좋아요 순으로 정렬
-    .limit(5)
-    .populate('author', 'name')
-    .populate('comments');
     
     res.render('main', { 
       communityPosts, 
