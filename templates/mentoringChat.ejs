@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentoring Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div id="chat">
+        <div id="messages"></div>
+        <input id="messageInput" type="text">
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        const socket = io();
+
+        const roomId = '<%= roomId %>'; // 서버에서 전달된 roomId
+        const userId = '<%= currentUser._id %>'; // 현재 로그인된 사용자 ID
+        socket.emit('joinRoom', { userId, roomId });
+
+        document.getElementById('sendButton').addEventListener('click', () => {
+            const message = document.getElementById('messageInput').value;
+            socket.emit('sendMessage', { roomId, message });
+        });
+
+        socket.on('receiveMessage', (message) => {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+        });
+    </script>
+</body>
+</html>

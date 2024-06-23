@@ -13,6 +13,7 @@ const { getTopWriters } = require('./service/topwriter');
 const Post = require('./db/Post');
 const Roadmap = require('./db/Roadmap');
 const User = require('./db/User');  // 유저 모델 추가
+const MentoringChat = require('./db/MentoringChat');  // 채팅 모델 추가
 
 dotenv.config();
 
@@ -69,12 +70,10 @@ app.use('/store-response', require('./service/chat'));
 app.use('/process-pdf', require('./service/chat'));
 app.use('/updateRoadmap', require('./service/chat')); // roadmap 업데이트 
 app.use('/searchPost', require('./service/searchPost'));
-
-
 app.use('/profile', require('./service/profile'));
 // app.use('/profile', require('./service/public_profile'));
-
 // app.use('/mypage',require('/servic/mypage'));
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -115,4 +114,25 @@ app.get('/searchprofile/name/:name', async (req, res) => {
 });
 
 // 서버 시작
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+// Socket.io 설정
+const socketIo = require('socket.io');
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+    console.log('New client connected');
+
+    socket.on('joinRoom', ({ userId, roomId }) => {
+        socket.join(roomId);
+        console.log(`${userId} joined room ${roomId}`);
+    });
+
+    socket.on('sendMessage', ({ roomId, message }) => {
+        io.to(roomId).emit('receiveMessage', message);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});

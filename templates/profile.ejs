@@ -110,6 +110,8 @@
         <div class="profile-details">
           <h2><%= user.name %></h2>
           <p>직업:   <%= user.job %></p>
+          <p>멘토:   <a href="/mentoringChat/startChat?mentorId=<%= user.mentor %>&menteeId=<%= user._id %>"><%= user.mentorName %></a></p>
+          <p>멘티:   <a href="/mentoringChat/startChat?mentorId=<%= user._id %>&menteeId=<%= user.mentee %>"><%= user.menteeName %></a></p>
           <p>GitHub: <a class="github-link" href="https://github.com/<%= user.githubUsername %>" target="_blank"><%= user.githubUsername %></a></p>
         </div>
       </div>
@@ -118,10 +120,8 @@
     <div class="container">
       <!-- 여기에 다른 내용을 추가할 수 있습니다 -->
       <h2>다른 내용</h2>
-      <p>이
-곳에 추가적인 정보를 넣을 수 있습니다.</p>
-</div>
-
+      <p>이곳에 추가적인 정보를 넣을 수 있습니다.</p>
+    </div>
   </div>
   <script>
     function toggleDropdown() {
