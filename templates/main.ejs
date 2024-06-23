@@ -164,12 +164,11 @@
                 <% if (typeof topwriters !== 'undefined') { %>
                     <% topwriters.forEach(writer => { %>
                         <li>
-                            <img src="<%= writer.avatar %>" alt="<%= writer.username %>">
+                            <img src="<%= writer.profileImageUrl %>" alt="<%= writer.profileImageUrl %>">
                             <div class="writer-info">
-                                <span class="writer-name"><%= writer.username %></span>
+                                <span class="writer-name"><%= writer.name %></span>
                                 <span class="writer-points">
-                                    <img src="/static/trophy-icon.png" alt="Trophy Icon">
-                                    <%= writer.postCount %>
+                                    - <%= writer.postCount %>점
                                 </span>
                             </div>
                         </li>
