@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentoring Room</title>
+  <!-- 필요한 CSS 파일 등을 포함 -->
+</head>
+<body>
+  <div class="container">
+    <h1>Mentoring Room</h1>
+    <h2>Welcome <%= user.name %>!</h2>
+
+    <% if (mentorId) { %>
+      <h3>You are connected with <%= mentorName %> (Mentor).</h3>
+    <% } else if (menteeId) { %>
+      <h3>You are connected with <%= menteeName %> (Mentee).</h3>
+    <% } %>
+
+    <!-- 질의응답 및 대화 영역 등을 구현 -->
+    <div id="conversation">
+      <!-- 질문과 답변을 표시할 부분 -->
+    </div>
+
+    <!-- 질문 입력 폼 -->
+    <form id="questionForm">
+      <textarea id="questionText" rows="4" cols="50"></textarea>
+      <button type="submit">Ask</button>
+    </form>
+
+    <!-- 대화 스크립트 등의 JavaScript 파일을 포함 -->
+    <script src="/javascripts/mentoringRoomScript.js"></script>
+  </div>
+</body>
+</html>

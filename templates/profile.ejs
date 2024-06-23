@@ -110,8 +110,8 @@
         <div class="profile-details">
           <h2><%= user.name %></h2>
           <p>직업: <%= user.job %></p>
-          <p>멘토: <a href="/mentoringChat/startChat?mentorId=<%= user.mentor %>&menteeId=<%= user.id %>"><%= mentorName %></a></p>
-          <p>멘티: <a href="/mentoringChat/startChat?mentorId=<%= user.id %>&menteeId=<%= user.mentee %>"><%= menteeName %></a></p>
+          <p>멘토: <a href="/mentoringRoom?mentorId=<%= user.mentor %>&menteeId=<%= user.id %>"><%= mentorName %></a></p>
+          <p>멘티: <a href="/mentoringRoom?mentorId=<%= user.id %>&menteeId=<%= user.mentee %>"><%= menteeName %></a></p>
           <p>GitHub: <a class="github-link" href="https://github.com/<%= user.githubUsername %>" target="_blank"><%= user.githubUsername %></a></p>
         </div>
       </div>

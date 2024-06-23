@@ -6,7 +6,6 @@
   <title><%= category.toUpperCase() %> 게시물 목록</title>
   <link rel="stylesheet" href="../static/styles/header.css"> <!-- 헤더 스타일을 포함한 CSS 파일 -->
   <style>
-
     @font-face {
         font-family: 'PR';
         src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
@@ -14,85 +13,119 @@
         font-style: normal;
     }
 
-    /* Header 및 Navbar 스타일 */
     body {
         font-family: 'PR';
         background-color: #f9f9f9;
         margin: 0;
         padding: 0;
     }
-    /* Container, Sidebar 및 Content 스타일 */
+
     .container {
-        display: grid;
-        grid-template-columns: 15% 75%; /* 사이드바를 15%로 설정, 나머지 콘텐츠를 75%로 설정 */
-        gap: 20px;
+        display: flex;
         padding: 20px;
     }
 
     .sidebar {
-      background-color: #f1f1f1;
-      padding: 10px;
+        width: 250px;
+        padding: 10px;
+    }
+
+    .content-wrapper {
+        flex-grow: 1;
+        padding: 0 20px;
+    }
+
+    .content {
+        max-width: 800px; /* 콘텐츠의 최대 너비 설정 */
+        margin-right: auto;
+        padding: 0 20px;
+        overflow-wrap: break-word; /* 단어 단위로 줄 바꿈 */
     }
 
     .posts {
-      display: grid;
-      gap: 20px;
+        display: flex;
+        flex-direction: column;
     }
-    
+
     .post {
-        max-width:1000px;
         background-color: #ffffff;
         padding: 15px;
         border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
         overflow: hidden;
+        margin-bottom: 20px;
     }
 
     .post h4 {
-      margin: 10px 0 10px 0; /* 기본 마진 제거 및 하단 마진 추가 */
-      font-size: 1.3em; /* 게시물 제목 글씨 크기 */
-      font-weight: bold; /* 게시물 제목 Bold체 */
-      color: black; /* 게시물 제목 글씨 색상 */
+        margin: 10px 0 10px 0;
+        font-size: 1.3em;
+        font-weight: bold;
+        color: black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .post h4 a {
-      color: black; /* 링크 색상 조정 */
-      text-decoration: none; /* 밑줄 제거 */
+        color: black;
+        text-decoration: none;
     }
 
     .post h4 a:hover {
-      color: #007bff;
+        color: #007bff;
     }
 
     .post p {
-      margin: 0; /* 단락 간격 조정 */
-      color: #888;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      hyphens: auto; /* 필요한 경우 하이픈으로 단어를 나눔 */
+        margin: 0;
+        color: #888;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
     }
 
     .info {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end; /* 우측 아래 정렬 */
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
     }
 
     .info span {
-      font-size: 20px; /* 좋아요와 댓글 수 글씨 크기 */
-      color: #888; /* 좋아요와 댓글 수 색상 */
+        font-size: 20px;
+        color: #888;
     }
 
-    /* 추가적인 스타일링 */
     h1 {
-      margin-top: 20px; /* 상단 마진 추가 */
+        margin-top: 20px;
     }
 
-    /* 폼 스타일 */
     form {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+        }
+
+        .content-wrapper {
+            padding: 0;
+        }
+
+        .content {
+            max-width: 100%; /* 작은 화면에서는 전체 너비 사용 */
+        }
     }
   </style>
   <script>       
@@ -111,36 +144,42 @@
 <body>
   <%- include('header') %> 
   <div class="container">
-    <div class="sidebar"></div>
-    <div class="content">
-      <h1><%= category.toUpperCase() %> 게시물 목록</h1> <!-- 대문자로 표시 및 중앙 정렬 -->
-      <% if (typeof query !== 'undefined') { %>
-        <p>검색어: <%= query %></p> <!-- 검색어 표시 -->
-      <% } %>
-      <div class="posts">
-        <% if (posts.length > 0) { %>
-          <% posts.forEach(post => { %>
-            <div class="post">
-              <div class="info">
-                <span>작성자: <%= post.author.name %></span> <!-- 사용자 이름을 첫 줄에 표시 -->
-              </div>
-              <div class="info">
-                <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4> <!-- 게시물 제목을 두 번째 줄에 Bold체와 글자 크기 증가 -->
-              </div>
-              <div class="info">
-                <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p> <!-- 게시물 내용은 185자까지 표시 -->
-              </div>
-              <div class="info">
-                <div>
-                  <span>💕<%= post.likes %></span> <!-- 좋아요 수 -->
-                  <span>🗨️ <%= post.comments.length %></span> <!-- 댓글 수 -->
+    <div class="sidebar">
+      <h3>Post recommendation</h3>
+      <hr>
+    </div>
+    <div class="content-wrapper">
+      <div class="content">
+        <h1><%= category.toUpperCase() %> 게시물 목록</h1>
+        <hr>
+        <div class="posts">
+          <% if (posts.length > 0) { %>
+            <% posts.forEach((post, index) => { %>
+              <div class="post">
+                <div class="info">
+                  <span>작성자: <%= post.author.name %></span>
+                </div>
+                <div class="info">
+                  <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                </div>
+                <div class="info">
+                  <p><%= post.content.substring(0, 185) + (post.content.length > 185 ? '...' : '') %></p>
+                </div>
+                <div class="info">
+                  <div>
+                    <span>💕<%= post.likes %></span>
+                    <span>🗨️ <%= post.comments.length %></span>
+                  </div>
                 </div>
               </div>
-            </div>
-          <% }); %>
-        <% } else { %>
-          <p>해당 게시물이 없습니다.</p>
-        <% } %>
+              <% if (index < posts.length - 1) { %>
+                <hr>
+              <% } %>
+            <% }); %>
+          <% } else { %>
+            <p>해당 카테고리에 게시물이 없습니다.</p>
+          <% } %>
+        </div>
       </div>
     </div>
   </div>
