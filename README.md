@@ -3,6 +3,7 @@
 **개발자 커리어 멘토 플랫폼 BBUS** 
    
 ![image](https://github.com/eclipse1228/BUSS-Developer-Roadmap--SNS/assets/107296751/b10a8dae-5a85-4bec-8b12-55bfe7523f82)
+![image](https://github.com/eclipse1228/BUSS-Developer-Roadmap--SNS/assets/107296751/9eebedf7-24fa-4731-ab40-4a6aac17d310)
 
 ## 프로젝트 기획 배경
 
@@ -24,6 +25,9 @@ npm run server
 ```Code key (.env)
 OPENAI_KEY=
 ```
+
+
+
 
 ## 사용 기술
 
