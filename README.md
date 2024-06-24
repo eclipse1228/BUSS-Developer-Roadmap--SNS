@@ -37,3 +37,5 @@ OPENAI_KEY=
 ![VSCode](https://img.shields.io/badge/Visual_Studio-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
+## Notion project Docs
+https://fourth-jumper-c2f.notion.site/c047161d28d5493f87082daee280b402?v=6a397b36f6254d6397a731c0012eeb6f&pvs=4
