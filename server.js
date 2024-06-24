@@ -6,6 +6,8 @@ const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const User = require('./db/User'); // 유저 모델 추가
+const http = require('http'); // 추가
+const { Server } = require('socket.io'); // 추가
 
 // 라우터 추가
 const mentorRequestRouter = require('./service/mentorRequest');
@@ -13,6 +15,8 @@ const mentoringRouter = require('./service/mentoring');
 
 dotenv.config();
 const app = express();
+const server = http.createServer(app); // 변경
+const io = new Server(server); // 추가
 const PORT = process.env.PORT || 5000;
 
 // Middleware 설정
@@ -112,5 +116,24 @@ app.get('/searchprofile/name/:name', async (req, res) => {
   }
 });
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('chat message', async (msg) => {
+    try {
+      const user = await User.findOne({ id: msg.senderId });
+      if (user) {
+        msg.sender = user.name; // 사용자 이름 설정
+        io.emit('chat message', msg);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  });
+});
+
 // 서버 시작
-const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

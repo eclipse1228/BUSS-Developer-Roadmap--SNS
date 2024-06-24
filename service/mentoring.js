@@ -43,12 +43,20 @@ router.post('/accept', async (req, res) => {
         await user.save();
         await mentee.save();
 
-        res.json({ success: true });
+        // 세션 갱신
+        req.session.user = user;
+        req.session.save(err => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Session save error' });
+            }
+            res.json({ success: true });
+        });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+
 
 // 멘토링 요청 거부
 router.post('/reject', async (req, res) => {

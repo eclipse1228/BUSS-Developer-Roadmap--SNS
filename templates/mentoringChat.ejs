@@ -43,13 +43,31 @@
         }
         .message {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .message.right {
+            justify-content: flex-end;
+        }
+        .message .bubble {
+            max-width: 60%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+            position: relative;
+        }
+        .message.right .bubble {
+            background-color: #007bff;
+            color: white;
         }
         .message .sender {
             font-weight: bold;
+            margin-bottom: 5px;
         }
         .message .timestamp {
             font-size: 0.8em;
             color: #888;
+            margin-top: 5px;
         }
         .chat-input {
             display: flex;
@@ -81,10 +99,12 @@
         <div class="content" id="chatMessages">
             <% if (chat && chat.messages.length > 0) { %>
                 <% chat.messages.forEach(message => { %>
-                    <div class="message">
-                        <span class="sender"><%= message.sender %>:</span>
-                        <span class="text"><%= message.message %></span>
-                        <span class="timestamp"><%= new Date(message.timestamp).toLocaleString() %></span>
+                    <div class="message <%= message.sender === user.name ? 'right' : '' %>">
+                        <div class="bubble">
+                            <div class="sender"><%= message.sender %></div>
+                            <div class="text"><%= message.message %></div>
+                            <div class="timestamp"><%= new Date(message.timestamp).toLocaleString() %></div>
+                        </div>
                     </div>
                 <% }) %>
             <% } else { %>
@@ -97,36 +117,68 @@
         </div>
     </div>
     <%- include('footer') %>  
+    <script src="/socket.io/socket.io.js"></script>
     <script>
       function toggleDropdown() {
         const dropdown = document.getElementById('dropdown-menu');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
       }
-        async function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value;
-            if (!message) return;
 
-            const response = await fetch('/mentoringChat/sendMessage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mentorId: '<%= mentor.id %>',
-                    menteeId: '<%= mentee.id %>',
-                    senderId: '<%= user.id %>',
-                    message
-                })
-            });
+      const socket = io();
 
-            const result = await response.json();
-            if (result.success) {
-                window.location.reload();
-            } else {
-                alert(result.message);
-            }
+      socket.on('chat message', function(msg) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        if (msg.sender === '<%= user.name %>') {
+          messageDiv.classList.add('right');
         }
+        messageDiv.innerHTML = `
+          <div class="bubble">
+            <div class="sender">${msg.sender}</div>
+            <div class="text">${msg.message}</div>
+            <div class="timestamp">${new Date(msg.timestamp).toLocaleString()}</div>
+          </div>`;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+
+      async function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value;
+        if (!message) return;
+
+        const msg = {
+          mentorId: '<%= mentor.id %>',
+          menteeId: '<%= mentee.id %>',
+          senderId: '<%= user.id %>',
+          message,
+          timestamp: new Date()
+        };
+
+        socket.emit('chat message', msg);
+
+        const response = await fetch('/mentoringChat/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(msg)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            messageInput.value = '';
+        } else {
+            alert(result.message);
+        }
+      }
+
+      document.getElementById('messageInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          sendMessage();
+        }
+      });
     </script>
 </body>
 </html>
