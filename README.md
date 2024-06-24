@@ -17,9 +17,9 @@ AI의 급격한 발전으로 인해 상위 10%를 제외한 기술 도메인의 
 npm run server
 ```
 
-- **OPEN AI API KEY 입력**
+- **OPEN AI API KEY 입력 (.env)**
 
-```Code key (.env)
+```Code key 
 OPENAI_KEY=
 ```
 
