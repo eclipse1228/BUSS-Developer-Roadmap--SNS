@@ -1,6 +1,7 @@
 ## 프로젝트 이름
 
-**개발자 커리어 멘토 플랫폼 BBUS**   
+**개발자 커리어 멘토 플랫폼 BBUS** 
+   
 ![image](https://github.com/eclipse1228/BUSS-Developer-Roadmap--SNS/assets/107296751/b10a8dae-5a85-4bec-8b12-55bfe7523f82)
 
 ## 프로젝트 기획 배경
