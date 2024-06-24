@@ -99,6 +99,84 @@
     input[type="text"][readonly] {
         background-color: rgba(200, 200, 200, 0.5);
     }
+    .svg-container {
+      /* position: relative; */
+      /* display: flex; */
+      width: 55%;
+      /* max-width: px; */
+      display: flex;
+      height: 83%;
+      padding: 20px;
+      overflow-y: scroll;
+      background-color: white;
+      /* margin-top: 200px; */
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: absolute; 
+      left: 620px;
+      top: 89px;
+     }
+     .modal {
+      
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      position: absolute;
+    top: 50%;
+    left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fefefe;
+    width: 300px;
+    height: 150px;
+      padding: 20px;
+      border: 1px solid #888;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .chat_inbox {
+      left: 5px;
+    }
+
+    /* 추가된 스타일 */
+    .button-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+
+    }
+    .button-link:hover {
+      background-color: #0056b3;
+    }
+    /* 글꼴 크기 키우는 스타일 */
+    .large-font {
+      font-size: 1.5em;
+    }
   </style>
 </head>
 <body>
@@ -172,11 +250,92 @@
         } else {
           alert(result.message || '프로필 업데이트 중 오류가 발생했습니다.');
         }
-      } catch (error) {
-        console.error('프로필 업데이트 중 오류 발생:', error);
-        alert('프로필 업데이트 중 오류가 발생했습니다.');
+      });
+    }
+    catch (error){
+      console.error('Error processing roadmap data:', error);
+     }
+    }
+
+    function drawConnection(svg, x1, y1, x2, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
+    }
+
+    function drawVerticalConnection(svg, x, y1, y2) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#888');
+      line.setAttribute('stroke-width', 2);
+      svg.appendChild(line);
+    }
+
+    function isInsideNode(x, y, node) {
+      return x >= node.x && x <= node.x + node.width && y >= node.y && y <= node.y + node.height;
+    }
+
+    function openModal(node) {
+      const modal = document.getElementById('courseModal');
+      const courseDescription = document.getElementById('courseDescription');
+      const courseLink = document.getElementById('courseLink');
+
+      courseDescription.textContent = node.data.description;
+      courseLink.href = `https://${node.data.course}`;
+
+      // 글꼴 크기를 키우는 클래스 추가
+      courseDescription.classList.add('large-font');
+      courseLink.classList.add('large-font');
+
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('courseModal');
+      modal.style.display = 'none';
+    }
+
+    // Close modal when the user clicks on <span> (x)
+    document.getElementsByClassName('close')[0].onclick = function() {
+      closeModal();
+    }
+
+    // Close modal when the user clicks anywhere outside of the modal
+    window.onclick = function(event) {
+      const modal = document.getElementById('courseModal');
+      if (event.target == modal) {
+        closeModal();
       }
-    });
+    }
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown-menu');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+   
+    window.roadmapData = <%- JSON.stringify(roadmap) %>;
+  console.log("Roadmap data in window:", window.roadmapData);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("Roadmap data in DOMContentLoaded:", window.roadmapData);
+    if (window.roadmapData && window.roadmapData.backend || window.roadmapData.javaBackendDeveloper || window.roadmapData.reactFrontendDeveloper || window.roadmapData.nodeJsDeveloper) {
+      drawRoadmap(window.roadmapData);
+    } else {
+      console.log('No valid roadmap data available');
+    }
+  });
+
+// 페이지 로드 시 로드맵 가져오기
+console.log()
+
   </script>
 </body>
 </html>
