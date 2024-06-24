@@ -224,7 +224,7 @@
                                 </div>
                                 <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title.length > 10 ? post.title.substring(0, 15) + '...' : post.title %></a></h4>
                         </div>
                         <% }) %>
                     <% } else { %>
@@ -254,7 +254,7 @@
                                 </div>
                                 <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title.length > 10 ? post.title.substring(0, 15) + '...' : post.title %></a></h4>
                         </div>
                         <% }) %>
                     <% } else { %>
@@ -284,7 +284,7 @@
                                 </div>
                                 <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title.length > 10 ? post.title.substring(0, 15) + '...' : post.title %></a></h4>
                         </div>
                         <% }) %>
                     <% } else { %>
@@ -314,8 +314,7 @@
                                 </div>
                                 <span>💕<%= post.likes %> 🗨️ <%= post.comments.length %></span>
                             </div>
-                            <h4><a href="/showPost/<%= post._id %>"><%= post.title %></a></h4>
-                        </div>
+                            <h4><a href="/showPost/<%= post._id %>"><%= post.title.length > 10 ? post.title.substring(0, 15) + '...' : post.title %></a></h4>                        </div>
                         <% }) %>
                     <% } else { %>
                         <p>No backend posts available.</p>
