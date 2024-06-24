@@ -21,30 +21,26 @@
         margin: 0;
         padding: 0;
     }
-    /* Sidebar 스타일 */
-    .sidebar {
-      background-color: #f1f1f1;
-      padding: 10px;
+    .container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
     }
-
-    /* Content 스타일 */
+    .content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        width: 75%;
+    }
     header, main, footer {
       padding: 20px;
     }
-
-    .content {
-      max-width: 1000px; /* 내용이 표시되는 최대 너비 */
-      margin: 0 0 auto; /* 가운데 정렬을 위해 추가 */
-      overflow-wrap: break-word; /* 단어 단위로 줄 바꿈 */
-    }
-
-    /* 폼 스타일 */
     form {
       display: grid;
       grid-template-columns: 1fr;
       gap: 20px;
     }
-
     textarea {
       width: 100%;
       padding: 10px;
@@ -52,7 +48,6 @@
       border-radius: 5px;
       box-sizing: border-box;
     }
-
     button[type="button"] {
       padding: 10px 20px;
       background-color: #007bff;
@@ -61,52 +56,36 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
     button[type="button"]:hover {
       background-color: #0056b3;
     }
-
-    /* Container 스타일 */
-    .container {
-        display: grid;
-        grid-template-columns: 15% 75%; /* 사이드바를 15%로 설정, 나머지 콘텐츠를 75%로 설정 */
-        gap: 20px;
-        padding: 20px;
-    }
-
     /* 댓글 박스 크기 고정 */
     textarea {
       resize: none;
     }
-
     /* 댓글 박스와 좋아요 버튼 위치 조정 */
     form {
       position: relative;
     }
-
     form button[type="button"] {
       position: absolute;
       top: -50px; /* 댓글 폼의 위쪽에 위치시킴 */
       right: 0;
     }
-
     /* 댓글 구역 스타일링 */
     ul {
       padding: 0;
       list-style: none;
     }
-
     ul li {
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px;
     }
-
     /* 댓글 내용 및 작성자, 작성 시각 스타일링 */
     ul li .comment-content {
       font-weight: bold;
     }
-
     ul li .comment-meta {
       font-size: 12px;
       color: #888;
@@ -206,8 +185,6 @@
   <%- include('header') %> 
   <div class="container">
     <div class="sidebar">
-      <!-- Sidebar 내용 추가 -->
-      <!-- 여기에 원하는 내용을 추가하세요 -->
     </div>
     <div class="content">
       <section>

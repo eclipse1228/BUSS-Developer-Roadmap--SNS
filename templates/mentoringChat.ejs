@@ -119,66 +119,66 @@
     <%- include('footer') %>  
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      function toggleDropdown() {
-        const dropdown = document.getElementById('dropdown-menu');
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-      }
-
-      const socket = io();
-
-      socket.on('chat message', function(msg) {
-        const chatMessages = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        if (msg.sender === '<%= user.id %>') {
-          messageDiv.classList.add('right');
+        function toggleDropdown() {
+          const dropdown = document.getElementById('dropdown-menu');
+          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
-        messageDiv.innerHTML = `
-          <div class="bubble">
-            <div class="sender">${msg.sender}</div>
-            <div class="text">${msg.message}</div>
-            <div class="timestamp">${new Date(msg.timestamp).toLocaleString()}</div>
-          </div>`;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      });
-
-      async function sendMessage() {
-        const messageInput = document.getElementById('messageInput');
-        const message = messageInput.value;
-        if (!message) return;
-
-        const msg = {
-          mentorId: '<%= mentor.id %>',
-          menteeId: '<%= mentee.id %>',
-          senderId: '<%= user.id %>',
-          message,
-          timestamp: new Date()
-        };
-
-        socket.emit('chat message', msg);
-
-        const response = await fetch('/mentoringChat/sendMessage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(msg)
+      
+        const socket = io();
+      
+        socket.on('chat message', function(msg) {
+          const chatMessages = document.getElementById('chatMessages');
+          const messageDiv = document.createElement('div');
+          messageDiv.classList.add('message');
+          if (msg.senderId === '<%= user.id %>') {
+            messageDiv.classList.add('right');
+          }
+          messageDiv.innerHTML = `
+            <div class="bubble">
+              <div class="sender">${msg.sender}</div>
+              <div class="text">${msg.message}</div>
+              <div class="timestamp">${new Date(msg.timestamp).toLocaleString()}</div>
+            </div>`;
+          chatMessages.appendChild(messageDiv);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
         });
-
-        const result = await response.json();
-        if (result.success) {
-            messageInput.value = '';
-        } else {
-            alert(result.message);
+      
+        async function sendMessage() {
+          const messageInput = document.getElementById('messageInput');
+          const message = messageInput.value;
+          if (!message) return;
+      
+          const msg = {
+            mentorId: '<%= mentor.id %>',
+            menteeId: '<%= mentee.id %>',
+            senderId: '<%= user.id %>',
+            message,
+            timestamp: new Date()
+          };
+      
+          socket.emit('chat message', msg);
+      
+          const response = await fetch('/mentoringChat/sendMessage', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(msg)
+          });
+      
+          const result = await response.json();
+          if (result.success) {
+              messageInput.value = '';
+          } else {
+              alert(result.message);
+          }
         }
-      }
-
-      document.getElementById('messageInput').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-          sendMessage();
-        }
-      });
-    </script>
+      
+        document.getElementById('messageInput').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            sendMessage();
+          }
+        });
+      </script>
 </body>
 </html>
