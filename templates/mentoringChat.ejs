@@ -90,7 +90,7 @@
     </style>
 </head>
 <body>
-  <%- include('header') %>  
+    <%- include('header') %>  
     <div class="container">
         <div class="chat-header">
             <h2>멘토-멘티 채팅 공간</h2> 
@@ -99,7 +99,7 @@
         <div class="content" id="chatMessages">
             <% if (chat && chat.messages.length > 0) { %>
                 <% chat.messages.forEach(message => { %>
-                    <div class="message <%= message.sender === user.name ? 'right' : '' %>">
+                    <div class="message <%= message.sender === user.id ? 'right' : '' %>">
                         <div class="bubble">
                             <div class="sender"><%= message.sender %></div>
                             <div class="text"><%= message.message %></div>
@@ -130,7 +130,7 @@
         const chatMessages = document.getElementById('chatMessages');
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
-        if (msg.sender === '<%= user.name %>') {
+        if (msg.sender === '<%= user.id %>') {
           messageDiv.classList.add('right');
         }
         messageDiv.innerHTML = `
